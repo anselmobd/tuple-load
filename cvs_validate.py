@@ -59,21 +59,24 @@ class Main:
         self.jsonFileName = ''.join((sqlTable, '.json'))
         self.printV('JSON file name: %s' % (self.jsonFileName))
 
-    def validateCvs(self):
-        with open(self.jsonFileName) as json_data:
-            fields = json.load(json_data)
-            pprint([field['name'] for field in fields
-                    if 'default' not in field.keys()])
-
+    def openToRun(self):
         with open(self.args.cvsFile) as csvfile:
-            readCsv = csv.reader(csvfile, delimiter=',')
-            for row in readCsv:
-                print(row[0])
+            with open(self.jsonFileName) as json_data:
+                self.validateCvs(csvfile, json_data)
+
+    def validateCvs(self, csvfile, json_data):
+        fields = json.load(json_data)
+        pprint([field['name'] for field in fields
+                if 'default' not in field.keys()])
+
+        readCsv = csv.reader(csvfile, delimiter=',')
+        for row in readCsv:
+            print('%s,%s,%s' % tuple(row))
 
     def main(self):
         self.parseArgs()
         self.config()
-        self.validateCvs()
+        self.openToRun()
 
 if __name__ == '__main__':
     Main()
