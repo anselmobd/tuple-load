@@ -29,17 +29,6 @@ class Main:
         # self.jsonFileName = None
         self.main()
 
-    def validateCvs(self):
-        with open(self.jsonFileName) as json_data:
-            fields = json.load(json_data)
-            pprint([field['name'] for field in fields
-                    if 'default' not in field.keys()])
-
-        with open(self.args.cvsFile) as csvfile:
-            readCsv = csv.reader(csvfile, delimiter=',')
-            for row in readCsv:
-                print(row[0])
-
     def parseArgs(self):
         parser = argparse.ArgumentParser(
             description='Verify CSV files against structure in JSON file',
@@ -69,6 +58,17 @@ class Main:
 
         self.jsonFileName = ''.join((sqlTable, '.json'))
         self.printV('JSON file name: %s' % (self.jsonFileName))
+
+    def validateCvs(self):
+        with open(self.jsonFileName) as json_data:
+            fields = json.load(json_data)
+            pprint([field['name'] for field in fields
+                    if 'default' not in field.keys()])
+
+        with open(self.args.cvsFile) as csvfile:
+            readCsv = csv.reader(csvfile, delimiter=',')
+            for row in readCsv:
+                print(row[0])
 
     def main(self):
         self.parseArgs()
