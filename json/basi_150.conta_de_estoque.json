@@ -1,0 +1,62 @@
+{
+  "csv": {
+    "fields": {
+      "CODIGO": { "type": "integer" }
+    }
+  , "keys": [
+      "CODIGO"
+    ]
+  }
+, "sql": {
+    "key_count": [
+      "SELECT"
+    , "  count(CONTA_ESTOQUE)"
+    , "FROM BASI_150"
+    , "WHERE CONTA_ESTOQUE=:CODIGO"
+    ]
+  , "update": [
+      "UPDATE SYSTEXTIL.BASI_150 SET"
+    , "  DESCR_CT_ESTOQUE=:DESCRICAO"
+    , "WHERE CONTA_ESTOQUE=:CODIGO"
+    ]
+  , "insert": [
+      "INSERT INTO BASI_150"
+    , "( CONTA_ESTOQUE"
+    , ", DESCR_CT_ESTOQUE"
+    , ", ITENS_ESTOQUE"
+    , ", TIPO_CONSUMO"
+    , ", PERC_ICMS_PCUSTO"
+    , ", IPI_PCUSTO"
+    , ", ANALISA_COTACAO"
+    , ", REPLICA_SUB_MAT_COMP"
+    , ", GENERO_PRODUTO_SPED"
+    , ", TIPO_PRODUTO_SPED"
+    , ", TIPO_CONTA_ESTOQUE"
+    , ", CONS_BLOQ_ITEM_REQ"
+    , ")"
+    , "VALUES"
+    , "( :CODIGO --  CONTA_ESTOQUE"
+    , ", :DESCRICAO --  DESCR_CT_ESTOQUE"
+    , ", 0 --  ITENS_ESTOQUE"
+    , ", 0 --  TIPO_CONSUMO"
+    , ", 0 --  PERC_ICMS_PCUSTO"
+    , ", 3 --  IPI_PCUSTO - (3) Nao considera IPI no calculo"
+    , ", 0 --  ANALISA_COTACAO"
+    , ", 0 --  REPLICA_SUB_MAT_COMP"
+    , ", 0 --  GENERO_PRODUTO_SPED"
+    , ", 0 --  TIPO_PRODUTO_SPED"
+    , ", 0 --  TIPO_CONTA_ESTOQUE"
+    , ", 1 --  CONS_BLOQ_ITEM_REQ - (1) Exige requisicao para comprar"
+    , ")"
+    ]
+  , "key_list": [
+      "SELECT"
+    , "  CONTA_ESTOQUE"
+    , "FROM BASI_150"
+    ]
+  , "delete": [
+      "DELETE FROM BASI_150"
+    , "WHERE CONTA_ESTOQUE=:CODIGO"
+    ]
+  }
+}

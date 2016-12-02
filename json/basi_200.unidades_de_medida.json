@@ -1,0 +1,40 @@
+{
+  "csv": {
+    "keys": [
+      "CODIGO"
+    ]
+  }
+, "sql": {
+    "key_count": [
+      "SELECT"
+    , "  count(um.unidade_medida)"
+    , "from basi_200 um"
+    , "where um.unidade_medida = :CODIGO"
+    ]
+  , "update": [
+      "UPDATE basi_200 um"
+    , "set"
+    , "  um.DESCR_UNIDADE = :DESCRICAO"
+    , "where um.unidade_medida = :CODIGO"
+    ]
+  , "insert": [
+      "INSERT INTO basi_200 ("
+    , "  unidade_medida"
+    , ", descr_unidade"
+    , ")"
+    , "VALUES ("
+    , "  :CODIGO"
+    , ", :DESCRICAO"
+    , ")"
+   ]
+ , "key_list": [
+      "SELECT"
+    , "  um.unidade_medida"
+    , "from basi_200 um"
+    ]
+  , "delete": [
+      "DELETE FROM basi_200 um"
+    , "WHERE um.unidade_medida=:CODIGO"
+    ]
+  }
+}
