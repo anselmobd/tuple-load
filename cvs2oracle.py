@@ -15,6 +15,7 @@ class Oracle:
 
     def __init__(self, username, password,
                  hostname, port, servicename, schema):
+        self.CONTINUE_ON_ERROR = True
         self.username = username
         self.password = password
         self.hostname = hostname
@@ -41,7 +42,11 @@ class Oracle:
         self.cursor = self.con.cursor()
 
     def commit(self):
-        self.con.commit()
+        """ Commit data to the database. If this fails, don't care. """
+        try:
+            self.con.commit()
+        except cx_Oracle.DatabaseError:
+            pass
 
     def disconnect(self):
         """ Disconnect from the database. If this fails, don't care. """
@@ -50,6 +55,20 @@ class Oracle:
             self.con.close()
         except cx_Oracle.DatabaseError:
             pass
+
+    def cursorExecute(self, statement, data=None, halt=True):
+        """ Execute statement using data and return cursor. """
+        try:
+            if data:
+                self.cursor.execute(statement, data)
+            else:
+                self.cursor.execute(statement)
+        except cx_Oracle.DatabaseError as e:
+            error, = e.args
+            print('Error: {}'.format(e))
+            if halt:
+                raise
+        return self.cursor
 
 
 class Main:
@@ -86,7 +105,6 @@ class Main:
         self.printV(
             'Banco de dados conectado. ' +
             '(versão do Oracle:' + self.oracle.con.version + ')')
-        self.cursor = self.oracle.cursor
 
     def closeDataBase(self):
         self.oracle.commit()
@@ -204,22 +222,22 @@ class Main:
         sql = '\n'.join(self.rules['sql']['key_count'])
         self.printV(sql, 2, sep='---')
 
-        self.cursor.execute(sql, keyRow)
-        countRows = self.cursor.fetchall()[0][0]
+        cursor = self.oracle.cursorExecute(sql, keyRow)
+        countRows = cursor.fetchall()[0][0]
         self.printV('count = %s' % (countRows), 2)
 
         if countRows == 1:
             sql = '\n'.join(self.rules['sql']['update'])
             self.printV(sql, 2, sep='---')
 
-            self.cursor.execute(sql, dictRow)
-            self.printV('updated: %s' % (self.cursor.rowcount), 2)
+            cursor = self.oracle.cursorExecute(sql, dictRow)
+            self.printV('updated: %s' % (cursor.rowcount), 2)
         else:
             sql = '\n'.join(self.rules['sql']['insert'])
             self.printV(sql, 2, sep='---')
 
-            self.cursor.execute(sql, dictRow)
-            self.printV('inserted: %s' % (self.cursor.rowcount), 2)
+            cursor = self.oracle.cursorExecute(sql, dictRow)
+            self.printV('inserted: %s' % (cursor.rowcount), 2)
 
     def readCsvKeys(self):
         self.printV('->readCsvKeys', 2)
@@ -235,9 +253,6 @@ class Main:
                         key = int(key)
                 completeKey += (key,)
             self.keys.append(completeKey)
-
-            # self.keys.append(
-            #     tuple((dataRow[k] for k in self.rules['csv']['keys'])))
         self.pprintV(self.keys, 3)
 
     def deleteRows(self):
@@ -246,10 +261,10 @@ class Main:
         sql = '\n'.join(self.rules['sql']['key_list'])
         self.printV(sql, 2, sep='---')
 
-        self.cursor.execute(sql)
+        cursor = self.oracle.cursorExecute(sql)
 
         toDelete = []
-        for row in self.cursor:
+        for row in cursor:
             self.printV('row', 4)
             self.pprintV(row, 4)
             if row in self.keys:
@@ -267,27 +282,12 @@ class Main:
 
             for deleteKey in toDelete:
                 self.printV('Delete: "{}"'.format(deleteKey))
-                try:
-                    self.cursor.execute(sql, deleteKey)
-                except cx_Oracle.DatabaseError as e:
-                    print('ERROR: "{}"'.format(type(e)))
-                    print('Deleting: "{}"'.format(deleteKey))
-                    error,  = e.args
-                    print('code: "{}"'.format(error.code))
-                    print('message: "{}"'.format(error.message.strip()))
-                    print('context: "{}"'.format(error.context))
-                else:
-                    self.printV('"{}" deleted'.format(deleteKey))
-
-                self.printV('deleted: %s' % (self.cursor.rowcount), 2)
+                cursor = self.oracle.cursorExecute(
+                    sql, deleteKey, self.oracle.CONTINUE_ON_ERROR)
+                self.printV('deleted: %s' % (cursor.rowcount), 2)
 
     def main(self):
         self.parseArgs()
-        # self.printV('sql1', 2, sep='---')
-        # self.printV('sql2', 2)
-        # print('insert {}'.format(self.args.insert or self.args.both))
-        # print('delete {}'.format(self.args.delete or self.args.both))
-        # sys.exit(1)
         self.configProcess()
         self.run()
 
