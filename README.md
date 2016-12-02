@@ -13,3 +13,24 @@ to an Oracle database.
 - BASI_220.json - First file with information from a table.
 
 ## ./cvs2oracle.py --help
+
+```
+usage: cvs2oracle.py [-h] [-i] [-u] [-d] [-b] [-v] cvsFile configFile
+
+Write CSV data to Oracle
+
+positional arguments:
+  cvsFile          data group CVS file name, in the format data_group_name[.version].csv
+  configFile       config file of data groups
+
+optional arguments:
+  -h, --help       show this help message and exit
+  -i, --insert     insert or update in Oracle rows in CSV
+                   (default if none action defined)
+  -u, --update     same as -i
+  -d, --delete     delete in Oracle rows not in CSV
+  -b, --both       force -i and -d
+  -v, --verbosity  increase output verbosity
+
+(c) Tussor & Oxigenai
+```
