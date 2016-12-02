@@ -1,7 +1,8 @@
 # tuple-load
-Loading CVS tuples in relational databases.
+Loading CVS tuples into relational databases.
 
-- cvs_validate.py - In this script are the first steps of the project. Initially implementing a simple validation.
+- cvs2oracle.py - Get data from a CSV and, according configuration files, write
+to an Oracle database.
 
 ## Files for routine testing.
 
@@ -11,10 +12,4 @@ Loading CVS tuples in relational databases.
 
 - BASI_220.json - First file with information from a table.
 
-## About running the script
-
-The script has two required parameters:
-
-- CSV file name
-
-- configuration file name
+## ./cvs2oracle.py --help
