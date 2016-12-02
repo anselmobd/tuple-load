@@ -11,10 +11,51 @@ import json
 import cx_Oracle
 
 
+class Oracle:
+
+    def __init__(self, username, password,
+                 hostname, port, servicename, schema):
+        self.username = username
+        self.password = password
+        self.hostname = hostname
+        self.port = port
+        self.servicename = servicename
+        self.schema = schema
+
+    def connect(self):
+        """ Connect to the database. if this fails, raise. """
+        try:
+            self.con = cx_Oracle.connect(
+                self.username, self.password,
+                '{}:{}/{}'.format(self.hostname, self.port, self.servicename))
+            self.con.current_schema = self.schema
+
+        except cx_Oracle.DatabaseError as e:
+            error, = e.args
+            if error.code == 1017:
+                print('Please check your credentials.')
+            else:
+                print('Database connection error: {}'.format(e))
+            raise
+
+        self.cursor = self.con.cursor()
+
+    def commit(self):
+        self.con.commit()
+
+    def disconnect(self):
+        """ Disconnect from the database. If this fails, don't care. """
+        try:
+            self.cursor.close()
+            self.con.close()
+        except cx_Oracle.DatabaseError:
+            pass
+
+
 class Main:
 
     def printV(self, message, level=1, **args):
-        # if 'sep' in args:
+        ''' Print message if visibility x '''
         try:
             message = '{0}\n{1}\n{0}'.format(args['sep'], message)
         except:
@@ -23,31 +64,33 @@ class Main:
             print(message)
 
     def pprintV(self, obj, level=1):
+        ''' PPrint object if visibility x '''
         if self.args.verbosity >= level:
             pprint(obj)
 
     def checkFile(self, fileName, description, exitError):
-        self.printV((description + ' file: %s') % (fileName))
+        self.printV(description + ' file: {}'.format(fileName))
         if not os.path.exists(fileName):
-            print(
-                '"' + description + '" file "' + fileName +
-                '" does not exist')
+            print('"{}" file "{}" does not exist'.format(
+                description, fileName))
             sys.exit(exitError)
 
     def connectDataBase(self):
-        self.printV('->connectDataBase', 2)
-        self.con = cx_Oracle.connect('systextil/oracle@localhost:16521/XE')
-        self.con.current_schema = 'SYSTEXTIL'
+        self.oracle = Oracle(self.config.get('db', 'username'),
+                             self.config.get('db', 'password'),
+                             self.config.get('db', 'hostname'),
+                             self.config.get('db', 'port'),
+                             self.config.get('db', 'servicename'),
+                             self.config.get('db', 'schema'))
+        self.oracle.connect()
         self.printV(
             'Banco de dados conectado. ' +
-            '(versão do Oracle:' + self.con.version + ')')
-        self.cursor = self.con.cursor()
+            '(versão do Oracle:' + self.oracle.con.version + ')')
+        self.cursor = self.oracle.cursor
 
     def closeDataBase(self):
-        self.printV('->closeDataBase', 2)
-        self.cursor.close()
-        self.con.commit()
-        self.con.close()
+        self.oracle.commit()
+        self.oracle.disconnect()
 
     def __init__(self):
         self.main()
@@ -89,21 +132,21 @@ class Main:
         if self.args.insert == self.args.delete:
             self.args.insert = True
 
-    def config(self):
-        self.printV('->config', 2)
+    def configProcess(self):
+        self.printV('->configProcess', 2)
         self.checkFile(self.args.cvsFile, 'CSV', 11)
 
         self.checkFile(self.args.configFile, 'Config', 12)
 
-        config = configparser.RawConfigParser()
-        config.read(self.args.configFile)
+        self.config = configparser.RawConfigParser()
+        self.config.read(self.args.configFile)
 
         dataGroup = os.path.basename(self.args.cvsFile)
         dataGroup = os.path.splitext(dataGroup)[0]
         dataGroup = dataGroup.split('.')[0]
         self.printV('Data group name: %s' % (dataGroup))
 
-        sqlTable = config.get('data_groups', dataGroup)
+        sqlTable = self.config.get('data_groups', dataGroup)
         self.printV('SQL Table name: %s' % (sqlTable))
 
         self.jsonFileName = ''.join((sqlTable, '.json'))
@@ -112,17 +155,18 @@ class Main:
     def run(self):
         self.printV('->run', 2)
         self.readJson()
-        self.connectDataBase()
+        try:
+            self.connectDataBase()
 
-        if self.args.insert:
-            for dataRow in self.readCsvGenerator():
-                self.insertUpdateRow(dataRow)
+            if self.args.insert:
+                for dataRow in self.readCsvGenerator():
+                    self.insertUpdateRow(dataRow)
 
-        if self.args.delete:
-            self.readCsvKeys()
-            self.deleteRows()
-
-        self.closeDataBase()
+            if self.args.delete:
+                self.readCsvKeys()
+                self.deleteRows()
+        finally:
+            self.closeDataBase()
 
     def readJson(self):
         self.printV('->readJson', 2)
@@ -244,7 +288,7 @@ class Main:
         # print('insert {}'.format(self.args.insert or self.args.both))
         # print('delete {}'.format(self.args.delete or self.args.both))
         # sys.exit(1)
-        self.config()
+        self.configProcess()
         self.run()
 
 
