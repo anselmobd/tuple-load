@@ -11,11 +11,31 @@ import json
 import cx_Oracle
 
 
+class VerboseOutput:
+
+    def __init__(self, verbosity):
+        self.verbosity = verbosity
+
+    def prnt(self, message, verbosity=1, **args):
+        ''' Print message if verbosity x '''
+        try:
+            message = '{0}\n{1}\n{0}'.format(args['sep'], message)
+        except:
+            pass
+        if self.verbosity >= verbosity:
+            print(message)
+
+    def pprnt(self, obj, verbosity=1):
+        ''' PPrint object if verbosity x '''
+        if self.verbosity >= verbosity:
+            pprint(obj)
+
+
 class Oracle:
 
     def __init__(self, username, password,
                  hostname, port, servicename, schema):
-        self.CONTINUE_ON_ERROR = True
+        self.CONTINUE_ON_ERROR = False
         self.username = username
         self.password = password
         self.hostname = hostname
@@ -73,22 +93,8 @@ class Oracle:
 
 class Main:
 
-    def printV(self, message, level=1, **args):
-        ''' Print message if visibility x '''
-        try:
-            message = '{0}\n{1}\n{0}'.format(args['sep'], message)
-        except:
-            pass
-        if self.args.verbosity >= level:
-            print(message)
-
-    def pprintV(self, obj, level=1):
-        ''' PPrint object if visibility x '''
-        if self.args.verbosity >= level:
-            pprint(obj)
-
     def checkFile(self, fileName, description, exitError):
-        self.printV(description + ' file: {}'.format(fileName))
+        self.vOut.prnt(description + ' file: {}'.format(fileName))
         if not os.path.exists(fileName):
             print('"{}" file "{}" does not exist'.format(
                 description, fileName))
@@ -102,9 +108,9 @@ class Main:
                              self.config.get('db', 'servicename'),
                              self.config.get('db', 'schema'))
         self.oracle.connect()
-        self.printV(
-            'Banco de dados conectado. ' +
-            '(versão do Oracle:' + self.oracle.con.version + ')')
+        self.vOut.prnt(
+            'Banco de dados conectado. (versão do Oracle: {})'.format(
+                self.oracle.con.version))
 
     def closeDataBase(self):
         self.oracle.commit()
@@ -151,7 +157,7 @@ class Main:
             self.args.insert = True
 
     def configProcess(self):
-        self.printV('->configProcess', 2)
+        self.vOut.prnt('->configProcess', 2)
         self.checkFile(self.args.cvsFile, 'CSV', 11)
 
         self.checkFile(self.args.configFile, 'Config', 12)
@@ -162,16 +168,16 @@ class Main:
         dataGroup = os.path.basename(self.args.cvsFile)
         dataGroup = os.path.splitext(dataGroup)[0]
         dataGroup = dataGroup.split('.')[0]
-        self.printV('Data group name: %s' % (dataGroup))
+        self.vOut.prnt('Data group name: %s' % (dataGroup))
 
         sqlTable = self.config.get('data_groups', dataGroup)
-        self.printV('SQL Table name: %s' % (sqlTable))
+        self.vOut.prnt('SQL Table name: %s' % (sqlTable))
 
         self.jsonFileName = ''.join((sqlTable, '.json'))
-        self.printV('JSON file name: %s' % (self.jsonFileName))
+        self.vOut.prnt('JSON file name: %s' % (self.jsonFileName))
 
     def run(self):
-        self.printV('->run', 2)
+        self.vOut.prnt('->run', 2)
         self.readJson()
         try:
             self.connectDataBase()
@@ -187,21 +193,21 @@ class Main:
             self.closeDataBase()
 
     def readJson(self):
-        self.printV('->readJson', 2)
+        self.vOut.prnt('->readJson', 2)
         with open(self.jsonFileName) as json_data:
             self.rules = json.load(json_data)
-        self.pprintV(self.rules, 3)
+        self.vOut.pprnt(self.rules, 3)
 
     def readCsvGenerator(self):
-        self.printV('->readCsvGenerator', 2)
+        self.vOut.prnt('->readCsvGenerator', 2)
         with open(self.args.cvsFile) as csvfile:
             readCsv = csv.reader(csvfile, delimiter=';')
             columns = None
             for row in readCsv:
                 if columns:
                     dictRow = dict(zip(columns, row))
-                    self.pprintV(dictRow, 3)
-                    self.pprintV(
+                    self.vOut.pprnt(dictRow, 3)
+                    self.vOut.pprnt(
                         list(
                             (dictRow[f] for f in self.rules['csv']['keys'])
                             ), 3)
@@ -211,36 +217,36 @@ class Main:
                     columns = row
 
     def insertUpdateRow(self, dictRow):
-        self.printV('->insertUpdate', 2)
-        self.pprintV(dictRow, 3)
+        self.vOut.prnt('->insertUpdate', 2)
+        self.vOut.pprnt(dictRow, 3)
 
         keyRow = dict(((k, dictRow[k]) for k in self.rules['csv']['keys']))
-        self.pprintV(keyRow)
+        self.vOut.pprnt(keyRow)
 
         # counting rows
 
         sql = '\n'.join(self.rules['sql']['key_count'])
-        self.printV(sql, 2, sep='---')
+        self.vOut.prnt(sql, 2, sep='---')
 
         cursor = self.oracle.cursorExecute(sql, keyRow)
         countRows = cursor.fetchall()[0][0]
-        self.printV('count = %s' % (countRows), 2)
+        self.vOut.prnt('count = %s' % (countRows), 2)
 
         if countRows == 1:
             sql = '\n'.join(self.rules['sql']['update'])
-            self.printV(sql, 2, sep='---')
+            self.vOut.prnt(sql, 2, sep='---')
 
             cursor = self.oracle.cursorExecute(sql, dictRow)
-            self.printV('updated: %s' % (cursor.rowcount), 2)
+            self.vOut.prnt('updated: %s' % (cursor.rowcount), 2)
         else:
             sql = '\n'.join(self.rules['sql']['insert'])
-            self.printV(sql, 2, sep='---')
+            self.vOut.prnt(sql, 2, sep='---')
 
             cursor = self.oracle.cursorExecute(sql, dictRow)
-            self.printV('inserted: %s' % (cursor.rowcount), 2)
+            self.vOut.prnt('inserted: %s' % (cursor.rowcount), 2)
 
     def readCsvKeys(self):
-        self.printV('->readCsvKeys', 2)
+        self.vOut.prnt('->readCsvKeys', 2)
         self.keys = []
         for dataRow in self.readCsvGenerator():
             completeKey = ()
@@ -253,20 +259,20 @@ class Main:
                         key = int(key)
                 completeKey += (key,)
             self.keys.append(completeKey)
-        self.pprintV(self.keys, 3)
+        self.vOut.pprnt(self.keys, 3)
 
     def deleteRows(self):
-        self.printV('->deleteRows', 2)
+        self.vOut.prnt('->deleteRows', 2)
 
         sql = '\n'.join(self.rules['sql']['key_list'])
-        self.printV(sql, 2, sep='---')
+        self.vOut.prnt(sql, 2, sep='---')
 
         cursor = self.oracle.cursorExecute(sql)
 
         toDelete = []
         for row in cursor:
-            self.printV('row', 4)
-            self.pprintV(row, 4)
+            self.vOut.prnt('row', 4)
+            self.vOut.pprnt(row, 4)
             if row in self.keys:
                 self.keys.remove(row)
             else:
@@ -274,20 +280,21 @@ class Main:
                     {self.rules['csv']['keys'][i]: row[i]
                         for i in range(0, len(row))})
 
-        self.pprintV(toDelete, 3)
+        self.vOut.pprnt(toDelete, 3)
 
         if len(toDelete) > 0:
             sql = '\n'.join(self.rules['sql']['delete'])
-            self.printV(sql, 2, sep='---')
+            self.vOut.prnt(sql, 2, sep='---')
 
             for deleteKey in toDelete:
-                self.printV('Delete: "{}"'.format(deleteKey))
+                self.vOut.prnt('Delete: "{}"'.format(deleteKey))
                 cursor = self.oracle.cursorExecute(
                     sql, deleteKey, self.oracle.CONTINUE_ON_ERROR)
-                self.printV('deleted: %s' % (cursor.rowcount), 2)
+                self.vOut.prnt('deleted: %s' % (cursor.rowcount), 2)
 
     def main(self):
         self.parseArgs()
+        self.vOut = VerboseOutput(self.args.verbosity)
         self.configProcess()
         self.run()
 
