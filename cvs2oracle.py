@@ -101,12 +101,14 @@ class Main:
             sys.exit(exitError)
 
     def connectDataBase(self):
-        self.oracle = Oracle(self.config.get('db', 'username'),
-                             self.config.get('db', 'password'),
-                             self.config.get('db', 'hostname'),
-                             self.config.get('db', 'port'),
-                             self.config.get('db', 'servicename'),
-                             self.config.get('db', 'schema'))
+        if self.config.get('dbwrite', 'dbms') != 'oracle':
+            raise NameError('For now, script prepared only for Oracle.')
+        self.oracle = Oracle(self.config.get('dbwrite', 'username'),
+                             self.config.get('dbwrite', 'password'),
+                             self.config.get('dbwrite', 'hostname'),
+                             self.config.get('dbwrite', 'port'),
+                             self.config.get('dbwrite', 'servicename'),
+                             self.config.get('dbwrite', 'schema'))
         self.oracle.connect()
         self.vOut.prnt(
             'Banco de dados conectado. (versão do Oracle: {})'.format(
