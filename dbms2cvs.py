@@ -9,6 +9,7 @@ import json
 import configparser
 
 import pyodbc
+import csv
 
 
 def count_field(valIni, fieldBreak):
@@ -26,6 +27,36 @@ def count_field(valIni, fieldBreak):
         ini += 1
         return result
     return inner_func
+
+
+def translate_field(queryDict):
+    ''' Closure to "translate" function variable '''
+    query = queryDict
+
+    def inner_func(dictRow):
+        nonlocal query
+        result = None
+        with open(query['from']) as transFile:
+            readCsv = csv.reader(transFile, delimiter=';')
+            columns = None
+            for row in readCsv:
+                if columns:
+                    csvRow = dict(zip(columns, row))
+                    bOk = True
+                    for cond in query['where']:
+                        bOk = bOk and csvRow[cond[0]] == dictRow[cond[-1]]
+                    if bOk:
+                        result = csvRow[query['select']]
+                        break
+                else:
+                    columns = row
+            if (not result) and ('default' in query):
+                result = query['default']
+            if ('type' in query) and (query['type'] == 'n'):
+                result = float(result)
+        return result
+    return inner_func
+
 
 iniConfig = configparser.RawConfigParser()
 iniConfig.read('insumos.ini')
@@ -58,12 +89,14 @@ columns = [column[0].lower() for column in curF.description]
 dictRowFunctions = {}
 for variable, value in iniConfig.items("functions"):
     varParams = json.loads(value)
-    if 'function' in varParams.keys():
-        if varParams['function'] == 'count':
-            dictRowFunctions[variable] = \
-                count_field(1,
-                            None if 'break' not in varParams else
-                            varParams['break'])
+    if list(varParams.keys())[0] == 'count':
+        funcParams = varParams['count']
+        dictRowFunctions[variable] = count_field(
+            1, None if 'break' not in funcParams else funcParams['break'])
+    elif list(varParams.keys())[0] == 'translate':
+        funcParams = varParams['translate']
+        dictRowFunctions[variable] = translate_field(funcParams)
+
 
 row = curF.fetchone()
 while row:
