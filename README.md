@@ -1,15 +1,16 @@
 # tuple-load
-Loading CVS tuples into relational databases.
+Loading CSV tuples into relational databases.
 
-- cvs2oracle.py - Get data from a CSV and, according configuration files, write to an Oracle database.
+- csv2oracle.py - Get data from a CSV and, according configuration files, write to an Oracle database.
 
-- dbms2cvs.py - Get data from MS-SQL database and, according configuration files, write to a CSV file.
+- dbms2csv.py - Get data from MS-SQL database and, according configuration files, write to a CSV file.
+  (Yet in early stages of development.)
 
 ## Files
 
 - data_load.cfg - Configuration file, which for the moment is only used to link an intelegable table name to the table name in an RDB. The intelegable name is the name of the CSV file (with a .csv), which contains the tuples (the data). The table name in the RDB is the name of the JSON file (with a .json), which contains information about the columns of the table.
 
-- insumos.ini - Sample configuration file to "dbms2cvs.py" script.
+- insumos.ini - Sample configuration file to "dbms2csv.py" script.
 
 ## Directories
 
@@ -17,15 +18,15 @@ Loading CVS tuples into relational databases.
 
 - json (/\*.json) One file per database table, with SQL commands required to load.
 
-### ./cvs2oracle.py --help
+### ./csv2oracle.py --help
 
 ```
-usage: cvs2oracle.py [-h] [-i] [-u] [-d] [-b] [-v] cvsFile configFile
+usage: csv2oracle.py [-h] [-i] [-u] [-d] [-b] [-v] csvFile configFile
 
 Write CSV data to Oracle
 
 positional arguments:
-  cvsFile          data group CVS file name, in the format data_group_name[.version].csv
+  csvFile          data group CSV file name, in the format data_group_name[.version].csv
   configFile       config file of data groups
 
 optional arguments:
