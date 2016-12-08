@@ -127,8 +127,8 @@ class Main:
             epilog="(c) Tussor & Oxigenai",
             formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument(
-            "cvsFile",
-            help='data group CVS file name, in the format '
+            "csvFile",
+            help='data group CSV file name, in the format '
             'data_group_name[.version].csv')
         parser.add_argument(
             "configFile",
@@ -160,14 +160,14 @@ class Main:
 
     def configProcess(self):
         self.vOut.prnt('->configProcess', 2)
-        self.checkFile(self.args.cvsFile, 'CSV', 11)
+        self.checkFile(self.args.csvFile, 'CSV', 11)
 
         self.checkFile(self.args.configFile, 'Config', 12)
 
         self.config = configparser.RawConfigParser()
         self.config.read(self.args.configFile)
 
-        dataGroup = os.path.basename(self.args.cvsFile)
+        dataGroup = os.path.basename(self.args.csvFile)
         dataGroup = os.path.splitext(dataGroup)[0]
         dataGroup = dataGroup.split('.')[0]
         self.vOut.prnt('Data group name: %s' % (dataGroup))
@@ -202,7 +202,7 @@ class Main:
 
     def readCsvGenerator(self):
         self.vOut.prnt('->readCsvGenerator', 2)
-        with open(self.args.cvsFile) as csvfile:
+        with open(self.args.csvFile) as csvfile:
             readCsv = csv.reader(csvfile, delimiter=';')
             columns = None
             for row in readCsv:
