@@ -2,14 +2,16 @@
 # -*- coding: utf8 -*-
 
 import sys
+import os.path
+from pprint import pprint
 import locale
 
-from pprint import pprint
-import json
+import argparse
 import configparser
+import json
+import csv
 
 import pyodbc
-import csv
 
 
 def count_field(valIni, fieldBreak):
@@ -58,38 +60,163 @@ def translate_field(queryDict):
     return inner_func
 
 
+class VerboseOutput:
+
+    def __init__(self, verbosity):
+        self.verbosity = verbosity
+
+    def prnt(self, message, verbosity=1, **args):
+        ''' Print message if verbosity x '''
+        try:
+            message = '{0}\n{1}\n{0}'.format(args['sep'], message)
+        except:
+            pass
+        if self.verbosity >= verbosity:
+            print(message)
+
+    def pprnt(self, obj, verbosity=1):
+        ''' PPrint object if verbosity x '''
+        if self.verbosity >= verbosity:
+            pprint(obj)
+
+
+class Mssql:
+
+    def __init__(self, username, password,
+                 hostname, port, database, schema):
+        # self.CONTINUE_ON_ERROR = False
+        self.username = username
+        self.password = password
+        self.hostname = hostname
+        self.port = port
+        self.database = database
+        self.schema = schema
+
+    def connect(self):
+        """ Connect to the database. if this fails, raise. """
+        try:
+            self.con = pyodbc.connect(
+                'DRIVER={FreeTDS};'
+                'SERVER='+self.hostname+';'
+                'PORT='+self.port+';'
+                'DATABASE='+self.database+';'
+                'SCHEMA='+self.schema+';'
+                'UID='+self.username+';'
+                'PWD='+self.password+';'
+                'TDS_Version=7.0;'
+                )
+
+        except pyodbc.DatabaseError as e:
+            print('Database connection error: {}'.format(e))
+            raise
+
+        self.cursor = self.con.cursor()
+
+    def disconnect(self):
+        """ Disconnect from the database. If this fails, don't care. """
+        try:
+            self.cursor.close()
+            self.con.close()
+        except pyodbc.DatabaseError:
+            pass
+
+    def cursorExecute(self, statement, data=None, halt=True):
+        """ Execute statement using data and return cursor. """
+        try:
+            if data:
+                self.cursor.execute(statement, data)
+            else:
+                self.cursor.execute(statement)
+        except puodbc.DatabaseError as e:
+            print('Error: {}'.format(e))
+            if halt:
+                raise
+        return self.cursor
+
+
 class Main:
 
+    def checkFile(self, fileName, description, exitError):
+        self.vOut.prnt(description + ' file: {}'.format(fileName))
+        if not os.path.exists(fileName):
+            print('"{}" file "{}" does not exist'.format(
+                description, fileName))
+            sys.exit(exitError)
+
+    def connectDataBase(self):
+        if self.cfgConfig.get('dbread', 'dbms') != 'mssql':
+            raise NameError('For now, script prepared only for Mssql.')
+
+        self.db = Mssql(self.cfgConfig.get('dbread', 'username'),
+                        self.cfgConfig.get('dbread', 'password'),
+                        self.cfgConfig.get('dbread', 'hostname'),
+                        self.cfgConfig.get('dbread', 'port'),
+                        self.cfgConfig.get('dbread', 'database'),
+                        self.cfgConfig.get('dbread', 'schema'))
+
+        self.db.connect()
+
+    def closeDataBase(self):
+        self.db.disconnect()
+
     def __init__(self):
-        iniConfig = configparser.RawConfigParser()
-        iniConfig.read('ini/insumo_nao_tecido_capa.ini')
+        self.main()
 
-        cfgConfig = configparser.RawConfigParser()
-        cfgConfig.read('data_load.cfg')
+    def parseArgs(self):
+        parser = argparse.ArgumentParser(
+            description='Write CSV from Mssql database',
+            epilog="(c) Tussor & Oxigenai",
+            formatter_class=argparse.RawTextHelpFormatter)
+        parser.add_argument(
+            "iniFile",
+            help='data group INI file name, in the format '
+            '[dir/]data_group_name[.version].ini')
+        parser.add_argument(
+            "configFile",
+            help='config file of data groups, in the format '
+            '[dir/]config_file_name.cfg')
+        parser.add_argument(
+            "-v", "--verbosity", action="count", default=0,
+            help="increase output verbosity")
+        self.args = parser.parse_args()
 
+    def configProcess(self):
+        self.vOut.prnt('->configProcess', 2)
+        self.checkFile(self.args.iniFile, 'INI', 11)
+
+        self.checkFile(self.args.configFile, 'Config', 12)
+
+        self.iniConfig = configparser.RawConfigParser()
+        self.iniConfig.read(self.args.iniFile)
+
+        self.cfgConfig = configparser.RawConfigParser()
+        self.cfgConfig.read(self.args.configFile)
+
+        # dataGroup = os.path.basename(self.args.csvFile)
+        # dataGroup = os.path.splitext(dataGroup)[0]
+        # dataGroup = dataGroup.split('.')[0]
+        # self.vOut.prnt('Data group name: %s' % (dataGroup))
+        #
+        # sqlTable = self.config.get('data_groups', dataGroup)
+        # self.vOut.prnt('SQL Table name: %s' % (sqlTable))
+        #
+        # self.jsonFileName = ''.join((sqlTable, '.json'))
+        # self.vOut.prnt('JSON file name: %s' % (self.jsonFileName))
+
+    def run(self):
+        self.vOut.prnt('->run', 2)
         locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
 
-        conFabric = pyodbc.connect(
-                    'DRIVER={FreeTDS};'
-                    'SERVER='+cfgConfig.get('dbread', 'hostname')+';'
-                    'PORT='+cfgConfig.get('dbread', 'port')+';'
-                    'DATABASE='+cfgConfig.get('dbread', 'database')+';'
-                    'SCHEMA='+cfgConfig.get('dbread', 'schema')+';'
-                    'UID='+cfgConfig.get('dbread', 'username')+';'
-                    'PWD='+cfgConfig.get('dbread', 'password')+';'
-                    'TDS_Version=7.0;'
-                    )
+        try:
+            self.connectDataBase()
 
-        curF = conFabric.cursor()
+            self.executeQuery()
+        finally:
+            self.closeDataBase()
 
-        sqlF = iniConfig.get('read', 'sql')
-        curF.execute(sqlF)
-
-        columns = [column[0].lower() for column in curF.description]
-
-        # load function variables
+    def loadFunctionVariables(self):
         dictRowFunctions = {}
-        for variable, value in iniConfig.items("functions"):
+        for variable, value in self.iniConfig.items("functions"):
             varParams = json.loads(value)
             if list(varParams.keys())[0] == 'count':
                 funcParams = varParams['count']
@@ -99,25 +226,43 @@ class Main:
             elif list(varParams.keys())[0] == 'translate':
                 funcParams = varParams['translate']
                 dictRowFunctions[variable] = translate_field(funcParams)
+        return dictRowFunctions
+
+    def addVariablesToRow(self, dictRow):
+        for variable, value in self.iniConfig.items("variables"):
+            varParams = json.loads(value)
+            if 'value' in varParams.keys():
+                dictRow[variable] = varParams['value']
+
+    def execFunctionsToRow(self, dictRowFunctions, dictRow):
+        for column in dictRowFunctions.keys():
+            dictRow[column] = dictRowFunctions[column](dictRow)
+
+    def executeQuery(self):
+        sqlF = self.iniConfig.get('read', 'sql')
+        curF = self.db.cursorExecute(sqlF)
+
+        columns = [column[0].lower() for column in curF.description]
+
+        dictRowFunctions = self.loadFunctionVariables()
 
         doHeader = True
         headerLine = ''
 
-        row = curF.fetchone()
-        while row:
+        while True:
+            row = curF.fetchone()
+            if not row:
+                break
+
             dictRow = dict(zip(columns, row))
 
-            for variable, value in iniConfig.items("variables"):
-                varParams = json.loads(value)
-                if 'value' in varParams.keys():
-                    dictRow[variable] = varParams['value']
+            self.addVariablesToRow(dictRow)
 
-            for column in dictRowFunctions.keys():
-                dictRow[column] = dictRowFunctions[column](dictRow)
+            self.execFunctionsToRow(dictRowFunctions, dictRow)
 
             dataLine = ''
             separator = ''
-            for column, spec in iniConfig.items("columns"):
+            for column, spec in self.iniConfig.items("columns"):
                 # print(column, spec)
                 colType = spec[0]
                 colParams = {}
@@ -126,6 +271,8 @@ class Main:
 
                 colValue = None
 
+                # A column can be made by processing others, so it can not
+                # exist in dictRow
                 if column in dictRow.keys():
                     colValue = dictRow[column]
 
@@ -171,10 +318,12 @@ class Main:
             print(dataLine)
 
             # sys.exit(2)
-            row = curF.fetchone()
 
-        curF.close()
-        conFabric.close()
+    def main(self):
+        self.parseArgs()
+        self.vOut = VerboseOutput(self.args.verbosity)
+        self.configProcess()
+        self.run()
 
 if __name__ == '__main__':
     Main()
