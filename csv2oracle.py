@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# -*- coding: utf8 -*-
 
 import sys
 import os.path
@@ -6,8 +7,9 @@ from pprint import pprint
 
 import argparse
 import configparser
-import csv
 import json
+import csv
+
 import cx_Oracle
 
 
