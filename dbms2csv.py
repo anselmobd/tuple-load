@@ -59,7 +59,7 @@ def translate_field(queryDict):
 
 
 iniConfig = configparser.RawConfigParser()
-iniConfig.read('insumos.ini')
+iniConfig.read('insumo_nao_tecido_capa.ini')
 
 cfgConfig = configparser.RawConfigParser()
 cfgConfig.read('data_load.cfg')
@@ -80,7 +80,6 @@ conFabric = pyodbc.connect(
 curF = conFabric.cursor()
 
 sqlF = iniConfig.get('read', 'sql')
-
 curF.execute(sqlF)
 
 columns = [column[0].lower() for column in curF.description]
@@ -98,6 +97,9 @@ for variable, value in iniConfig.items("functions"):
         dictRowFunctions[variable] = translate_field(funcParams)
 
 
+doHeader = True
+headerLine = ''
+
 row = curF.fetchone()
 while row:
     dictRow = dict(zip(columns, row))
@@ -110,6 +112,7 @@ while row:
     for column in dictRowFunctions.keys():
         dictRow[column] = dictRowFunctions[column](dictRow)
 
+    dataLine = ''
     separator = ''
     for column, spec in iniConfig.items("columns"):
         # print(column, spec)
@@ -150,9 +153,18 @@ while row:
                 # print(type(dictRow[column]))
                 colValue = colValue.strftime(colParams['format'])
 
-        print('{}{}'.format(separator, colValue), end="")
+        dataLine += '{}{}'.format(separator, colValue)
+
+        if doHeader:
+            headerLine += '{}"{}"'.format(separator, column.upper())
+
         separator = ';'
-    print('')
+
+    if doHeader:
+        print(headerLine)
+        doHeader = False
+
+    print(dataLine)
 
     # sys.exit(2)
     row = curF.fetchone()
