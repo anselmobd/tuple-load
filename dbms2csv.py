@@ -58,116 +58,123 @@ def translate_field(queryDict):
     return inner_func
 
 
-iniConfig = configparser.RawConfigParser()
-iniConfig.read('insumo_nao_tecido_capa.ini')
+class Main:
 
-cfgConfig = configparser.RawConfigParser()
-cfgConfig.read('data_load.cfg')
+    def __init__(self):
+        iniConfig = configparser.RawConfigParser()
+        iniConfig.read('ini/insumo_nao_tecido_capa.ini')
 
-locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
+        cfgConfig = configparser.RawConfigParser()
+        cfgConfig.read('data_load.cfg')
 
-conFabric = pyodbc.connect(
-            'DRIVER={FreeTDS};'
-            'SERVER='+cfgConfig.get('dbread', 'hostname')+';'
-            'PORT='+cfgConfig.get('dbread', 'port')+';'
-            'DATABASE='+cfgConfig.get('dbread', 'database')+';'
-            'SCHEMA='+cfgConfig.get('dbread', 'schema')+';'
-            'UID='+cfgConfig.get('dbread', 'username')+';'
-            'PWD='+cfgConfig.get('dbread', 'password')+';'
-            'TDS_Version=7.0;'
-            )
+        locale.setlocale(locale.LC_ALL, 'pt_BR.utf8')
 
-curF = conFabric.cursor()
+        conFabric = pyodbc.connect(
+                    'DRIVER={FreeTDS};'
+                    'SERVER='+cfgConfig.get('dbread', 'hostname')+';'
+                    'PORT='+cfgConfig.get('dbread', 'port')+';'
+                    'DATABASE='+cfgConfig.get('dbread', 'database')+';'
+                    'SCHEMA='+cfgConfig.get('dbread', 'schema')+';'
+                    'UID='+cfgConfig.get('dbread', 'username')+';'
+                    'PWD='+cfgConfig.get('dbread', 'password')+';'
+                    'TDS_Version=7.0;'
+                    )
 
-sqlF = iniConfig.get('read', 'sql')
-curF.execute(sqlF)
+        curF = conFabric.cursor()
 
-columns = [column[0].lower() for column in curF.description]
+        sqlF = iniConfig.get('read', 'sql')
+        curF.execute(sqlF)
 
-# load function variables
-dictRowFunctions = {}
-for variable, value in iniConfig.items("functions"):
-    varParams = json.loads(value)
-    if list(varParams.keys())[0] == 'count':
-        funcParams = varParams['count']
-        dictRowFunctions[variable] = count_field(
-            1, None if 'break' not in funcParams else funcParams['break'])
-    elif list(varParams.keys())[0] == 'translate':
-        funcParams = varParams['translate']
-        dictRowFunctions[variable] = translate_field(funcParams)
+        columns = [column[0].lower() for column in curF.description]
 
+        # load function variables
+        dictRowFunctions = {}
+        for variable, value in iniConfig.items("functions"):
+            varParams = json.loads(value)
+            if list(varParams.keys())[0] == 'count':
+                funcParams = varParams['count']
+                dictRowFunctions[variable] = count_field(
+                    1,
+                    None if 'break' not in funcParams else funcParams['break'])
+            elif list(varParams.keys())[0] == 'translate':
+                funcParams = varParams['translate']
+                dictRowFunctions[variable] = translate_field(funcParams)
 
-doHeader = True
-headerLine = ''
+        doHeader = True
+        headerLine = ''
 
-row = curF.fetchone()
-while row:
-    dictRow = dict(zip(columns, row))
+        row = curF.fetchone()
+        while row:
+            dictRow = dict(zip(columns, row))
 
-    for variable, value in iniConfig.items("variables"):
-        varParams = json.loads(value)
-        if 'value' in varParams.keys():
-            dictRow[variable] = varParams['value']
+            for variable, value in iniConfig.items("variables"):
+                varParams = json.loads(value)
+                if 'value' in varParams.keys():
+                    dictRow[variable] = varParams['value']
 
-    for column in dictRowFunctions.keys():
-        dictRow[column] = dictRowFunctions[column](dictRow)
+            for column in dictRowFunctions.keys():
+                dictRow[column] = dictRowFunctions[column](dictRow)
 
-    dataLine = ''
-    separator = ''
-    for column, spec in iniConfig.items("columns"):
-        # print(column, spec)
-        colType = spec[0]
-        colParams = {}
-        if len(spec) > 2:
-            colParams = json.loads(spec[2:])
+            dataLine = ''
+            separator = ''
+            for column, spec in iniConfig.items("columns"):
+                # print(column, spec)
+                colType = spec[0]
+                colParams = {}
+                if len(spec) > 2:
+                    colParams = json.loads(spec[2:])
 
-        colValue = None
+                colValue = None
 
-        if column in dictRow.keys():
-            colValue = dictRow[column]
+                if column in dictRow.keys():
+                    colValue = dictRow[column]
 
-        if colType == 't':
-            if not colValue:
-                colValue = ''
-            if 'format' in colParams:
-                if 'fields' in colParams:
-                    colFieldValues = \
-                        tuple((dictRow[c] for c in colParams['fields']))
-                else:
-                    colFieldValues = tuple(colValue,)
-                colValue = \
-                    colParams['format'] % tuple(colFieldValues)
-            colValue = \
-                '"{}"'.format(colValue.replace('"', '""'))
+                if colType == 't':
+                    if not colValue:
+                        colValue = ''
+                    if 'format' in colParams:
+                        if 'fields' in colParams:
+                            colFieldValues = \
+                                tuple((dictRow[c]
+                                      for c in colParams['fields']))
+                        else:
+                            colFieldValues = tuple(colValue,)
+                        colValue = \
+                            colParams['format'] % tuple(colFieldValues)
+                    colValue = \
+                        '"{}"'.format(colValue.replace('"', '""'))
 
-        elif colType == 'n':
-            if not colValue:
-                colValue = 0
-            colValue = \
-                locale.format(colParams['format'], colValue)
+                elif colType == 'n':
+                    if not colValue:
+                        colValue = 0
+                    colValue = \
+                        locale.format(colParams['format'], colValue)
 
-        elif colType == 'd':
-            if not colValue:
-                colValue = ''
-            else:
-                # print(type(dictRow[column]))
-                colValue = colValue.strftime(colParams['format'])
+                elif colType == 'd':
+                    if not colValue:
+                        colValue = ''
+                    else:
+                        # print(type(dictRow[column]))
+                        colValue = colValue.strftime(colParams['format'])
 
-        dataLine += '{}{}'.format(separator, colValue)
+                dataLine += '{}{}'.format(separator, colValue)
 
-        if doHeader:
-            headerLine += '{}"{}"'.format(separator, column.upper())
+                if doHeader:
+                    headerLine += '{}"{}"'.format(separator, column.upper())
 
-        separator = ';'
+                separator = ';'
 
-    if doHeader:
-        print(headerLine)
-        doHeader = False
+            if doHeader:
+                print(headerLine)
+                doHeader = False
 
-    print(dataLine)
+            print(dataLine)
 
-    # sys.exit(2)
-    row = curF.fetchone()
+            # sys.exit(2)
+            row = curF.fetchone()
 
-curF.close()
-conFabric.close()
+        curF.close()
+        conFabric.close()
+
+if __name__ == '__main__':
+    Main()
