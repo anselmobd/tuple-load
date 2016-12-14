@@ -96,3 +96,6 @@ kb/
 passos/
 dados originais systextil/
 scripts/
+
+# sensible data
+secret.py
