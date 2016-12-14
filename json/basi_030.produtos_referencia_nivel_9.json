@@ -19,9 +19,9 @@
   , "update": [
       "UPDATE BASI_030 SET"
     , "  DESCR_REFERENCIA=:DESCRITEMDEPRODUCAO"
-    , "  UNIDADE_MEDIDA=:UNIDMEDIDA"
-    , "  CONTA_ESTOQUE=:CONTA_ESTOQUE"
-    , "  CODIGO_CONTABIL=:CODIGO_CONTABIL"
+    , ", UNIDADE_MEDIDA=:UNIDMEDIDA"
+    , ", CONTA_ESTOQUE=:CONTA_ESTOQUE"
+    , ", CODIGO_CONTABIL=:CODIGO_CONTABIL"
     , "WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA"
     , "  AND REFERENCIA=:REFERENCIA"
     ]
@@ -236,7 +236,7 @@
     , ", '000000'        -- COR_DE_ESTOQUE"
     , ", 0               -- DIV_PROD"
     , ", '000000'        -- COR_DE_PRODUCAO"
-    , ", 99              -- CODIGO_CONTABIL -- identificador de carga"
+    , ", :CODIGO_CONTABIL -- CODIGO_CONTABIL -- identificador de carga"
     , ", 0               -- CGC_CLIENTE_2"
     , ", 0               -- CGC_CLIENTE_4"
     , ", 0               -- CGC_CLIENTE_9"
