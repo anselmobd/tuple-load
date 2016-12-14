@@ -143,6 +143,12 @@ class Main:
                 description, fileName))
             sys.exit(exitError)
 
+    def fileWithDefaultDir(self, dire, fileName):
+        path, name = os.path.split(fileName)
+        if not path:
+            path = dire
+        return os.path.join(path, name)
+
     def connectDataBase(self):
         if self.cfgConfig.get('dbread', 'dbms') != 'mssql':
             raise NameError('For now, script prepared only for Mssql.')
@@ -172,14 +178,32 @@ class Main:
             help='data group INI file name, in the format '
             '[dir/]data_group_name[.version].ini')
         parser.add_argument(
-            "--cfg",
+            "--cfg", "--cfgfile",
             type=str,
             default='tuple-load.cfg',
             help='config file of data access and groups')
         parser.add_argument(
+            "--ini", "--inidir",
+            type=str,
+            default='ini',
+            help='default directory for ini files')
+        parser.add_argument(
+            "--csv", "--csvdir",
+            type=str,
+            default='csv',
+            help='default directory for csv files')
+        parser.add_argument(
+            "--json", "--jsondir",
+            type=str,
+            default='json',
+            help='default directory for json files')
+        parser.add_argument(
             "-v", "--verbosity", action="count", default=0,
             help="increase output verbosity")
         self.args = parser.parse_args()
+
+        self.args.iniFile = \
+            self.fileWithDefaultDir(self.args.ini, self.args.iniFile)
 
     def configProcess(self):
         self.vOut.prnt('->configProcess', 2)
