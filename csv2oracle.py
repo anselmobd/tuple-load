@@ -190,6 +190,15 @@ class Main:
     def configProcess(self):
         self.vOut.prnt('->configProcess', 2)
 
+        if self.args.insert:
+            self.vOut.prnt('--insert', 2)
+        if self.args.delete:
+            self.vOut.prnt('--delete', 2)
+        if self.args.update:
+            self.vOut.prnt('--update', 2)
+        if self.args.both:
+            self.vOut.prnt('--both', 2)
+
         self.checkFile(self.args.csvFile, 'CSV', 11)
 
         self.checkFile(self.args.cfg, 'Config', 12)
