@@ -16,7 +16,7 @@ import pyodbc
 
 def count_field(valIni, fieldBreak):
     ''' Closure to "count" function variable '''
-    ini = valIni
+    ini = int(valIni)
     breakVal = None
 
     def inner_func(dictRow):
@@ -24,7 +24,7 @@ def count_field(valIni, fieldBreak):
         if fieldBreak:
             if (not breakVal) or breakVal != dictRow[fieldBreak]:
                 breakVal = dictRow[fieldBreak]
-                ini = valIni
+                ini = int(valIni)
         result = ini
         ini += 1
         return result
@@ -246,7 +246,7 @@ class Main:
             if list(varParams.keys())[0] == 'count':
                 funcParams = varParams['count']
                 dictRowFunctions[variable] = count_field(
-                    1,
+                    '1' if 'start' not in funcParams else funcParams['start'],
                     None if 'break' not in funcParams else funcParams['break'])
             elif list(varParams.keys())[0] == 'translate':
                 funcParams = varParams['translate']
