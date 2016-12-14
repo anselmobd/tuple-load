@@ -150,15 +150,16 @@ class Main:
         return os.path.join(path, name)
 
     def connectDataBase(self):
-        if self.cfgConfig.get('dbread', 'dbms') != 'mssql':
+        dbfrom = 'db.from.{}'.format(self.iniConfig.get('read', 'db'))
+        if self.config.get(dbfrom, 'dbms') != 'mssql':
             raise NameError('For now, script prepared only for Mssql.')
 
-        self.db = Mssql(self.cfgConfig.get('dbread', 'username'),
-                        self.cfgConfig.get('dbread', 'password'),
-                        self.cfgConfig.get('dbread', 'hostname'),
-                        self.cfgConfig.get('dbread', 'port'),
-                        self.cfgConfig.get('dbread', 'database'),
-                        self.cfgConfig.get('dbread', 'schema'))
+        self.db = Mssql(self.config.get(dbfrom, 'username'),
+                        self.config.get(dbfrom, 'password'),
+                        self.config.get(dbfrom, 'hostname'),
+                        self.config.get(dbfrom, 'port'),
+                        self.config.get(dbfrom, 'database'),
+                        self.config.get(dbfrom, 'schema'))
 
         self.db.connect()
 
@@ -214,19 +215,13 @@ class Main:
         self.iniConfig = configparser.RawConfigParser()
         self.iniConfig.read(self.args.iniFile)
 
-        self.cfgConfig = configparser.RawConfigParser()
-        self.cfgConfig.read(self.args.cfg)
+        self.config = configparser.RawConfigParser()
+        self.config.read(self.args.cfg)
 
-        # dataGroup = os.path.basename(self.args.csvFile)
-        # dataGroup = os.path.splitext(dataGroup)[0]
-        # dataGroup = dataGroup.split('.')[0]
-        # self.vOut.prnt('Data group name: %s' % (dataGroup))
-        #
-        # sqlTable = self.config.get('data_groups', dataGroup)
-        # self.vOut.prnt('SQL Table name: %s' % (sqlTable))
-        #
-        # self.jsonFileName = ''.join((sqlTable, '.json'))
-        # self.vOut.prnt('JSON file name: %s' % (self.jsonFileName))
+        if os.path.exists('secret.py'):
+            from secret import DBSECRET
+            for dbkey in DBSECRET:
+                self.config[dbkey].update(DBSECRET[dbkey])
 
     def run(self):
         self.vOut.prnt('->run', 2)
