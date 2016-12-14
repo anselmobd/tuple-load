@@ -133,7 +133,9 @@ class Main:
             help='data group CSV file name, in the format '
             'data_group_name[.version].csv')
         parser.add_argument(
-            "configFile",
+            "--cfg",
+            type=str,
+            default='tuple-load.cfg',
             help='config file of data groups')
         parser.add_argument(
             "-i", "--insert",
@@ -162,12 +164,13 @@ class Main:
 
     def configProcess(self):
         self.vOut.prnt('->configProcess', 2)
+
         self.checkFile(self.args.csvFile, 'CSV', 11)
 
-        self.checkFile(self.args.configFile, 'Config', 12)
+        self.checkFile(self.args.cfg, 'Config', 12)
 
         self.config = configparser.RawConfigParser()
-        self.config.read(self.args.configFile)
+        self.config.read(self.args.cfg)
 
         dataGroup = os.path.basename(self.args.csvFile)
         dataGroup = os.path.splitext(dataGroup)[0]

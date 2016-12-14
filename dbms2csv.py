@@ -172,9 +172,10 @@ class Main:
             help='data group INI file name, in the format '
             '[dir/]data_group_name[.version].ini')
         parser.add_argument(
-            "configFile",
-            help='config file of data groups, in the format '
-            '[dir/]config_file_name.cfg')
+            "--cfg",
+            type=str,
+            default='tuple-load.cfg',
+            help='config file of data access and groups')
         parser.add_argument(
             "-v", "--verbosity", action="count", default=0,
             help="increase output verbosity")
@@ -184,13 +185,13 @@ class Main:
         self.vOut.prnt('->configProcess', 2)
         self.checkFile(self.args.iniFile, 'INI', 11)
 
-        self.checkFile(self.args.configFile, 'Config', 12)
+        self.checkFile(self.args.cfg, 'Config', 12)
 
         self.iniConfig = configparser.RawConfigParser()
         self.iniConfig.read(self.args.iniFile)
 
         self.cfgConfig = configparser.RawConfigParser()
-        self.cfgConfig.read(self.args.configFile)
+        self.cfgConfig.read(self.args.cfg)
 
         # dataGroup = os.path.basename(self.args.csvFile)
         # dataGroup = os.path.splitext(dataGroup)[0]
