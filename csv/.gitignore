@@ -1,0 +1,5 @@
+# dinamic files
+_*.csv
+
+# local files
+leia.txt
