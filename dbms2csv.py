@@ -243,13 +243,15 @@ class Main:
         dictRowFunctions = {}
         for variable, value in self.iniConfig.items("functions"):
             varParams = json.loads(value)
-            if list(varParams.keys())[0] == 'count':
+            if 'count' in varParams:
                 funcParams = varParams['count']
                 dictRowFunctions[variable] = count_field(
                     '1' if 'start' not in funcParams else funcParams['start'],
                     None if 'break' not in funcParams else funcParams['break'])
-            elif list(varParams.keys())[0] == 'translate':
+            elif 'translate' in varParams:
                 funcParams = varParams['translate']
+                funcParams['from'] = self.fileWithDefaultDir(
+                        self.args.csv, funcParams['from'])
                 dictRowFunctions[variable] = translate_field(funcParams)
         return dictRowFunctions
 
