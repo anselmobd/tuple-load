@@ -1,11 +1,25 @@
 #!/bin/bash
 
-./csv2oracle.py csv/unidades_de_medida.fixo.csv -d -vvv
+# generate
 
-./csv2oracle.py csv/tamanho.fixo.csv -d -vvv
+./dbms2csv.py insumo_nao_tecido_capa.ini > csv/_insumo_nao_tecido_capa.csv
 
-./csv2oracle.py csv/conta_de_estoque.v161202.csv -d -vvv
+# delete
 
-./dbms2csv.py ini/insumo_nao_tecido_capa.ini > csv/_insumos_nao_tecido_capa.csv
+./csv2oracle.py _insumo_nao_tecido_capa.csv -d -vvv
 
-./csv2oracle.py csv/insumos_nao_tecido_capa.csv -d -vvv
+./csv2oracle.py conta_de_estoque.v161202.csv -d -vvv
+
+./csv2oracle.py tamanho.fixo.csv -d -vvv
+
+./csv2oracle.py unidades_de_medida.fixo.csv -d -vvv
+
+# insert/update
+
+./csv2oracle.py unidades_de_medida.fixo.csv -i -vvv
+
+./csv2oracle.py tamanho.fixo.csv -i -vvv
+
+./csv2oracle.py conta_de_estoque.v161202.csv -i -vvv
+
+./csv2oracle.py _insumo_nao_tecido_capa.csv -i -vvv
