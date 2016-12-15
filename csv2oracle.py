@@ -206,6 +206,11 @@ class Main:
         self.config = configparser.RawConfigParser()
         self.config.read(self.args.cfg)
 
+        if os.path.exists('secret.py'):
+            from secret import DBSECRET
+            for dbkey in DBSECRET:
+                self.config[dbkey].update(DBSECRET[dbkey])
+
         dataGroup = os.path.basename(self.args.csvFile)
         dataGroup = os.path.splitext(dataGroup)[0]
         dataGroup = dataGroup.split('.')[0]
