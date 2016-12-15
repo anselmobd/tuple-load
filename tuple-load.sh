@@ -8,6 +8,8 @@
 
 # delete
 
+./csv2oracle.py _insumo_nao_tecido_tamanho.csv -d -vvv
+
 ./csv2oracle.py _insumo_nao_tecido_capa.csv -d -vvv
 
 ./csv2oracle.py conta_de_estoque.v161202.csv -d -vvv
@@ -25,3 +27,5 @@
 ./csv2oracle.py conta_de_estoque.v161202.csv -i -vvv
 
 ./csv2oracle.py _insumo_nao_tecido_capa.csv -i -vvv
+
+./csv2oracle.py _insumo_nao_tecido_tamanho.csv -i -vvv
