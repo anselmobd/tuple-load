@@ -127,7 +127,7 @@ class Mssql:
                 self.cursor.execute(statement, data)
             else:
                 self.cursor.execute(statement)
-        except puodbc.DatabaseError as e:
+        except pyodbc.DatabaseError as e:
             print('Error: {}'.format(e))
             if halt:
                 raise
