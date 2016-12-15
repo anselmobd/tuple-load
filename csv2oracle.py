@@ -275,7 +275,7 @@ class Main:
         # counting rows
 
         sql = '\n'.join(self.rules['sql']['key_count'])
-        self.vOut.prnt(sql, 2, sep='---')
+        self.vOut.prnt(sql, 3, sep='---')
 
         cursor = self.oracle.cursorExecute(sql, keyRow)
         countRows = cursor.fetchall()[0][0]
@@ -283,13 +283,13 @@ class Main:
 
         if countRows == 1:
             sql = '\n'.join(self.rules['sql']['update'])
-            self.vOut.prnt(sql, 2, sep='---')
+            self.vOut.prnt(sql, 3, sep='---')
 
             cursor = self.oracle.cursorExecute(sql, dictRow)
             self.vOut.prnt('updated: %s' % (cursor.rowcount), 2)
         else:
             sql = '\n'.join(self.rules['sql']['insert'])
-            self.vOut.prnt(sql, 2, sep='---')
+            self.vOut.prnt(sql, 3, sep='---')
 
             cursor = self.oracle.cursorExecute(sql, dictRow)
             self.vOut.prnt('inserted: %s' % (cursor.rowcount), 2)
