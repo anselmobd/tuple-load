@@ -5,7 +5,8 @@
     ]
   }
 , "sql": {
-    "key_count": [
+    "db": "systextil"
+  , "key_count": [
       "SELECT"
     , "  count(t.TAMANHO_REF)"
     , "from basi_220 t"

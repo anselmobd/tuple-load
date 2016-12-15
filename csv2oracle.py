@@ -109,14 +109,15 @@ class Main:
         return os.path.join(path, name)
 
     def connectDataBase(self):
-        if self.config.get('dbwrite', 'dbms') != 'oracle':
+        dbTo = 'db.to.{}'.format(self.rules['sql']['db'])
+        if self.config.get(dbTo, 'dbms') != 'oracle':
             raise NameError('For now, script prepared only for Oracle.')
-        self.oracle = Oracle(self.config.get('dbwrite', 'username'),
-                             self.config.get('dbwrite', 'password'),
-                             self.config.get('dbwrite', 'hostname'),
-                             self.config.get('dbwrite', 'port'),
-                             self.config.get('dbwrite', 'servicename'),
-                             self.config.get('dbwrite', 'schema'))
+        self.oracle = Oracle(self.config.get(dbTo, 'username'),
+                             self.config.get(dbTo, 'password'),
+                             self.config.get(dbTo, 'hostname'),
+                             self.config.get(dbTo, 'port'),
+                             self.config.get(dbTo, 'servicename'),
+                             self.config.get(dbTo, 'schema'))
         self.oracle.connect()
         self.vOut.prnt(
             'Banco de dados conectado. (versão do Oracle: {})'.format(

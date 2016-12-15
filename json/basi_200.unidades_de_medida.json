@@ -5,7 +5,8 @@
     ]
   }
 , "sql": {
-    "key_count": [
+    "db": "systextil"
+  , "key_count": [
       "SELECT"
     , "  count(um.unidade_medida)"
     , "from basi_200 um"
