@@ -4,6 +4,8 @@
 
 ./dbms2csv.py insumo_nao_tecido_capa.ini > csv/_insumo_nao_tecido_capa.csv
 
+./dbms2csv.py insumo_nao_tecido_tamanho.ini > csv/_insumo_nao_tecido_tamanho.csv
+
 # delete
 
 ./csv2oracle.py _insumo_nao_tecido_capa.csv -d -vvv
