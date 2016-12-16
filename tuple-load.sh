@@ -2,6 +2,8 @@
 
 # generate
 
+./dbms2csv.py insumo_nao_tecido_codigos.ini > csv/_insumo_nao_tecido_codigos.csv
+
 ./dbms2csv.py insumo_nao_tecido_capa.ini > csv/_insumo_nao_tecido_capa.csv
 
 ./dbms2csv.py insumo_nao_tecido_tamanho.ini > csv/_insumo_nao_tecido_tamanho.csv
