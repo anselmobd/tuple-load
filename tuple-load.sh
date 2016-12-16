@@ -16,6 +16,8 @@
 
 ./csv2oracle.py conta_de_estoque.v161202.csv -d -vvv
 
+./csv2oracle.py cor.fixo.csv -d -vvv
+
 ./csv2oracle.py tamanho.fixo.csv -d -vvv
 
 ./csv2oracle.py unidades_de_medida.fixo.csv -d -vvv
@@ -25,6 +27,8 @@
 ./csv2oracle.py unidades_de_medida.fixo.csv -i -vvv
 
 ./csv2oracle.py tamanho.fixo.csv -i -vvv
+
+./csv2oracle.py cor.fixo.csv -i -vvv
 
 ./csv2oracle.py conta_de_estoque.v161202.csv -i -vvv
 
