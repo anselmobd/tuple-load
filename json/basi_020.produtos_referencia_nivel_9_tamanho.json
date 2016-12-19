@@ -19,7 +19,11 @@
     ]
   , "update": [
       "UPDATE BASI_020 SET"
-    , "  DESCR_TAM_REFER=:CATALOGODOTAMAMANHO"
+    , "  DESCR_TAM_REFER="
+    , "    case when :CATALOGODOTAMAMANHO is null"
+    , "      then ( select t.DESCR_TAMANHO FROM basi_220 t where t.TAMANHO_REF = :TAM )"
+    , "      else :CATALOGODOTAMAMANHO"
+    , "    end"
     , ", DESC_TAM_FICHA=:CODITEMPROD"
     , "WHERE BASI030_NIVEL030=9"
     , "  AND BASI030_REFERENC=:REFERENCIA"
