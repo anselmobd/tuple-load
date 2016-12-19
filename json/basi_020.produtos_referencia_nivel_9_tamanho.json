@@ -4,7 +4,7 @@
     }
   , "keys": [
       "REFERENCIA"
-    , "CODTAM"
+    , "TAM"
     ]
   }
 , "sql": {
@@ -15,14 +15,15 @@
     , "FROM BASI_020"
     , "WHERE BASI030_NIVEL030=9"
     , "  AND BASI030_REFERENC=:REFERENCIA"
-    , "  AND TAMANHO_REF=:CODTAM"
+    , "  AND TAMANHO_REF=:TAM"
     ]
   , "update": [
       "UPDATE BASI_020 SET"
-    , "  DESC_TAM_FICHA=:CODITEMPROD"
+    , "  DESCR_TAM_REFER=:CATALOGODOTAMAMANHO"
+    , ", DESC_TAM_FICHA=:CODITEMPROD"
     , "WHERE BASI030_NIVEL030=9"
     , "  AND BASI030_REFERENC=:REFERENCIA"
-    , "  AND TAMANHO_REF=:CODTAM"
+    , "  AND TAMANHO_REF=:TAM"
     ]
   , "insert": [
       "INSERT INTO BASI_020"
@@ -34,8 +35,8 @@
     , ") VALUES ("
     , "  9"
     , ", :REFERENCIA"
-    , ", :CODTAM"
-    , ", ( select t.DESCR_TAMANHO FROM basi_220 t where t.TAMANHO_REF = :CODTAM )"
+    , ", :TAM"
+    , ", :CATALOGODOTAMAMANHO"
     , ", :CODITEMPROD"
     , ")"
       ]
@@ -52,7 +53,7 @@
       "DELETE FROM BASI_020"
     , "WHERE BASI030_NIVEL030=9"
     , "  AND BASI030_REFERENC=:REFERENCIA"
-    , "  AND TAMANHO_REF=:CODTAM"
+    , "  AND TAMANHO_REF=:TAM"
   ]
   }
 }
