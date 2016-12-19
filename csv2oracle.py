@@ -308,13 +308,14 @@ class Main:
                         key = int(key)
                 completeKey += (key,)
             self.keys.append(completeKey)
+        self.vOut.prnt('self.keys', 3)
         self.vOut.pprnt(self.keys, 3)
 
     def deleteRows(self):
         self.vOut.prnt('->deleteRows', 2)
 
         sql = '\n'.join(self.rules['sql']['key_list'])
-        self.vOut.prnt(sql, 2, sep='---')
+        self.vOut.prnt(sql, 3, sep='---')
 
         cursor = self.oracle.cursorExecute(sql)
 
@@ -323,8 +324,10 @@ class Main:
             self.vOut.prnt('row', 4)
             self.vOut.pprnt(row, 4)
             if row in self.keys:
+                self.vOut.prnt('remove', 3)
                 self.keys.remove(row)
             else:
+                self.vOut.prnt('append', 3)
                 toDelete.append(
                     {self.rules['csv']['keys'][i]: row[i]
                         for i in range(0, len(row))})
