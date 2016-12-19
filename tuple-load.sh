@@ -8,7 +8,11 @@
 
 ./dbms2csv.py insumo_nao_tecido_tamanho.ini > csv/_insumo_nao_tecido_tamanho.csv
 
+./dbms2csv.py insumo_nao_tecido_tamanho_cor.ini > csv/_insumo_nao_tecido_tamanho_cor.csv
+
 # delete
+
+./csv2oracle.py _insumo_nao_tecido_tamanho_cor.csv -d -vvv
 
 ./csv2oracle.py _insumo_nao_tecido_tamanho.csv -d -vvv
 
@@ -35,3 +39,5 @@
 ./csv2oracle.py _insumo_nao_tecido_capa.csv -i -vvv
 
 ./csv2oracle.py _insumo_nao_tecido_tamanho.csv -i -vvv
+
+./csv2oracle.py _insumo_nao_tecido_tamanho_cor.csv -i -vvv
