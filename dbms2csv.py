@@ -3,8 +3,9 @@
 
 import sys
 import os.path
-from pprint import pprint
 import locale
+import contextlib
+from pprint import pprint
 
 import argparse
 import configparser
@@ -179,6 +180,10 @@ class Main:
             help='data group INI file name, in the format '
             '[dir/]data_group_name[.version].ini')
         parser.add_argument(
+            "csvFile",
+            help='CSV file to be created '
+            '[dir/]_file_name.csv')
+        parser.add_argument(
             "--cfg", "--cfgfile",
             type=str,
             default='tuple-load.cfg',
@@ -206,6 +211,9 @@ class Main:
         self.args.iniFile = \
             self.fileWithDefaultDir(self.args.ini, self.args.iniFile)
 
+        self.args.csvFile = \
+            self.fileWithDefaultDir(self.args.csv, self.args.csvFile)
+
     def configProcess(self):
         self.vOut.prnt('->configProcess', 2)
         self.checkFile(self.args.iniFile, 'INI', 11)
@@ -217,6 +225,9 @@ class Main:
 
         self.config = configparser.RawConfigParser()
         self.config.read(self.args.cfg)
+
+        with contextlib.suppress(FileNotFoundError):
+            os.remove(self.args.csvFile)
 
         if os.path.exists('secret.py'):
             from secret import DBSECRET
@@ -230,7 +241,9 @@ class Main:
         try:
             self.connectDataBase()
 
-            self.executeQuery()
+            with open(self.args.csvFile, 'w') as self.csvNew:
+                self.executeQuery()
+
         finally:
             self.closeDataBase()
 
@@ -334,10 +347,12 @@ class Main:
                 separator = ';'
 
             if doHeader:
-                print(headerLine)
+                # print(headerLine)
+                self.csvNew.write('{}\n'.format(headerLine))
                 doHeader = False
 
-            print(dataLine)
+            # print(dataLine)
+            self.csvNew.write('{}\n'.format(dataLine))
 
             # sys.exit(2)
 
