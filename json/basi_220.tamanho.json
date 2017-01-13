@@ -17,6 +17,7 @@
     , "set"
     , "  t.DESCR_TAMANHO = :DESCR_TAMANHO"
     , ", t.ORDEM_TAMANHO = :ORDEM_TAMANHO"
+    , ", t.INCLUIR_ZEROS = 'N'"
     , "where t.TAMANHO_REF = :TAMANHO_REF"
     ]
   , "insert": [
@@ -24,11 +25,13 @@
     , "  TAMANHO_REF"
     , ", DESCR_TAMANHO"
     , ", ORDEM_TAMANHO"
+    , ", INCLUIR_ZEROS"
     , ")"
     , "VALUES ("
     , "  :TAMANHO_REF"
     , ", :DESCR_TAMANHO"
     , ", :ORDEM_TAMANHO"
+    , ", 'N'"
     , ")"
    ]
  , "key_list": [
