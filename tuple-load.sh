@@ -18,6 +18,11 @@ fi
 
 ./dbms2csv.py insumo_tecido_codigos.ini _insumo_tecido_codigos.csv $VERBOSE
 
+./dbms2csv.py insumo_tecido_capa.ini _insumo_tecido_capa.csv $VERBOSE
+
+./dbms2csv.py insumo_tecido_tamanho.ini _insumo_tecido_tamanho.csv $VERBOSE
+
+./dbms2csv.py insumo_tecido_tamanho_cor.ini _insumo_tecido_tamanho_cor.csv $VERBOSE
 
 # delete
 
