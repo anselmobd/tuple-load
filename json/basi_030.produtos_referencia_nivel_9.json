@@ -23,6 +23,8 @@
     , ", UNIDADE_MEDIDA=:UNIDMEDIDA"
     , ", CONTA_ESTOQUE=:CONTA_ESTOQUE"
     , ", CODIGO_CONTABIL=:CODIGO_CONTABIL"
+    , ", COMPRADO_FABRIC=1"
+    , ", CLASSIFIC_FISCAL='0'"
     , "WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA"
     , "  AND REFERENCIA=:REFERENCIA"
     ]
@@ -34,6 +36,8 @@
     , ", UNIDADE_MEDIDA"
     , ", CONTA_ESTOQUE"
     , ", CODIGO_CONTABIL"
+    , ", COMPRADO_FABRIC"
+    , ", CLASSIFIC_FISCAL"
     , ") VALUES ("
     , "  :NIVEL_ESTRUTURA"
     , ", :REFERENCIA"
@@ -41,6 +45,8 @@
     , ", :UNIDMEDIDA"
     , ", :CONTA_ESTOQUE"
     , ", :CODIGO_CONTABIL -- identificador de carga = 99"
+    , ", 1"
+    , ", '0'"
     , ")"
       ]
   , "key_list": [
