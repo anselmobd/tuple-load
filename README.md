@@ -58,12 +58,13 @@ optional arguments:
 
 ```
 usage: dbms2csv.py [-h] [--cfg CFG] [--ini INI] [--csv CSV] [--json JSON] [-v]
-                   iniFile
+                   iniFile csvFile
 
 Write CSV from Mssql database
 
 positional arguments:
   iniFile               data group INI file name, in the format [dir/]data_group_name[.version].ini
+  csvFile               CSV file to be created [dir/]_file_name.csv
 
 optional arguments:
   -h, --help            show this help message and exit
