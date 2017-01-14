@@ -1,0 +1,45 @@
+csv:
+
+  keys:
+    - TAMANHO_REF
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(t.TAMANHO_REF)
+    from basi_220 t
+    where t.TAMANHO_REF = :TAMANHO_REF
+
+  update: |
+    UPDATE basi_220 t
+    set
+      t.DESCR_TAMANHO = :DESCR_TAMANHO
+    , t.ORDEM_TAMANHO = :ORDEM_TAMANHO
+    , t.INCLUIR_ZEROS = 'N'
+    where t.TAMANHO_REF = :TAMANHO_REF
+
+  insert: |
+    INSERT INTO basi_220 (
+      TAMANHO_REF
+    , DESCR_TAMANHO
+    , ORDEM_TAMANHO
+    , INCLUIR_ZEROS
+    )
+    VALUES (
+      :TAMANHO_REF
+    , :DESCR_TAMANHO
+    , :ORDEM_TAMANHO
+    , 'N'
+    )
+
+  key_list: |
+    SELECT
+      t.TAMANHO_REF
+    from basi_220 t
+
+  delete: |
+    DELETE FROM basi_220 t
+    WHERE t.TAMANHO_REF=:TAMANHO_REF

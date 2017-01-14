@@ -1,0 +1,120 @@
+csv:
+
+  keys:
+    - REFERENCIA
+    - TAM
+    - COR
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(GRUPO_ESTRUTURA)
+    FROM BASI_010
+    WHERE NIVEL_ESTRUTURA = '2'
+      AND GRUPO_ESTRUTURA = :REFERENCIA
+      AND SUBGRU_ESTRUTURA = :TAM
+      AND ITEM_ESTRUTURA = :COR
+
+  update: |
+    UPDATE BASI_010 SET
+      CODIGO_VELHO = :CODITEMPROD
+    , DESCRICAO_15 = (
+        SELECT
+          DESCRICAO
+        FROM BASI_100
+        WHERE COR_SORTIMENTO = :COR
+          AND TIPO_COR = 1
+      )
+    , NARRATIVA = (
+        (
+          SELECT
+            DESCR_REFERENCIA
+          FROM BASI_030
+          WHERE NIVEL_ESTRUTURA = '2'
+            AND REFERENCIA = :REFERENCIA
+        ) || ' ' || (
+          SELECT
+            DESCR_TAM_REFER
+          FROM SYSTEXTIL.BASI_020
+          WHERE BASI030_NIVEL030='2'
+            AND BASI030_REFERENC=:REFERENCIA
+            AND TAMANHO_REF=:TAM
+          SELECT
+            DESCRICAO
+          FROM BASI_100
+          WHERE COR_SORTIMENTO = :COR
+            AND TIPO_COR = 1
+            ) || ' ' || (
+        )
+      )
+    WHERE NIVEL_ESTRUTURA = '2'
+      AND GRUPO_ESTRUTURA = :REFERENCIA
+      AND SUBGRU_ESTRUTURA = :TAM
+      AND ITEM_ESTRUTURA = :COR
+
+  insert: |
+    INSERT INTO BASI_010
+    (
+      NIVEL_ESTRUTURA
+    , GRUPO_ESTRUTURA
+    , SUBGRU_ESTRUTURA
+    , ITEM_ESTRUTURA
+    , CODIGO_VELHO
+    , DESCRICAO_15
+    , NARRATIVA
+    ) VALUES (
+      2
+    , :REFERENCIA
+    , :TAM
+    , :COR
+    , :CODITEMPROD
+    , (
+        SELECT
+          DESCRICAO
+        FROM BASI_100
+        WHERE COR_SORTIMENTO = :COR
+          AND TIPO_COR = 1
+      )
+    , (
+        (
+          SELECT
+            DESCR_REFERENCIA
+          FROM BASI_030
+          WHERE NIVEL_ESTRUTURA = '2'
+            AND REFERENCIA = :REFERENCIA
+        ) || ' ' || (
+          SELECT
+            DESCR_TAM_REFER
+          FROM SYSTEXTIL.BASI_020
+          WHERE BASI030_NIVEL030='2'
+            AND BASI030_REFERENC=:REFERENCIA
+            AND TAMANHO_REF=:TAM
+        ) || ' ' || (
+          SELECT
+            DESCRICAO
+          FROM BASI_100
+          WHERE COR_SORTIMENTO = :COR
+            AND TIPO_COR = 1
+        )
+      )
+    )
+
+  key_list: |
+    SELECT
+      rtc.GRUPO_ESTRUTURA
+    , rtc.SUBGRU_ESTRUTURA
+    , rtc.ITEM_ESTRUTURA
+    FROM BASI_010 rtc
+    LEFT JOIN BASI_030 rb
+      ON rb.REFERENCIA = rtc.GRUPO_ESTRUTURA
+    WHERE rb.CODIGO_CONTABIL=99
+
+  delete: |
+    DELETE FROM BASI_010
+    WHERE NIVEL_ESTRUTURA='2'
+      AND GRUPO_ESTRUTURA=:REFERENCIA
+      AND SUBGRU_ESTRUTURA=:TAM
+      AND ITEM_ESTRUTURA=:COR

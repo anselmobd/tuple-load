@@ -1,6 +1,7 @@
 csv:
 
   fields:
+
     CODIGO:
       type: integer
 
