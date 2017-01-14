@@ -1,0 +1,55 @@
+csv:
+
+  keys:
+  - COR_SORTIMENTO
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(c.COR_SORTIMENTO)
+    from BASI_100 c
+    where c.COR_SORTIMENTO = :COR_SORTIMENTO
+
+  update: |
+    UPDATE BASI_100 c
+    set
+      c.DESCRICAO = :DESCRICAO
+    , c.CODIGO_VELHO = :CODIGO_VELHO
+    where c.COR_SORTIMENTO = :COR_SORTIMENTO
+
+  insert: |
+    INSERT INTO BASI_100
+    (
+      COR_SORTIMENTO
+    , TIPO_COR
+    , DESCRICAO
+    , SERIE_COR
+    , COR_DE_FUNDO
+    , TIPO_TINGIMENTO
+    , TONALIDADE
+    , COR_REPRESENTATIVA
+    , CODIGO_VELHO
+    ) VALUES (
+      :COR_SORTIMENTO -- COR_SORTIMENTO
+    , 1               -- TIPO_COR
+    , :DESCRICAO      -- DESCRICAO
+    , 0               -- SERIE_COR
+    , '000000'        -- COR_DE_FUNDO
+    , '1'             -- TIPO_TINGIMENTO
+    , '1'             -- TONALIDADE
+    , '255 255 255'   -- COR_REPRESENTATIVA
+    , :CODIGO_VELHO   -- CODIGO_VELHO
+    )
+
+  key_list: |
+    SELECT
+      c.COR_SORTIMENTO
+    from BASI_100 c
+    WHERE CODIGO_VELHO <> ' '
+
+  delete: |
+    DELETE FROM BASI_100 c
+    where c.COR_SORTIMENTO = :COR_SORTIMENTO
