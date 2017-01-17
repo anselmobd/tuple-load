@@ -9,8 +9,11 @@ import argparse
 import configparser
 import json
 import csv
+import yaml
 
 import cx_Oracle
+
+import myOracle
 
 
 class VerboseOutput:
@@ -33,66 +36,6 @@ class VerboseOutput:
             pprint(obj)
 
 
-class Oracle:
-
-    def __init__(self, username, password,
-                 hostname, port, servicename, schema):
-        self.CONTINUE_ON_ERROR = False
-        self.username = username
-        self.password = password
-        self.hostname = hostname
-        self.port = port
-        self.servicename = servicename
-        self.schema = schema
-
-    def connect(self):
-        """ Connect to the database. if this fails, raise. """
-        try:
-            self.con = cx_Oracle.connect(
-                self.username, self.password,
-                '{}:{}/{}'.format(self.hostname, self.port, self.servicename))
-            self.con.current_schema = self.schema
-
-        except cx_Oracle.DatabaseError as e:
-            error, = e.args
-            if error.code == 1017:
-                print('Please check your credentials.')
-            else:
-                print('Database connection error: {}'.format(e))
-            raise
-
-        self.cursor = self.con.cursor()
-
-    def commit(self):
-        """ Commit data to the database. If this fails, don't care. """
-        try:
-            self.con.commit()
-        except cx_Oracle.DatabaseError:
-            pass
-
-    def disconnect(self):
-        """ Disconnect from the database. If this fails, don't care. """
-        try:
-            self.cursor.close()
-            self.con.close()
-        except cx_Oracle.DatabaseError:
-            pass
-
-    def cursorExecute(self, statement, data=None, halt=True):
-        """ Execute statement using data and return cursor. """
-        try:
-            if data:
-                self.cursor.execute(statement, data)
-            else:
-                self.cursor.execute(statement)
-        except cx_Oracle.DatabaseError as e:
-            error, = e.args
-            print('Error: {}'.format(e))
-            if halt:
-                raise
-        return self.cursor
-
-
 class Main:
 
     def checkFile(self, fileName, description, exitError):
@@ -112,12 +55,16 @@ class Main:
         dbTo = 'db.to.{}'.format(self.rules['sql']['db'])
         if self.config.get(dbTo, 'dbms') != 'oracle':
             raise NameError('For now, script prepared only for Oracle.')
-        self.oracle = Oracle(self.config.get(dbTo, 'username'),
-                             self.config.get(dbTo, 'password'),
-                             self.config.get(dbTo, 'hostname'),
-                             self.config.get(dbTo, 'port'),
-                             self.config.get(dbTo, 'servicename'),
-                             self.config.get(dbTo, 'schema'))
+
+        self.oracle = myOracle.Oracle(
+            self.config.get(dbTo, 'username'),
+            self.config.get(dbTo, 'password'),
+            self.config.get(dbTo, 'hostname'),
+            self.config.get(dbTo, 'port'),
+            self.config.get(dbTo, 'servicename'),
+            self.config.get(dbTo, 'schema'))
+        self.oracle.verbosity = self.args.verbosity
+
         self.oracle.connect()
         self.vOut.prnt(
             'Banco de dados conectado. (versão do Oracle: {})'.format(
@@ -148,17 +95,26 @@ class Main:
             "--ini", "--inidir",
             type=str,
             default='ini',
-            help='default directory for ini files')
+            help='default directory for INI files')
         parser.add_argument(
             "--csv", "--csvdir",
             type=str,
             default='csv',
-            help='default directory for csv files')
+            help='default directory for CSV files')
         parser.add_argument(
             "--json", "--jsondir",
             type=str,
             default='json',
-            help='default directory for json files')
+            help='default directory for JSON files')
+        parser.add_argument(
+            "--yaml", "--yamldir",
+            type=str,
+            default='yaml',
+            help='default directory for YAML files')
+        parser.add_argument(
+            "--yc", "--yamlcfg",
+            action="store_true",
+            help='use YAML format config file')
         parser.add_argument(
             "-i", "--insert",
             action="store_true",
@@ -220,14 +176,24 @@ class Main:
         sqlTable = self.config.get('data_groups', dataGroup)
         self.vOut.prnt('SQL Table name: %s' % (sqlTable))
 
-        self.jsonFileName = ''.join((sqlTable, '.json'))
-        self.jsonFileName = \
-            self.fileWithDefaultDir(self.args.json, self.jsonFileName)
+        if self.args.yc:
+            self.jsonFileName = ''.join((sqlTable, '.yaml'))
+            self.jsonFileName = \
+                self.fileWithDefaultDir(self.args.yaml, self.jsonFileName)
+        else:
+            self.jsonFileName = ''.join((sqlTable, '.json'))
+            self.jsonFileName = \
+                self.fileWithDefaultDir(self.args.json, self.jsonFileName)
         self.vOut.prnt('JSON file name: %s' % (self.jsonFileName))
 
     def run(self):
         self.vOut.prnt('->run', 2)
-        self.readJson()
+
+        if self.args.yc:
+            self.readYaml()
+        else:
+            self.readJson()
+
         try:
             self.connectDataBase()
 
@@ -239,12 +205,19 @@ class Main:
                 self.readCsvKeys()
                 self.deleteRows()
         finally:
-            self.closeDataBase()
+            if self.oracle.connected:
+                self.closeDataBase()
 
     def readJson(self):
         self.vOut.prnt('->readJson', 2)
         with open(self.jsonFileName) as json_data:
             self.rules = json.load(json_data)
+        self.vOut.pprnt(self.rules, 3)
+
+    def readYaml(self):
+        self.vOut.prnt('->readYaml', 2)
+        with open(self.jsonFileName) as yaml_data:
+            self.rules = yaml.load(yaml_data)
         self.vOut.pprnt(self.rules, 3)
 
     def readCsvGenerator(self):
@@ -274,7 +247,11 @@ class Main:
 
         # counting rows
 
-        sql = '\n'.join(self.rules['sql']['key_count'])
+        rulesql = self.rules['sql']['key_count']
+        if isinstance(rulesql, list):
+            sql = '\n'.join(rulesql)
+        else:
+            sql = rulesql
         self.vOut.prnt(sql, 3, sep='---')
 
         cursor = self.oracle.cursorExecute(sql, keyRow)
