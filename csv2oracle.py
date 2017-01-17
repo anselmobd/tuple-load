@@ -13,7 +13,7 @@ import yaml
 
 import cx_Oracle
 
-import myOracle
+from oxy.oracle import Oracle
 from oxy.usual import VerboseOutput
 
 
@@ -37,7 +37,7 @@ class Main:
         if self.config.get(dbTo, 'dbms') != 'oracle':
             raise NameError('For now, script prepared only for Oracle.')
 
-        self.oracle = myOracle.Oracle(
+        self.oracle = Oracle(
             self.config.get(dbTo, 'username'),
             self.config.get(dbTo, 'password'),
             self.config.get(dbTo, 'hostname'),
