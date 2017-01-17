@@ -14,7 +14,7 @@ import yaml
 import cx_Oracle
 
 import myOracle
-from myUsual import VerboseOutput
+from oxy.usual import VerboseOutput
 
 
 class Main:

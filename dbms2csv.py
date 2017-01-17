@@ -14,7 +14,7 @@ import csv
 
 import pyodbc
 
-from myUsual import VerboseOutput
+from oxy.usual import VerboseOutput
 
 
 def count_field(valIni, fieldBreak):
