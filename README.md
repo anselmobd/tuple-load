@@ -1,6 +1,6 @@
 # tuple-load
 
-Loading CSV tuples into relational databases.
+Creating CSV tuples from relational databases, loading CSV tuples into relational databases.
 
 ## Scripts
 
@@ -11,22 +11,28 @@ Loading CSV tuples into relational databases.
 ## Other files
 
 - tuple-load.cfg - Configuration file, used to:
-. Link an intelligible name of data group a to the table name in an RDB. The intelligible name is the name of the CSV file (with a .csv), which contains the tuples (the data). The table name in the RDB is the name of the JSON file (with a .json), which contains information about how to work with that table in the RDB.
+. Link an intelligible name of data group a to a table name in an RDB.
+  . The intelligible name is the start of the name of a CSV file (.csv), which contains the tuples (the data).
+  . The table name in an RDB is the start of the name of a JSON (or YAML) file (.json or .yaml), which contains information about how to work with that table in the RDB.
 . Indicate informations necessaire to connect to RDB.
 
 ## Directories
 
-- csv (/\*.csv) One file per data group.
+- csv (/\*.csv) : One file per data group.
 
-- json (/\*.json) One file per database table, with SQL commands required to load.
+- json (/\*.json) : One file per database table, with SQL commands required to load.
 
-- ini (/\*.ini) One file per data groups to be created.
+- yaml (/\*.yaml) : One file per database table, with SQL commands required to load. (better readability)
+
+- ini (/\*.ini) : One file per data groups to be created.
+
+- oxy : Package with generic (Oxigenai) modules
 
 ### ./csv2oracle.py --help
 
 ```
 usage: csv2oracle.py [-h] [--cfg CFG] [--ini INI] [--csv CSV] [--json JSON]
-                     [-i] [-u] [-d] [-b] [-v]
+                     [--yaml YAML] [--yc] [-i] [-u] [-d] [-b] [-v]
                      csvFile
 
 Write CSV data to Oracle
@@ -39,11 +45,14 @@ optional arguments:
   --cfg CFG, --cfgfile CFG
                         config file of data groups
   --ini INI, --inidir INI
-                        default directory for ini files
+                        default directory for INI files
   --csv CSV, --csvdir CSV
-                        default directory for csv files
+                        default directory for CSV files
   --json JSON, --jsondir JSON
-                        default directory for json files
+                        default directory for JSON files
+  --yaml YAML, --yamldir YAML
+                        default directory for YAML files
+  --yc, --yamlcfg       use YAML format config file
   -i, --insert          insert or update in Oracle rows in CSV
                         (default if none action defined)
   -u, --update          same as -i
