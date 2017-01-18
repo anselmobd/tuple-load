@@ -60,7 +60,7 @@ class Main:
 
     def parseArgs(self):
         parser = argparse.ArgumentParser(
-            description='Write CSV data to Oracle',
+            description='Write CSV data to Oracle table',
             epilog="(c) Tussor & Oxigenai",
             formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument(
@@ -73,11 +73,6 @@ class Main:
             default='tuple-load.cfg',
             help='config file of data groups and database access')
         parser.add_argument(
-            "--ini", "--inidir",
-            type=str,
-            default='ini',
-            help='default directory for INI files')
-        parser.add_argument(
             "--csv", "--csvdir",
             type=str,
             default='csv',
@@ -86,7 +81,7 @@ class Main:
             "--json", "--jsondir",
             type=str,
             default='json',
-            help='default directory for table access definitions (TADs) '
+            help='default directory for table access definitions (TAD) '
                  'in JOSN format')
         parser.add_argument(
             "--yaml", "--yamldir",
