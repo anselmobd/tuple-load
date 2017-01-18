@@ -71,7 +71,7 @@ class Main:
             "--cfg", "--cfgfile",
             type=str,
             default='tuple-load.cfg',
-            help='config file of data groups')
+            help='config file of data groups and database access')
         parser.add_argument(
             "--ini", "--inidir",
             type=str,
@@ -86,16 +86,23 @@ class Main:
             "--json", "--jsondir",
             type=str,
             default='json',
-            help='default directory for JSON files')
+            help='default directory for table access definitions'
+            ' in JOSN format')
         parser.add_argument(
             "--yaml", "--yamldir",
             type=str,
             default='yaml',
-            help='default directory for YAML files')
+            help='default directory for table access definitions'
+            ' in YAML format')
         parser.add_argument(
             "--yc", "--yamlcfg",
             action="store_true",
-            help='use YAML format config file')
+            default=True,
+            help='use YAML format file for table access definitions (default)')
+        parser.add_argument(
+            "--jc", "--jsoncfg",
+            action="store_true",
+            help='use JOSN format file for table access definitions')
         parser.add_argument(
             "-i", "--insert",
             action="store_true",
@@ -119,6 +126,8 @@ class Main:
         self.args.insert = self.args.insert \
             or self.args.update or self.args.both
         self.args.delete = self.args.delete or self.args.both
+        if self.args.jc:
+            self.args.yc = False
         if self.args.insert == self.args.delete:
             self.args.insert = True
 
@@ -158,14 +167,14 @@ class Main:
         self.vOut.prnt('SQL Table name: %s' % (sqlTable))
 
         if self.args.yc:
-            self.jsonFileName = ''.join((sqlTable, '.yaml'))
-            self.jsonFileName = \
-                self.fileWithDefaultDir(self.args.yaml, self.jsonFileName)
+            self.tableADFileName = ''.join((sqlTable, '.yaml'))
+            self.tableADFileName = \
+                self.fileWithDefaultDir(self.args.yaml, self.tableADFileName)
         else:
-            self.jsonFileName = ''.join((sqlTable, '.json'))
-            self.jsonFileName = \
-                self.fileWithDefaultDir(self.args.json, self.jsonFileName)
-        self.vOut.prnt('JSON file name: %s' % (self.jsonFileName))
+            self.tableADFileName = ''.join((sqlTable, '.json'))
+            self.tableADFileName = \
+                self.fileWithDefaultDir(self.args.json, self.tableADFileName)
+        self.vOut.prnt('Table access definitions file name: %s' % (self.tableADFileName))
 
     def run(self):
         self.vOut.prnt('->run', 2)
@@ -191,13 +200,13 @@ class Main:
 
     def readJson(self):
         self.vOut.prnt('->readJson', 2)
-        with open(self.jsonFileName) as json_data:
+        with open(self.tableADFileName) as json_data:
             self.rules = json.load(json_data)
         self.vOut.pprnt(self.rules, 3)
 
     def readYaml(self):
         self.vOut.prnt('->readYaml', 2)
-        with open(self.jsonFileName) as yaml_data:
+        with open(self.tableADFileName) as yaml_data:
             self.rules = yaml.load(yaml_data)
         self.vOut.pprnt(self.rules, 3)
 
