@@ -94,15 +94,18 @@ class Main:
             default='yaml',
             help='default directory for table access definitions'
             ' in YAML format')
-        parser.add_argument(
+
+        group = parser.add_mutually_exclusive_group()
+        group.add_argument(
             "--yc", "--yamlcfg",
             action="store_true",
             default=True,
             help='use YAML format file for table access definitions (default)')
-        parser.add_argument(
+        group.add_argument(
             "--jc", "--jsoncfg",
             action="store_true",
             help='use JOSN format file for table access definitions')
+
         parser.add_argument(
             "-i", "--insert",
             action="store_true",
