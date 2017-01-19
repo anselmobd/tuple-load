@@ -1,0 +1,137 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: argparse 0.1-2017.01.19-13.49\n"
+"POT-Creation-Date: 2017-01-18 18:44+BRST\n"
+"PO-Revision-Date: 2017-01-19 13:45-0300\n"
+"Last-Translator: Anselmo Blanco Dominguez <anselmo.blanco.dominguez@gmail."
+"com>\n"
+"Language-Team: Oxigenai <anselmo@oxigenai.com.br>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: português brasileiro\n"
+
+#: /usr/lib/python3.4/argparse.py:300
+msgid "usage: "
+msgstr "uso: "
+
+#: /usr/lib/python3.4/argparse.py:831
+msgid ".__call__() not defined"
+msgstr ".__call__() não definida"
+
+#: /usr/lib/python3.4/argparse.py:1128
+msgid "unknown parser %(parser_name)r (choices: %(choices)s)"
+msgstr "parser desconhecido %(parser_name)r (opções: %(choices)s)"
+
+#: /usr/lib/python3.4/argparse.py:1182
+msgid "argument \"-\" with mode %r"
+msgstr "argumento \"-\" em modo %r"
+
+#: /usr/lib/python3.4/argparse.py:1190
+msgid "can't open '%s': %s"
+msgstr "impossível abrir '%s': %s"
+
+#: /usr/lib/python3.4/argparse.py:1399
+msgid "cannot merge actions - two groups are named %r"
+msgstr "Não é possível mesclar ações - dois grupos com o nome % r"
+
+#: /usr/lib/python3.4/argparse.py:1437
+msgid "'required' is an invalid argument for positionals"
+msgstr "'Required' é um argumento inválido para posicionamentos"
+
+#: /usr/lib/python3.4/argparse.py:1459
+msgid ""
+"invalid option string %(option)r: must start with a character "
+"%(prefix_chars)r"
+msgstr ""
+"%(option)r é uma opção inválida: deve começar com o caractere "
+"%(prefix_chars)r"
+
+#: /usr/lib/python3.4/argparse.py:1479
+msgid "dest= is required for options like %r"
+msgstr "dest= é necessário para opções como %r"
+
+#: /usr/lib/python3.4/argparse.py:1496
+msgid "invalid conflict_resolution value: %r"
+msgstr "valor de \"conflict_resolution\" inválido: %r"
+
+#: /usr/lib/python3.4/argparse.py:1580
+msgid "mutually exclusive arguments must be optional"
+msgstr "argumentos mutuamente exclusivos devem ser opcionais"
+
+#: /usr/lib/python3.4/argparse.py:1640
+msgid "positional arguments"
+msgstr "argumentos posicionais"
+
+#: /usr/lib/python3.4/argparse.py:1641
+msgid "optional arguments"
+msgstr "argumentos opcionais"
+
+#: /usr/lib/python3.4/argparse.py:1656
+msgid "show this help message and exit"
+msgstr "mostrar esta mensagem de ajuda e sai"
+
+#: /usr/lib/python3.4/argparse.py:1687
+msgid "cannot have multiple subparser arguments"
+msgstr "não pode ter vários argumentos subparser"
+
+#: /usr/lib/python3.4/argparse.py:1739
+msgid "unrecognized arguments: %s"
+msgstr "argumentos não reconhecidos: %s"
+
+#: /usr/lib/python3.4/argparse.py:1836
+msgid "not allowed with argument %s"
+msgstr "não permitido com o argumento %s"
+
+#: /usr/lib/python3.4/argparse.py:1882 /usr/lib/python3.4/argparse.py:1896
+msgid "ignored explicit argument %r"
+msgstr "argumento explícito ignorado %r"
+
+#: /usr/lib/python3.4/argparse.py:2003
+msgid "the following arguments are required: %s"
+msgstr "os seguintes argumentos são obrigatórios: %s"
+
+#: /usr/lib/python3.4/argparse.py:2018
+msgid "one of the arguments %s is required"
+msgstr "ao menos um dos argumentos %s é obrigatório"
+
+#: /usr/lib/python3.4/argparse.py:2061
+msgid "expected one argument"
+msgstr "esperado um argumento"
+
+#: /usr/lib/python3.4/argparse.py:2062
+msgid "expected at most one argument"
+msgstr "esperado no máximo um argumento"
+
+#: /usr/lib/python3.4/argparse.py:2063
+msgid "expected at least one argument"
+msgstr "esperado pelo menos um argumento"
+
+#: /usr/lib/python3.4/argparse.py:2124
+msgid "ambiguous option: %(option)s could match %(matches)s"
+msgstr "opção ambígua: %(option)s pode corresponder a %(matches)s"
+
+#: /usr/lib/python3.4/argparse.py:2187
+msgid "unexpected option string: %s"
+msgstr "cadeia de opções inesperada: %s"
+
+#: /usr/lib/python3.4/argparse.py:2291
+msgid "%r is not callable"
+msgstr "%r não é passível de chamada"
+
+#: /usr/lib/python3.4/argparse.py:2308
+msgid "invalid %(type)s value: %(value)r"
+msgstr "valor de %(type)s inválido: %(value)r"
+
+#: /usr/lib/python3.4/argparse.py:2319
+msgid "invalid choice: %(value)r (choose from %(choices)s)"
+msgstr "escolha inválida: %(value)r (escolha entre as opções %(choices)s)"
+
+#: /usr/lib/python3.4/argparse.py:2395
+msgid "%(prog)s: error: %(message)s\n"
+msgstr "%(prog)s: erro: %(message)s\n"

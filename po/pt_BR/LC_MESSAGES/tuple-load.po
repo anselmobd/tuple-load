@@ -1,0 +1,17 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: tuple-load 0.1-2017.01.19-13.49\n"
+"POT-Creation-Date: 2017-01-18 18:44+BRST\n"
+"PO-Revision-Date: 2017-01-19 13:45-0300\n"
+"Last-Translator: Anselmo Blanco Dominguez <anselmo.blanco.dominguez@gmail."
+"com>\n"
+"Language-Team: Oxigenai <anselmo@oxigenai.com.br>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: português brasileiro\n"
