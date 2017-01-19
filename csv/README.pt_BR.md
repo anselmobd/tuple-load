@@ -7,6 +7,7 @@ Arquivos CSV com nomes no formato:
 Cada arquivo representa um grupo de dados
 
 - Por convenção, nomes iniciados com "_" são gerados por script.
+  (provavelmente não gravado no repositório)
 
 - [nome] nome do grupo de dados
 
