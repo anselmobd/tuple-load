@@ -1,14 +1,16 @@
+*Leia isto em outras línguas: [English](README.md), [Português](README.pt_BR.md).*
+
 Arquivos CSV com nomes no formato:
 
   [_][nome][.info].csv
 
-Cada arquivo representa um grupo de dados da Tussor
+Cada arquivo representa um grupo de dados
+
+- Por convenção, nomes iniciados com "_" são gerados por script.
 
 - [nome] nome do grupo de dados
 
-- [.info] pode conter:
-  . "fixo" está pronto e não é gerado dinamicamente
+- [.info] pode ser:
+  . ".fixo" está pronto e não é gerado dinamicamente
   . Qualquer identificação da versão dos dados, como, por exemplo:
-    . "v" (ou "versão") 999.999 (ou AAAA.MM.DD, ou variações)
-
-- Por convenção, nomes iniciados com "_" são gerados por script.
+    . "v" (ou "versão") + "999.999" (ou "AAAA.MM.DD", ou variações)

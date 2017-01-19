@@ -1,3 +1,5 @@
+*Read this in other languages: [English](README.md), [Português](README.pt_BR.md).*
+
 CSV files with names in the format:
 
   [_][name][.info].csv
