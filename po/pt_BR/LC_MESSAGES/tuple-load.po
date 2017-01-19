@@ -15,3 +15,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: português brasileiro\n"
+
+#: csv2oracle.py:24
+msgid "{} file: {}"
+msgstr "arquivo {}: {}"
+
+#: csv2oracle.py:26
+msgid "file does not exist"
+msgstr "arquivo não existe"
+
+#: csv2oracle.py:38
+msgid "For now, script prepared only for Oracle."
+msgstr "Por ora o script só está preparado para Oracle"
+
+#: csv2oracle.py:311
+msgid "deleted: %s"
+msgstr "apagado: %s"
