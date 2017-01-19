@@ -5,7 +5,6 @@ import sys
 import os.path
 from pprint import pprint
 
-import argparse
 import configparser
 import json
 import csv
@@ -13,6 +12,9 @@ import yaml
 
 import cx_Oracle
 
+import gettext
+
+from oxy.arg import parse as argparse
 from oxy.oracle import Oracle
 from oxy.usual import VerboseOutput
 
@@ -20,10 +22,9 @@ from oxy.usual import VerboseOutput
 class Main:
 
     def checkFile(self, fileName, description, exitError):
-        self.vOut.prnt(description + ' file: {}'.format(fileName))
+        self.vOut.prnt(_('{} file: {}').format(description, fileName))
         if not os.path.exists(fileName):
-            print('"{}" file "{}" does not exist'.format(
-                description, fileName))
+            print(_('file does not exist'))
             sys.exit(exitError)
 
     def fileWithDefaultDir(self, dire, fileName):
@@ -35,7 +36,7 @@ class Main:
     def connectDataBase(self):
         dbTo = 'db.to.{}'.format(self.rules['sql']['db'])
         if self.config.get(dbTo, 'dbms') != 'oracle':
-            raise NameError('For now, script prepared only for Oracle.')
+            raise NameError(_('For now, script prepared only for Oracle.'))
 
         self.oracle = Oracle(
             self.config.get(dbTo, 'username'),
@@ -60,7 +61,7 @@ class Main:
 
     def parseArgs(self):
         parser = argparse.ArgumentParser(
-            description='Write CSV data to Oracle',
+            description='Write CSV data to Oracle table',
             epilog="(c) Tussor & Oxigenai",
             formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument(
@@ -73,11 +74,6 @@ class Main:
             default='tuple-load.cfg',
             help='config file of data groups and database access')
         parser.add_argument(
-            "--ini", "--inidir",
-            type=str,
-            default='ini',
-            help='default directory for INI files')
-        parser.add_argument(
             "--csv", "--csvdir",
             type=str,
             default='csv',
@@ -86,23 +82,23 @@ class Main:
             "--json", "--jsondir",
             type=str,
             default='json',
-            help='default directory for table access definitions'
-            ' in JOSN format')
+            help='default directory for table access definitions (TAD) '
+                 'in JOSN format')
         parser.add_argument(
             "--yaml", "--yamldir",
             type=str,
             default='yaml',
-            help='default directory for table access definitions'
-            ' in YAML format')
+            help='default directory for table access definitions '
+                 'in YAML format')
 
         group = parser.add_mutually_exclusive_group()
         group.add_argument(
-            "--yc", "--yamlcfg",
+            "--yamltad", "--yt",
             action="store_true",
             default=True,
             help='use YAML format file for table access definitions (default)')
         group.add_argument(
-            "--jc", "--jsoncfg",
+            "--jsontad", "--jt",
             action="store_true",
             help='use JOSN format file for table access definitions')
 
@@ -114,7 +110,7 @@ class Main:
         parser.add_argument(
             "-u", "--update",
             action="store_true",
-            help="same as -i")
+            help="(same as -i)")
         parser.add_argument(
             "-d", "--delete", action="store_true",
             help="delete in Oracle rows not in CSV")
@@ -129,8 +125,8 @@ class Main:
         self.args.insert = self.args.insert \
             or self.args.update or self.args.both
         self.args.delete = self.args.delete or self.args.both
-        if self.args.jc:
-            self.args.yc = False
+        if self.args.jsontad:
+            self.args.yamltad = False
         if self.args.insert == self.args.delete:
             self.args.insert = True
 
@@ -169,7 +165,7 @@ class Main:
         sqlTable = self.config.get('data_groups', dataGroup)
         self.vOut.prnt('SQL Table name: %s' % (sqlTable))
 
-        if self.args.yc:
+        if self.args.yamltad:
             self.tableADFileName = ''.join((sqlTable, '.yaml'))
             self.tableADFileName = \
                 self.fileWithDefaultDir(self.args.yaml, self.tableADFileName)
@@ -177,12 +173,13 @@ class Main:
             self.tableADFileName = ''.join((sqlTable, '.json'))
             self.tableADFileName = \
                 self.fileWithDefaultDir(self.args.json, self.tableADFileName)
-        self.vOut.prnt('Table access definitions file name: %s' % (self.tableADFileName))
+        self.vOut.prnt('Table access definitions '
+                       'file name: %s' % (self.tableADFileName))
 
     def run(self):
         self.vOut.prnt('->run', 2)
 
-        if self.args.yc:
+        if self.args.yamltad:
             self.readYaml()
         else:
             self.readJson()
@@ -312,7 +309,7 @@ class Main:
                 self.vOut.prnt('Delete: "{}"'.format(deleteKey))
                 cursor = self.oracle.cursorExecute(
                     sql, deleteKey, self.oracle.CONTINUE_ON_ERROR)
-                self.vOut.prnt('deleted: %s' % (cursor.rowcount), 2)
+                self.vOut.prnt(_('deleted: %s') % (cursor.rowcount), 2)
 
     def main(self):
         self.parseArgs()
@@ -322,4 +319,6 @@ class Main:
 
 
 if __name__ == '__main__':
+    tupleLoadGT = gettext.translation('tuple-load', 'po', fallback=True)
+    tupleLoadGT.install()
     Main()

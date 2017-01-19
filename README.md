@@ -31,11 +31,11 @@ Creating CSV tuples from relational databases, loading CSV tuples into relationa
 ### ./csv2oracle.py --help
 
 ```
-usage: csv2oracle.py [-h] [--cfg CFG] [--ini INI] [--csv CSV] [--json JSON]
-                     [--yaml YAML] [--yc] [-i] [-u] [-d] [-b] [-v]
+usage: csv2oracle.py [-h] [--cfg CFG] [--csv CSV] [--json JSON] [--yaml YAML]
+                     [--yamltad | --jsontad] [-i] [-u] [-d] [-b] [-v]
                      csvFile
 
-Write CSV data to Oracle
+Write CSV data to Oracle table
 
 positional arguments:
   csvFile               data group CSV file name, in the format data_group_name[.version].csv
@@ -43,19 +43,18 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   --cfg CFG, --cfgfile CFG
-                        config file of data groups
-  --ini INI, --inidir INI
-                        default directory for INI files
+                        config file of data groups and database access
   --csv CSV, --csvdir CSV
                         default directory for CSV files
   --json JSON, --jsondir JSON
-                        default directory for JSON files
+                        default directory for table access definitions (TAD) in JOSN format
   --yaml YAML, --yamldir YAML
-                        default directory for YAML files
-  --yc, --yamlcfg       use YAML format config file
+                        default directory for table access definitions in YAML format
+  --yamltad, --yt       use YAML format file for table access definitions (default)
+  --jsontad, --jt       use JOSN format file for table access definitions
   -i, --insert          insert or update in Oracle rows in CSV
                         (default if none action defined)
-  -u, --update          same as -i
+  -u, --update          (same as -i)
   -d, --delete          delete in Oracle rows not in CSV
   -b, --both            force -i and -d
   -v, --verbosity       increase output verbosity
