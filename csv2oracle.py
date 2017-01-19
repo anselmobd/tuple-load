@@ -33,8 +33,20 @@ class Main:
             path = dire
         return os.path.join(path, name)
 
+    def getRule(self, group, rulename):
+        return self.rules[group][rulename]
+
+    def getStrRule(self, group, rulename):
+        ruleData = self.getRule(group, rulename)
+        if isinstance(ruleData, list):
+            rule = '\n'.join(ruleData)
+        else:
+            rule = ruleData
+        self.vOut.prnt(rule, 3, sep='---')
+        return rule
+
     def connectDataBase(self):
-        dbTo = 'db.to.{}'.format(self.rules['sql']['db'])
+        dbTo = 'db.to.{}'.format(self.getRule('sql', 'db'))
         if self.config.get(dbTo, 'dbms') != 'oracle':
             raise NameError(_('For now, script prepared only for Oracle.'))
 
@@ -222,7 +234,7 @@ class Main:
                     self.vOut.pprnt(dictRow, 3)
                     self.vOut.pprnt(
                         list(
-                            (dictRow[f] for f in self.rules['csv']['keys'])
+                            (dictRow[f] for f in self.getRule('csv', 'keys'))
                             ), 3)
                     yield dictRow
                     # break
@@ -233,32 +245,22 @@ class Main:
         self.vOut.prnt('->insertUpdate', 2)
         self.vOut.pprnt(dictRow, 3)
 
-        keyRow = dict(((k, dictRow[k]) for k in self.rules['csv']['keys']))
+        keyRow = dict(((k, dictRow[k]) for k in self.getRule('csv', 'keys')))
         self.vOut.pprnt(keyRow)
 
         # counting rows
 
-        rulesql = self.rules['sql']['key_count']
-        if isinstance(rulesql, list):
-            sql = '\n'.join(rulesql)
-        else:
-            sql = rulesql
-        self.vOut.prnt(sql, 3, sep='---')
-
+        sql = self.getStrRule('sql', 'key_count')
         cursor = self.oracle.cursorExecute(sql, keyRow)
         countRows = cursor.fetchall()[0][0]
         self.vOut.prnt(_('count = %s') % (countRows), 2)
 
         if countRows == 1:
-            sql = '\n'.join(self.rules['sql']['update'])
-            self.vOut.prnt(sql, 3, sep='---')
-
+            sql = self.getStrRule('sql', 'update')
             cursor = self.oracle.cursorExecute(sql, dictRow)
             self.vOut.prnt(_('updated: %s') % (cursor.rowcount), 2)
         else:
-            sql = '\n'.join(self.rules['sql']['insert'])
-            self.vOut.prnt(sql, 3, sep='---')
-
+            sql = self.getStrRule('sql', 'insert')
             cursor = self.oracle.cursorExecute(sql, dictRow)
             self.vOut.prnt(_('inserted: %s') % (cursor.rowcount), 2)
 
@@ -267,10 +269,10 @@ class Main:
         self.keys = []
         for dataRow in self.readCsvGenerator():
             completeKey = ()
-            for keyName in self.rules['csv']['keys']:
+            for keyName in self.getRule('csv', 'keys'):
                 key = dataRow[keyName]
                 if ('fields' in self.rules['csv'] and
-                        keyName in self.rules['csv']['fields']):
+                        keyName in self.getRule('csv', 'fields')):
                     fieldType = self.rules['csv']['fields'][keyName]['type']
                     if fieldType == 'integer':
                         key = int(key)
@@ -282,9 +284,7 @@ class Main:
     def deleteRows(self):
         self.vOut.prnt('->deleteRows', 2)
 
-        sql = '\n'.join(self.rules['sql']['key_list'])
-        self.vOut.prnt(sql, 3, sep='---')
-
+        sql = self.getStrRule('sql', 'key_list')
         cursor = self.oracle.cursorExecute(sql)
 
         toDelete = []
@@ -292,22 +292,19 @@ class Main:
             self.vOut.prnt('row', 4)
             self.vOut.pprnt(row, 4)
             if row in self.keys:
-                self.vOut.prnt('remove', 3)
+                self.vOut.prnt('remove', 4)
                 self.keys.remove(row)
             else:
-                self.vOut.prnt('append', 3)
+                self.vOut.prnt('append', 4)
                 toDelete.append(
-                    {self.rules['csv']['keys'][i]: row[i]
+                    {self.getRule('csv', 'keys')[i]: row[i]
                         for i in range(0, len(row))})
 
         self.vOut.pprnt(toDelete, 3)
 
         if len(toDelete) > 0:
-            sql = '\n'.join(self.rules['sql']['delete'])
-            self.vOut.prnt(sql, 2, sep='---')
-
+            sql = self.getStrRule('sql', 'delete')
             for deleteKey in toDelete:
-
                 cursor = self.oracle.cursorExecute(
                     sql, deleteKey, self.oracle.CONTINUE_ON_ERROR)
                 self.vOut.prnt(_('deleted: %s') % (cursor.rowcount), 2)

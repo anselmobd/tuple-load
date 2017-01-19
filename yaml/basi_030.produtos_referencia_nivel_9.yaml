@@ -1,3 +1,14 @@
+csv:
+
+  fields:
+
+    - CONTA_ESTOQUE:
+        type: integer
+
+  keys:
+    - NIVEL_ESTRUTURA
+    - REFERENCIA
+
 sql:
 
   db: systextil
