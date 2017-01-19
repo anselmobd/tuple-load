@@ -49,7 +49,7 @@ class Main:
 
         self.oracle.connect()
         self.vOut.prnt(
-            'Banco de dados conectado. (versão do Oracle: {})'.format(
+            _('Database connected. (Oracle version: {})').format(
                 self.oracle.con.version))
 
     def closeDataBase(self):
@@ -61,65 +61,66 @@ class Main:
 
     def parseArgs(self):
         parser = argparse.ArgumentParser(
-            description='Write CSV data to Oracle table',
+            description=_('Write CSV data to Oracle table'),
             epilog="(c) Tussor & Oxigenai",
             formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument(
             "csvFile",
-            help='data group CSV file name, in the format '
-            'data_group_name[.version].csv')
+            help=_('data group CSV file name, in the format '
+                   'data_group_name[.version].csv'))
         parser.add_argument(
             "--cfg", "--cfgfile",
             type=str,
             default='tuple-load.cfg',
-            help='config file of data groups and database access')
+            help=_('config file of data groups and database access'))
         parser.add_argument(
             "--csv", "--csvdir",
             type=str,
             default='csv',
-            help='default directory for CSV files')
+            help=_('default directory for CSV files'))
         parser.add_argument(
             "--json", "--jsondir",
             type=str,
             default='json',
-            help='default directory for table access definitions (TAD) '
-                 'in JOSN format')
+            help=_('default directory for table access definitions (TAD) '
+                   'in JOSN format'))
         parser.add_argument(
             "--yaml", "--yamldir",
             type=str,
             default='yaml',
-            help='default directory for table access definitions '
-                 'in YAML format')
+            help=_('default directory for table access definitions '
+                   'in YAML format'))
 
         group = parser.add_mutually_exclusive_group()
         group.add_argument(
             "--yamltad", "--yt",
             action="store_true",
             default=True,
-            help='use YAML format file for table access definitions (default)')
+            help=_('use YAML format file for table access definitions '
+                   '(default)'))
         group.add_argument(
             "--jsontad", "--jt",
             action="store_true",
-            help='use JOSN format file for table access definitions')
+            help=_('use JOSN format file for table access definitions'))
 
         parser.add_argument(
             "-i", "--insert",
             action="store_true",
-            help="insert or update in Oracle rows in CSV\n"
-                 "(default if none action defined)")
+            help=_("insert or update in Oracle rows in CSV\n"
+                   "(default if none action defined)"))
         parser.add_argument(
             "-u", "--update",
             action="store_true",
-            help="(same as -i)")
+            help=_("(same as -i)"))
         parser.add_argument(
             "-d", "--delete", action="store_true",
-            help="delete in Oracle rows not in CSV")
+            help=_("delete in Oracle rows not in CSV"))
         parser.add_argument(
             "-b", "--both", action="store_true",
-            help="force -i and -d")
+            help=_("force -i and -d"))
         parser.add_argument(
             "-v", "--verbosity", action="count", default=0,
-            help="increase output verbosity")
+            help=_("increase output verbosity"))
         self.args = parser.parse_args()
 
         self.args.insert = self.args.insert \
@@ -160,10 +161,10 @@ class Main:
         dataGroup = os.path.basename(self.args.csvFile)
         dataGroup = os.path.splitext(dataGroup)[0]
         dataGroup = dataGroup.split('.')[0]
-        self.vOut.prnt('Data group name: %s' % (dataGroup))
+        self.vOut.prnt(_('Data group name: %s') % (dataGroup))
 
         sqlTable = self.config.get('data_groups', dataGroup)
-        self.vOut.prnt('SQL Table name: %s' % (sqlTable))
+        self.vOut.prnt(_('SQL Table name: %s') % (sqlTable))
 
         if self.args.yamltad:
             self.tableADFileName = ''.join((sqlTable, '.yaml'))
@@ -173,8 +174,8 @@ class Main:
             self.tableADFileName = ''.join((sqlTable, '.json'))
             self.tableADFileName = \
                 self.fileWithDefaultDir(self.args.json, self.tableADFileName)
-        self.vOut.prnt('Table access definitions '
-                       'file name: %s' % (self.tableADFileName))
+        self.vOut.prnt(_('Table access definitions '
+                         'file name: %s') % (self.tableADFileName))
 
     def run(self):
         self.vOut.prnt('->run', 2)
@@ -246,20 +247,20 @@ class Main:
 
         cursor = self.oracle.cursorExecute(sql, keyRow)
         countRows = cursor.fetchall()[0][0]
-        self.vOut.prnt('count = %s' % (countRows), 2)
+        self.vOut.prnt(_('count = %s') % (countRows), 2)
 
         if countRows == 1:
             sql = '\n'.join(self.rules['sql']['update'])
             self.vOut.prnt(sql, 3, sep='---')
 
             cursor = self.oracle.cursorExecute(sql, dictRow)
-            self.vOut.prnt('updated: %s' % (cursor.rowcount), 2)
+            self.vOut.prnt(_('updated: %s') % (cursor.rowcount), 2)
         else:
             sql = '\n'.join(self.rules['sql']['insert'])
             self.vOut.prnt(sql, 3, sep='---')
 
             cursor = self.oracle.cursorExecute(sql, dictRow)
-            self.vOut.prnt('inserted: %s' % (cursor.rowcount), 2)
+            self.vOut.prnt(_('inserted: %s') % (cursor.rowcount), 2)
 
     def readCsvKeys(self):
         self.vOut.prnt('->readCsvKeys', 2)
@@ -306,7 +307,7 @@ class Main:
             self.vOut.prnt(sql, 2, sep='---')
 
             for deleteKey in toDelete:
-                self.vOut.prnt('Delete: "{}"'.format(deleteKey))
+
                 cursor = self.oracle.cursorExecute(
                     sql, deleteKey, self.oracle.CONTINUE_ON_ERROR)
                 self.vOut.prnt(_('deleted: %s') % (cursor.rowcount), 2)

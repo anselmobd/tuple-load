@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: argparse 0.1-2017.01.19-13.49\n"
 "POT-Creation-Date: 2017-01-18 18:44+BRST\n"
-"PO-Revision-Date: 2017-01-19 13:45-0300\n"
+"PO-Revision-Date: 2017-01-19 17:34-0300\n"
 "Last-Translator: Anselmo Blanco Dominguez <anselmo.blanco.dominguez@gmail."
 "com>\n"
 "Language-Team: Oxigenai <anselmo@oxigenai.com.br>\n"
@@ -15,6 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: português brasileiro\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: /usr/lib/python3.4/argparse.py:300
 msgid "usage: "
@@ -42,7 +43,7 @@ msgstr "Não é possível mesclar ações - dois grupos com o nome % r"
 
 #: /usr/lib/python3.4/argparse.py:1437
 msgid "'required' is an invalid argument for positionals"
-msgstr "'Required' é um argumento inválido para posicionamentos"
+msgstr "'required' é um argumento inválido para posicionamentos"
 
 #: /usr/lib/python3.4/argparse.py:1459
 msgid ""
@@ -74,7 +75,7 @@ msgstr "argumentos opcionais"
 
 #: /usr/lib/python3.4/argparse.py:1656
 msgid "show this help message and exit"
-msgstr "mostrar esta mensagem de ajuda e sai"
+msgstr "mostra esta mensagem de ajuda e sai"
 
 #: /usr/lib/python3.4/argparse.py:1687
 msgid "cannot have multiple subparser arguments"
