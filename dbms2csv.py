@@ -14,6 +14,9 @@ import csv
 
 import pyodbc
 
+import gettext
+
+from oxy.arg import parse as argparse
 from oxy.usual import VerboseOutput
 
 
@@ -154,7 +157,7 @@ class Main:
 
     def parseArgs(self):
         parser = argparse.ArgumentParser(
-            description='Write CSV from Mssql database',
+            description=_('Write CSV from Mssql database'),
             epilog="(c) Tussor & Oxigenai",
             formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument(
@@ -345,4 +348,6 @@ class Main:
         self.run()
 
 if __name__ == '__main__':
+    tupleLoadGT = gettext.translation('tuple-load', 'po', fallback=True)
+    tupleLoadGT.install()
     Main()

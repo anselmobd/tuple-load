@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: tuple-load 0.2-2017.01.19-17.31\n"
-"POT-Creation-Date: 2017-01-19 17:30+BRST\n"
+"POT-Creation-Date: 2017-01-21 00:26+BRST\n"
 "PO-Revision-Date: 2017-01-19 17:46-0300\n"
 "Last-Translator: Anselmo Blanco Dominguez <anselmo.blanco.dominguez@gmail."
 "com>\n"
@@ -25,54 +25,54 @@ msgstr "arquivo {}: {}"
 msgid "file does not exist"
 msgstr "arquivo não existe"
 
-#: csv2oracle.py:39
+#: csv2oracle.py:51
 msgid "For now, script prepared only for Oracle."
 msgstr "Por ora o script só está preparado para Oracle"
 
-#: csv2oracle.py:52
+#: csv2oracle.py:64
 msgid "Database connected. (Oracle version: {})"
 msgstr "Banco de dados conectado. (versão do Oracle: {})"
 
-#: csv2oracle.py:64
+#: csv2oracle.py:76
 msgid "Write CSV data to Oracle table"
 msgstr "Importa dados de um CSV para uma tabela do Oracle"
 
-#: csv2oracle.py:69
+#: csv2oracle.py:81
 msgid "data group CSV file name, in the format data_group_name[.version].csv"
 msgstr ""
 "nome do CSV de um grupo de dados, no formato nome_do_grupo_de_dados[.versão]."
 "csv"
 
-#: csv2oracle.py:75
+#: csv2oracle.py:87
 msgid "config file of data groups and database access"
 msgstr "arquivo de configuração de grupos de dados e acesso à banco de dados"
 
-#: csv2oracle.py:80
+#: csv2oracle.py:92
 msgid "default directory for CSV files"
 msgstr "diretório padrão para arquivos CSV"
 
-#: csv2oracle.py:85
+#: csv2oracle.py:97
 msgid "default directory for table access definitions (TAD) in JOSN format"
 msgstr ""
 "diretório padrão para arquivos de definições de acesso à tabelas (TAD) no "
 "formato JSON"
 
-#: csv2oracle.py:91
+#: csv2oracle.py:103
 msgid "default directory for table access definitions in YAML format"
 msgstr ""
 "diretório padrão para arquivos de definições de acesso à tabelas no formato "
 "YAML"
 
-#: csv2oracle.py:99
+#: csv2oracle.py:111
 msgid "use YAML format file for table access definitions (default)"
 msgstr ""
 "usa formato YAML para os arquivos de definições de acesso à tabelas (padrão)"
 
-#: csv2oracle.py:104
+#: csv2oracle.py:116
 msgid "use JOSN format file for table access definitions"
 msgstr "usa formato JSON para os arquivos de definições de acesso à tabelas"
 
-#: csv2oracle.py:109
+#: csv2oracle.py:121
 msgid ""
 "insert or update in Oracle rows in CSV\n"
 "(default if none action defined)"
@@ -80,46 +80,51 @@ msgstr ""
 "insert ou update no Oracle das linhas no CSV\n"
 "(padrão, se nenhuma ação for definida)"
 
-#: csv2oracle.py:114
+#: csv2oracle.py:126
 msgid "(same as -i)"
 msgstr "(mesmo que -i)"
 
-#: csv2oracle.py:117
+#: csv2oracle.py:129
 msgid "delete in Oracle rows not in CSV"
 msgstr "delete no Oracle linhas que não estão no CSV"
 
-#: csv2oracle.py:120
+#: csv2oracle.py:132
 msgid "force -i and -d"
 msgstr "força -i e -d"
 
-#: csv2oracle.py:123
+#: csv2oracle.py:135
 msgid "increase output verbosity"
 msgstr "aumenta a verbosidade"
 
-#: csv2oracle.py:164
+#: csv2oracle.py:176
 msgid "Data group name: %s"
 msgstr "Nome do grupo de dados: %s"
 
-#: csv2oracle.py:167
+#: csv2oracle.py:179
 msgid "SQL Table name: %s"
 msgstr "Nome da tabela SQL: %s"
 
-#: csv2oracle.py:177
+#: csv2oracle.py:189
 msgid "Table access definitions file name: %s"
 msgstr "Nome do arquivo de definição de acesso à tabelas: %s"
 
-#: csv2oracle.py:250
+#: csv2oracle.py:256
 msgid "count = %s"
 msgstr "contador = %s"
 
-#: csv2oracle.py:257
+#: csv2oracle.py:261
 msgid "updated: %s"
 msgstr "atualizado: %s"
 
-#: csv2oracle.py:263
+#: csv2oracle.py:265
 msgid "inserted: %s"
 msgstr "inserido: %s"
 
-#: csv2oracle.py:313
+#: csv2oracle.py:310
 msgid "deleted: %s"
 msgstr "apagado: %s"
+
+#: dbms2csv.py:160
+#, fuzzy
+msgid "Write CSV from Mssql database"
+msgstr "Importa dados de um CSV para uma tabela do Oracle"
