@@ -24,6 +24,7 @@ fi
 
 ./dbms2csv.py insumo_tecido_tamanho_cor.ini _insumo_tecido_tamanho_cor.csv $VERBOSE
 
+
 # delete
 
 ./csv2oracle.py _insumo_nao_tecido_tamanho_cor.csv -d $VERBOSE
@@ -37,6 +38,8 @@ fi
 # ./csv2oracle.py _insumo_tecido_tamanho.csv -d $VERBOSE
 #
 # ./csv2oracle.py _insumo_tecido_capa.csv -d $VERBOSE
+
+./csv2oracle.py tecido-linha_de_produto.csv -d $VERBOSE
 
 ./csv2oracle.py conta_de_estoque.v161202.csv -d $VERBOSE
 
@@ -55,6 +58,8 @@ fi
 ./csv2oracle.py cor.fixo.csv -i $VERBOSE
 
 ./csv2oracle.py conta_de_estoque.v161202.csv -i $VERBOSE
+
+./csv2oracle.py tecido-linha_de_produto.csv -i $VERBOSE
 
 # ./csv2oracle.py _insumo_tecido_capa.csv -i $VERBOSE
 #
