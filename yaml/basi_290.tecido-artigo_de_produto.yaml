@@ -1,0 +1,51 @@
+csv:
+
+  fields:
+
+    ARTIGO:
+      type: integer
+
+  keys:
+    - ARTIGO
+    - NIVEL_ESTRUTURA
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(ARTIGO)
+    FROM BASI_290
+    WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
+      AND ARTIGO=:ARTIGO
+
+  update: |
+    UPDATE SYSTEXTIL.BASI_290 SET
+      DESCR_ARTIGO=:DESCR_ARTIGO
+    WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
+      AND ARTIGO=:ARTIGO
+
+  insert: |
+    INSERT INTO BASI_290
+    ( NIVEL_ESTRUTURA
+    , ARTIGO
+    , DESCR_ARTIGO
+    )
+    VALUES
+    ( :NIVEL_ESTRUTURA
+    , :ARTIGO
+    , :DESCR_ARTIGO
+    )
+
+  key_list: |
+    SELECT
+      NIVEL_ESTRUTURA
+    , ARTIGO
+    FROM BASI_290
+    WHERE NIVEL_ESTRUTURA='2'
+
+  delete: |
+    DELETE FROM BASI_290
+    WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
+      AND ARTIGO=:ARTIGO
