@@ -7,6 +7,8 @@ import cx_Oracle
 
 
 class Oracle:
+    # Vebosity to show all
+    self._VERBOSITY = 4
 
     def __init__(self, username, password,
                  hostname, port, servicename, schema):
@@ -22,7 +24,7 @@ class Oracle:
 
     def connect(self):
         """ Connect to the database. if this fails, raise. """
-        if self.verbosity >= 2:
+        if self.verbosity >= self._VERBOSITY:
             print('Oracle->connect start')
         try:
             self.con = cx_Oracle.connect(
@@ -48,35 +50,35 @@ class Oracle:
             if reraise:
                 raise
             else:
-                if self.verbosity >= 2:
+                if self.verbosity >= self._VERBOSITY:
                     print('Exiting.')
                 sys.exit(10)
 
         if self.connected:
-            if self.verbosity >= 2:
+            if self.verbosity >= self._VERBOSITY:
                 print('Connected!')
             self.cursor = self.con.cursor()
         else:
-            if self.verbosity >= 2:
+            if self.verbosity >= self._VERBOSITY:
                 print('Not connected!')
 
-        if self.verbosity >= 2:
+        if self.verbosity >= self._VERBOSITY:
             print('Oracle->connect end')
 
     def commit(self):
         """ Commit data to the database. If this fails, don't care. """
-        if self.verbosity >= 2:
+        if self.verbosity >= self._VERBOSITY:
             print('Oracle->commit start')
         try:
             self.con.commit()
         except cx_Oracle.DatabaseError:
             pass
-        if self.verbosity >= 2:
+        if self.verbosity >= self._VERBOSITY:
             print('Oracle->commit end')
 
     def disconnect(self):
         """ Disconnect from the database. If this fails, don't care. """
-        if self.verbosity >= 2:
+        if self.verbosity >= self._VERBOSITY:
             print('Oracle->disconnect start')
         try:
             self.cursor.close()
@@ -84,12 +86,12 @@ class Oracle:
             self.connected = False
         except cx_Oracle.DatabaseError:
             pass
-        if self.verbosity >= 2:
+        if self.verbosity >= self._VERBOSITY:
             print('Oracle->disconnect end')
 
     def cursorExecute(self, statement, data=None, halt=True):
         """ Execute statement using data and return cursor. """
-        if self.verbosity >= 2:
+        if self.verbosity >= self._VERBOSITY:
             print('Oracle->cursorExecute start')
         try:
             if data:
@@ -102,7 +104,7 @@ class Oracle:
                 print('Error: {}'.format(e))
             if halt:
                 raise
-        if self.verbosity >= 2:
+        if self.verbosity >= self._VERBOSITY:
             print('Oracle->cursorExecute end')
         return self.cursor
 
