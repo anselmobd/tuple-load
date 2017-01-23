@@ -42,12 +42,12 @@ sql:
           WHERE BASI030_NIVEL030='2'
             AND BASI030_REFERENC=:REFERENCIA
             AND TAMANHO_REF=:TAM
+        ) || ' ' || (
           SELECT
             DESCRICAO
           FROM BASI_100
           WHERE COR_SORTIMENTO = :COR
             AND TIPO_COR = 1
-            ) || ' ' || (
         )
       )
     WHERE NIVEL_ESTRUTURA = '2'
@@ -110,7 +110,7 @@ sql:
     FROM BASI_010 rtc
     LEFT JOIN BASI_030 rb
       ON rb.REFERENCIA = rtc.GRUPO_ESTRUTURA
-    WHERE NIVEL_ESTRUTURA = '2'
+    WHERE rtc.NIVEL_ESTRUTURA = '2'
       AND rb.CODIGO_CONTABIL=99
 
   delete: |
