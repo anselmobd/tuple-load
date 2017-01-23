@@ -7,11 +7,12 @@ import cx_Oracle
 
 
 class Oracle:
-    # Vebosity to show all
-    self._VERBOSITY = 4
 
     def __init__(self, username, password,
                  hostname, port, servicename, schema):
+        # Vebosity to show all
+        self._VERBOSITY = 4
+
         self.CONTINUE_ON_ERROR = False
         self.username = username
         self.password = password
