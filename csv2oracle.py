@@ -300,11 +300,10 @@ class Main:
                     {self.getRule('csv', 'keys')[i]: row[i]
                         for i in range(0, len(row))})
 
-        self.vOut.pprnt(toDelete, 3)
-
         if len(toDelete) > 0:
             sql = self.getStrRule('sql', 'delete')
             for deleteKey in toDelete:
+                self.vOut.pprnt(deleteKey, 3)
                 cursor = self.oracle.cursorExecute(
                     sql, deleteKey, self.oracle.CONTINUE_ON_ERROR)
                 self.vOut.prnt(_('deleted: %s') % (cursor.rowcount), 2)

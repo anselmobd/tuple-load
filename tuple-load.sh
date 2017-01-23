@@ -33,11 +33,11 @@ fi
 
 ./csv2oracle.py _insumo_nao_tecido_capa.csv -d $VERBOSE
 
-# ./csv2oracle.py _insumo_tecido_tamanho_cor.csv -d $VERBOSE
-#
-# ./csv2oracle.py _insumo_tecido_tamanho.csv -d $VERBOSE
-#
-# ./csv2oracle.py _insumo_tecido_capa.csv -d $VERBOSE
+./csv2oracle.py _insumo_tecido_tamanho_cor.csv -d $VERBOSE
+
+./csv2oracle.py _insumo_tecido_tamanho.csv -d $VERBOSE
+
+./csv2oracle.py _insumo_tecido_capa.csv -d $VERBOSE
 
 ./csv2oracle.py tecido-linha_de_produto.csv -d $VERBOSE
 
@@ -61,11 +61,11 @@ fi
 
 ./csv2oracle.py tecido-linha_de_produto.csv -i $VERBOSE
 
-# ./csv2oracle.py _insumo_tecido_capa.csv -i $VERBOSE
-#
-# ./csv2oracle.py _insumo_tecido_tamanho.csv -i $VERBOSE
-#
-# ./csv2oracle.py _insumo_tecido_tamanho_cor.csv -i $VERBOSE
+./csv2oracle.py _insumo_tecido_capa.csv -i $VERBOSE
+
+./csv2oracle.py _insumo_tecido_tamanho.csv -i $VERBOSE
+
+./csv2oracle.py _insumo_tecido_tamanho_cor.csv -i $VERBOSE
 
 ./csv2oracle.py _insumo_nao_tecido_capa.csv -i $VERBOSE
 
