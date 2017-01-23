@@ -39,7 +39,10 @@ sql:
       9
     , :REFERENCIA
     , :TAM
-    , :CATALOGODOTAMAMANHO
+    , case when :CATALOGODOTAMAMANHO is null
+      then ( select t.DESCR_TAMANHO FROM basi_220 t where t.TAMANHO_REF = :TAM )
+      else :CATALOGODOTAMAMANHO
+      end
     , :CODITEMPROD
     )
 
