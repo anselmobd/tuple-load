@@ -81,6 +81,12 @@ class Main:
             help=_('data group CSV file name, in the format '
                    'data_group_name[.version].csv'))
         parser.add_argument(
+            "rulesFile",
+            nargs='?',
+            default='',
+            help=_('table access definitions (TAD) file name, in the format '
+                   'tad_name.{yaml|json}'))
+        parser.add_argument(
             "--cfg", "--cfgfile",
             type=str,
             default='tuple-load.cfg',
@@ -94,7 +100,7 @@ class Main:
             "--json", "--jsondir",
             type=str,
             default='json',
-            help=_('default directory for table access definitions (TAD) '
+            help=_('default directory for table access definitions '
                    'in JOSN format'))
         parser.add_argument(
             "--yaml", "--yamldir",
@@ -175,17 +181,23 @@ class Main:
         dataGroup = dataGroup.split('.')[0]
         self.vOut.prnt(_('Data group name: %s') % (dataGroup))
 
-        sqlTable = self.config.get('data_groups', dataGroup)
-        self.vOut.prnt(_('SQL Table name: %s') % (sqlTable))
+        if self.args.rulesFile == '':
+            sqlTable = self.config.get('data_groups', dataGroup)
+            self.vOut.prnt(_('SQL Table name: %s') % (sqlTable))
 
-        if self.args.yamltad:
-            self.tableADFileName = ''.join((sqlTable, '.yaml'))
-            self.tableADFileName = \
-                self.fileWithDefaultDir(self.args.yaml, self.tableADFileName)
+            if self.args.yamltad:
+                self.tableADFileName = ''.join((sqlTable, '.yaml'))
+                self.tableADFileName = \
+                    self.fileWithDefaultDir(self.args.yaml,
+                                            self.tableADFileName)
+            else:
+                self.tableADFileName = ''.join((sqlTable, '.json'))
+                self.tableADFileName = \
+                    self.fileWithDefaultDir(self.args.json,
+                                            self.tableADFileName)
         else:
-            self.tableADFileName = ''.join((sqlTable, '.json'))
-            self.tableADFileName = \
-                self.fileWithDefaultDir(self.args.json, self.tableADFileName)
+            self.tableADFileName = self.args.rulesFile
+
         self.vOut.prnt(_('Table access definitions '
                          'file name: %s') % (self.tableADFileName))
 
