@@ -24,6 +24,8 @@ sql:
           else :CATALOGODOTAMAMANHO
         end
     , DESC_TAM_FICHA=:CODITEMPROD
+    , TIPO_PRODUTO = 1
+    , PESO_ROLO = 15
     WHERE BASI030_NIVEL030=2
       AND BASI030_REFERENC=:REFERENCIA
       AND TAMANHO_REF=:TAM
@@ -35,6 +37,8 @@ sql:
     , TAMANHO_REF
     , DESCR_TAM_REFER
     , DESC_TAM_FICHA
+    , TIPO_PRODUTO
+    , PESO_ROLO
     ) VALUES (
       2
     , :REFERENCIA
@@ -44,6 +48,8 @@ sql:
       else :CATALOGODOTAMAMANHO
       end
     , :CODITEMPROD
+    , 1
+    , 15
     )
 
   key_list: |

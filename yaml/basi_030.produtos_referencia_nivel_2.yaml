@@ -26,6 +26,8 @@ sql:
     , UNIDADE_MEDIDA=:UNIDMEDIDA
     , CONTA_ESTOQUE=:CONTA_ESTOQUE
     , CODIGO_CONTABIL=:CODIGO_CONTABIL
+    , COMPRADO_FABRIC=1
+    , CLASSIFIC_FISCAL='0'
     , LINHA_PRODUTO=:LINHA_PRODUTO
     , ARTIGO =
       ( SELECT
@@ -36,8 +38,6 @@ sql:
           AND INSTR( :DESCRITEMDEPRODUCAO, SUBSTR( art.DESCR_ARTIGO, 1, LENGTH(art.DESCR_ARTIGO)-1) ) <> 0
       )
     , TIPO_PRODUTO = case when INSTR( :DESCRITEMDEPRODUCAO, 'LISTRA' ) <> 0 then 2 else 1 end
-    , COMPRADO_FABRIC=1
-    , CLASSIFIC_FISCAL='0'
     WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
       AND REFERENCIA=:REFERENCIA
 
@@ -49,11 +49,11 @@ sql:
     , UNIDADE_MEDIDA
     , CONTA_ESTOQUE
     , CODIGO_CONTABIL
+    , COMPRADO_FABRIC
+    , CLASSIFIC_FISCAL
     , LINHA_PRODUTO
     , ARTIGO
     , TIPO_PRODUTO
-    , COMPRADO_FABRIC
-    , CLASSIFIC_FISCAL
     ) VALUES (
       :NIVEL_ESTRUTURA
     , :REFERENCIA
@@ -61,6 +61,8 @@ sql:
     , :UNIDMEDIDA
     , :CONTA_ESTOQUE
     , :CODIGO_CONTABIL -- identificador de carga = 99
+    , 1
+    , '0'
     , :LINHA_PRODUTO
     , ( SELECT
           min(art.ARTIGO)
@@ -70,8 +72,6 @@ sql:
           AND INSTR( :DESCRITEMDEPRODUCAO, SUBSTR( art.DESCR_ARTIGO, 1, LENGTH(art.DESCR_ARTIGO)-1) ) <> 0
       )
     , case when INSTR( :DESCRITEMDEPRODUCAO, 'LISTRA' ) <> 0 then 2 else 1 end
-    , 1
-    , '0'
     )
 
   key_list: |

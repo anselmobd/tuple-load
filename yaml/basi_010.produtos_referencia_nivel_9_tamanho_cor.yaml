@@ -50,6 +50,8 @@ sql:
             AND TIPO_COR = 1
         )
       )
+    , CLASSIFIC_FISCAL = '0'
+    , DATA_CADASTRO = TIMESTAMP '2017-01-24 00:00:00.000000'
     WHERE NIVEL_ESTRUTURA = '9'
       AND GRUPO_ESTRUTURA = :REFERENCIA
       AND SUBGRU_ESTRUTURA = :TAM
@@ -65,6 +67,8 @@ sql:
     , CODIGO_VELHO
     , DESCRICAO_15
     , NARRATIVA
+    , CLASSIFIC_FISCAL
+    , DATA_CADASTRO
     ) VALUES (
       9
     , :REFERENCIA
@@ -100,6 +104,8 @@ sql:
             AND TIPO_COR = 1
         )
       )
+    , '0'
+    , TIMESTAMP '2017-01-24 00:00:00.000000'
     )
 
   key_list: |
