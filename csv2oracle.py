@@ -10,8 +10,6 @@ import json
 import csv
 import yaml
 
-import cx_Oracle
-
 import gettext
 
 from oxy.arg import parse as argparse
