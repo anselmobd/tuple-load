@@ -24,8 +24,12 @@ fi
 
 ./dbms2csv.py insumo_tecido_tamanho_cor.ini _insumo_tecido_tamanho_cor.csv $VERBOSE
 
+./dbms2csv.py insumo_tecido_tamanho_cor_col.ini _insumo_tecido_tamanho_cor_col.csv $VERBOSE
+
 
 # delete
+
+./csv2oracle.py csv/_insumo_tecido_tamanho_cor_col.csv yaml/basi_400.produtos_referencia_nivel_2_tamanho_cor_col.yaml -d $VERBOSE
 
 ./csv2oracle.py _insumo_nao_tecido_tamanho_cor.csv -d $VERBOSE
 
@@ -76,3 +80,5 @@ fi
 ./csv2oracle.py _insumo_nao_tecido_tamanho.csv -i $VERBOSE
 
 ./csv2oracle.py _insumo_nao_tecido_tamanho_cor.csv -i $VERBOSE
+
+./csv2oracle.py csv/_insumo_tecido_tamanho_cor_col.csv yaml/basi_400.produtos_referencia_nivel_2_tamanho_cor_col.yaml -i $VERBOSE
