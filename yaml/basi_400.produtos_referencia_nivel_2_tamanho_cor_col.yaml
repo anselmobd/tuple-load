@@ -1,0 +1,81 @@
+csv:
+
+  keys:
+    - REFERENCIA
+    - TAM
+    - COR
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(CODIGO_INFORMACAO)
+    FROM BASI_400
+    WHERE NIVEL = '2'
+      AND GRUPO = :REFERENCIA
+      AND SUBGRUPO = :TAM
+      AND ITEM = :COR
+      AND TIPO_INFORMACAO = 12
+
+  update: |
+    UPDATE BASI_400 SET
+      CODIGO_INFORMACAO = 1
+    , DATA_01 = TIMESTAMP '2017-01-24 00:00:00.000000'
+    , DATA_02 = TIMESTAMP '2017-01-24 00:00:00.000000'
+    , SITUACAO = 0
+    , CLASSIFICACAO = 2
+    -- :CODITEMPROD
+    WHERE NIVEL = '2'
+      AND GRUPO = :REFERENCIA
+      AND SUBGRUPO = :TAM
+      AND ITEM = :COR
+      AND TIPO_INFORMACAO = 12
+
+  insert: |
+    INSERT INTO BASI_400
+    ( NIVEL
+    -- :CODITEMPROD
+    , GRUPO
+    , SUBGRUPO
+    , ITEM
+    , TIPO_INFORMACAO
+    , CODIGO_INFORMACAO
+    , DATA_01
+    , DATA_02
+    , SITUACAO
+    , CLASSIFICACAO
+    )
+    VALUES
+    ( '2'
+    , :REFERENCIA
+    , :TAM
+    , :COR
+    , 12
+    , 1
+    , TIMESTAMP '2017-01-24 00:00:00.000000'
+    , TIMESTAMP '2017-01-24 00:00:00.000000'
+    , 0
+    , 2
+    )
+
+  key_list: |
+    SELECT
+      rtcc.GRUPO
+    , rtcc.SUBGRUPO
+    , rtcc.ITEM
+    FROM BASI_400 rtcc
+    LEFT JOIN BASI_030 rb
+      ON rb.REFERENCIA = rtcc.GRUPO
+    WHERE rtcc.TIPO_INFORMACAO = 12
+      AND rtcc.NIVEL_ESTRUTURA = '2'
+      AND rb.CODIGO_CONTABIL=99
+
+  delete: |
+    DELETE FROM BASI_400
+    WHERE NIVEL = '2'
+      AND GRUPO = :REFERENCIA
+      AND SUBGRUPO = :TAM
+      AND ITEM = :COR
+      AND TIPO_INFORMACAO = 12
