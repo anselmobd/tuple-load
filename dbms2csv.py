@@ -232,11 +232,11 @@ class Main:
 
     def loadFunctionVariables(self):
         self.vOut.prnt('->loadFunctionVariables', 3)
-        self.vOut.pprnt(self.iniConfig.items("functions"), 3)
+        self.vOut.pprnt(self.iniConfig.items("functions"), 4)
 
         dictRowFunctions = []
         for variable, value in self.iniConfig.items("functions"):
-            self.vOut.prnt('variable: {}'.format(variable), 3)
+            self.vOut.prnt('variable: {}'.format(variable), 4)
             varParams = json.loads(value)
             if 'count' in varParams:
                 funcParams = varParams['count']
@@ -267,9 +267,9 @@ class Main:
                 dictRow[variable] = varParams['value']
 
     def execFunctionsToRow(self, dictRowFunctions, dictRow):
-        self.vOut.prnt('->execFunctionsToRow', 2)
+        self.vOut.prnt('->execFunctionsToRow', 4)
         for function in dictRowFunctions:
-            self.vOut.prnt('column: {}'.format(function[0]), 3)
+            self.vOut.prnt('column: {}'.format(function[0]), 4)
             dictRow[function[0]] = function[1](dictRow)
 
     def executeQueries(self):
