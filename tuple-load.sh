@@ -28,6 +28,8 @@ fi
 
 ./dbms2csv.py produto_colecao.ini _produto_colecao.csv $VERBOSE
 
+# ./dbms2csv.py produto_referencias.ini _produto_referencias.csv $VERBOSE
+
 # delete
 
 ./csv2oracle.py csv/_insumo_tecido_tamanho_cor_col.csv yaml/basi_400.produtos_referencia_nivel_2_tamanho_cor_col.yaml -d $VERBOSE
