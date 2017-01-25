@@ -1,0 +1,39 @@
+csv:
+
+  keys:
+    - SEQUENCE
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(c.DESCR_COLECAO)
+    from basi_140 c
+    where c.COLECAO = :SEQUENCE
+
+  update: |
+    UPDATE basi_140 c
+    set
+      c.DESCR_COLECAO = :CODCOLECAO
+    where c.COLECAO = :SEQUENCE
+
+  insert: |
+    INSERT INTO basi_140 (
+      COLECAO
+    , DESCR_COLECAO
+    )
+    VALUES (
+      :SEQUENCE
+    , :CODCOLECAO
+    )
+
+  key_list: |
+    SELECT
+      c.COLECAO
+    from basi_140 c
+
+  delete: |
+    DELETE FROM basi_140 c
+    where c.COLECAO = :SEQUENCE
