@@ -10,16 +10,18 @@ class Oracle:
 
     def __init__(self, username, password,
                  hostname, port, servicename, schema):
-        # Vebosity to show all
-        self._VERBOSITY = 4
 
-        self.CONTINUE_ON_ERROR = False
         self.username = username
         self.password = password
         self.hostname = hostname
         self.port = port
         self.servicename = servicename
         self.schema = schema
+
+        # Vebosity to show all
+        self._VERBOSITY = 4
+
+        self.CONTINUE_ON_ERROR = False
         self.connected = False
         self.verbosity = 0
 
