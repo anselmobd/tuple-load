@@ -16,6 +16,7 @@ import gettext
 
 from oxy.arg import parse as argparse
 from oxy.mssql import Mssql
+from oxy.firebird import Firebird
 from oxy.usual import VerboseOutput
 
 
@@ -82,15 +83,26 @@ class Main:
 
     def connectDataBase(self):
         dbfrom = 'db.from.{}'.format(self.iniConfig.get('read', 'db'))
-        if self.config.get(dbfrom, 'dbms') != 'mssql':
-            raise NameError('For now, script prepared only for Mssql.')
+        dbms = self.config.get(dbfrom, 'dbms')
 
-        self.db = Mssql(self.config.get(dbfrom, 'username'),
-                        self.config.get(dbfrom, 'password'),
-                        self.config.get(dbfrom, 'hostname'),
-                        self.config.get(dbfrom, 'port'),
-                        self.config.get(dbfrom, 'database'),
-                        self.config.get(dbfrom, 'schema'))
+        if dbms == 'mssql':
+            self.db = Mssql(self.config.get(dbfrom, 'username'),
+                            self.config.get(dbfrom, 'password'),
+                            self.config.get(dbfrom, 'hostname'),
+                            self.config.get(dbfrom, 'port'),
+                            self.config.get(dbfrom, 'database'),
+                            self.config.get(dbfrom, 'schema'))
+
+        elif dbms == 'firebird':
+            self.db = Firebird(self.config.get(dbfrom, 'username'),
+                               self.config.get(dbfrom, 'password'),
+                               self.config.get(dbfrom, 'hostname'),
+                               self.config.get(dbfrom, 'database'),
+                               self.config.get(dbfrom, 'charset'))
+
+        else:
+            raise NameError(
+                'For now, script is not prepared for "'+dbms+'".')
 
         self.db.connect()
 
