@@ -66,6 +66,20 @@ def translate_field(queryDict):
     return inner_func
 
 
+def trim_field(fieldName):
+    ''' Closure to "trim" function variable '''
+    field = fieldName
+
+    def inner_func(dictRow):
+        nonlocal field
+        if isinstance(dictRow[field], basestring):
+            result = dictRow[field].strip()
+        else:
+            result = ''
+        return result
+    return inner_func
+
+
 class Main:
 
     def checkFile(self, fileName, description, exitError):
@@ -203,6 +217,9 @@ class Main:
                 funcParams['from'] = self.fileWithDefaultDir(
                         self.args.csv, funcParams['from'])
                 dictRowFunctions[variable] = translate_field(funcParams)
+            elif 'trim' in varParams:
+                funcParams = varParams['trim']
+                dictRowFunctions[variable] = trim_field(funcParams['field'])
         return dictRowFunctions
 
     def addVariablesToRow(self, dictRow):
