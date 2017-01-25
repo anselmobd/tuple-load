@@ -72,10 +72,37 @@ def trim_field(fieldName):
 
     def inner_func(dictRow):
         nonlocal field
-        if isinstance(dictRow[field], basestring):
+        if isinstance(dictRow[field], str):
             result = dictRow[field].strip()
         else:
             result = ''
+        return result
+    return inner_func
+
+
+def str_field(methodDict, variable):
+    ''' Closure to str methods variable '''
+    method = methodDict
+    fieldName = variable
+
+    def inner_func(dictRow):
+        nonlocal method
+        result = ''
+
+        if 'field' in method:
+            field = method['field']
+        else:
+            field = fieldName
+
+        if isinstance(dictRow[field], str):
+            if method['method'] == 'rjust':
+                # print('str_field->rjust')
+                size = int(method['args'][0])
+                fill = method['args'][1]
+                # print('fill: "{}"'.format(fill))
+                result = dictRow[field].rjust(size, fill)
+            elif method['method'] == 'strip':
+                result = dictRow[field].strip()
         return result
     return inner_func
 
@@ -198,28 +225,39 @@ class Main:
             self.connectDataBase()
 
             with open(self.args.csvFile, 'w') as self.csvNew:
-                self.executeQuery()
+                self.executeQueries()
 
         finally:
             self.closeDataBase()
 
     def loadFunctionVariables(self):
-        dictRowFunctions = {}
+        self.vOut.prnt('->loadFunctionVariables', 3)
+        self.vOut.pprnt(self.iniConfig.items("functions"), 3)
+
+        dictRowFunctions = []
         for variable, value in self.iniConfig.items("functions"):
+            self.vOut.prnt('variable: {}'.format(variable), 3)
             varParams = json.loads(value)
             if 'count' in varParams:
                 funcParams = varParams['count']
-                dictRowFunctions[variable] = count_field(
+                dictRowFunctions.append([variable, count_field(
                     '1' if 'start' not in funcParams else funcParams['start'],
                     None if 'break' not in funcParams else funcParams['break'])
+                    ])
             elif 'translate' in varParams:
                 funcParams = varParams['translate']
                 funcParams['from'] = self.fileWithDefaultDir(
                         self.args.csv, funcParams['from'])
-                dictRowFunctions[variable] = translate_field(funcParams)
+                dictRowFunctions.append(
+                    [variable, translate_field(funcParams)])
             elif 'trim' in varParams:
                 funcParams = varParams['trim']
-                dictRowFunctions[variable] = trim_field(funcParams['field'])
+                dictRowFunctions.append(
+                    [variable, trim_field(funcParams['field'])])
+            elif 'str' in varParams:
+                funcParams = varParams['str']
+                dictRowFunctions.append(
+                    [variable, str_field(funcParams, variable)])
         return dictRowFunctions
 
     def addVariablesToRow(self, dictRow):
@@ -229,18 +267,31 @@ class Main:
                 dictRow[variable] = varParams['value']
 
     def execFunctionsToRow(self, dictRowFunctions, dictRow):
-        for column in dictRowFunctions.keys():
-            dictRow[column] = dictRowFunctions[column](dictRow)
+        self.vOut.prnt('->execFunctionsToRow', 2)
+        for function in dictRowFunctions:
+            self.vOut.prnt('column: {}'.format(function[0]), 3)
+            dictRow[function[0]] = function[1](dictRow)
 
-    def executeQuery(self):
-        sqlF = self.iniConfig.get('read', 'sql')
+    def executeQueries(self):
+        self.vOut.prnt('->executeQueries', 2)
+        self.doHeader = True
+        for i in range(10):
+            if i == 0:
+                sqlVar = 'sql'
+            else:
+                sqlVar = 'sql{}'.format(i)
+            if sqlVar in list(self.iniConfig['read']):
+                self.vOut.prnt('sql = {}'.format(sqlVar), 3)
+                sqlF = self.iniConfig.get('read', sqlVar)
+                self.executeQuery(sqlF)
+
+    def executeQuery(self, sqlF):
         curF = self.db.cursorExecute(sqlF)
 
         columns = [column[0].lower() for column in curF.description]
 
         dictRowFunctions = self.loadFunctionVariables()
 
-        doHeader = True
         headerLine = ''
 
         while True:
@@ -300,15 +351,15 @@ class Main:
 
                 dataLine += '{}{}'.format(separator, colValue)
 
-                if doHeader:
+                if self.doHeader:
                     headerLine += '{}"{}"'.format(separator, column.upper())
 
                 separator = ';'
 
-            if doHeader:
+            if self.doHeader:
                 # print(headerLine)
                 self.csvNew.write('{}\n'.format(headerLine))
-                doHeader = False
+                self.doHeader = False
 
             # print(dataLine)
             self.csvNew.write('{}\n'.format(dataLine))
