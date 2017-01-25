@@ -47,6 +47,8 @@ fi
 
 ./csv2oracle.py tecido-artigo_de_produto.csv -d $VERBOSE
 
+./csv2oracle.py produto-linha_de_produto.csv -d $VERBOSE
+
 ./csv2oracle.py tecido-linha_de_produto.csv -d $VERBOSE
 
 ./csv2oracle.py conta_de_estoque.v161202.csv -d $VERBOSE
@@ -68,6 +70,8 @@ fi
 ./csv2oracle.py conta_de_estoque.v161202.csv -i $VERBOSE
 
 ./csv2oracle.py tecido-linha_de_produto.csv -i $VERBOSE
+
+./csv2oracle.py produto-linha_de_produto.csv -i $VERBOSE
 
 ./csv2oracle.py tecido-artigo_de_produto.csv -i $VERBOSE
 
