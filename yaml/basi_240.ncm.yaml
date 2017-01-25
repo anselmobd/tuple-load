@@ -1,0 +1,52 @@
+csv:
+
+  keys:
+    - NCM
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(n.DESCR_CLASS_FISC)
+    from BASI_240 n
+    where n.CLASSIFIC_FISCAL = :NCM
+
+  update: |
+    UPDATE BASI_240 n
+    set
+      n.DESCR_CLASS_FISC = :DESCRICAO
+    , n.CVF_IPI_SAIDA = 52
+    , n.CVF_IPI_ENTRADA = 2
+    , n.CVF_IPI_SAIDA_EXP = 52
+    , n.DESC_DETALHA_CLASS_FISC = :DETALHE
+    where n.CLASSIFIC_FISCAL = :NCM
+
+  insert: |
+    INSERT INTO SYSTEXTIL.BASI_240
+    ( CLASSIFIC_FISCAL
+    , DESCR_CLASS_FISC
+    , CVF_IPI_SAIDA
+    , CVF_IPI_ENTRADA
+    , CVF_IPI_SAIDA_EXP
+    , DESC_DETALHA_CLASS_FISC
+    )
+    VALUES(
+      :NCM       -- CLASSIFIC_FISCAL
+    , :DESCRICAO -- DESCR_CLASS_FISC
+    , 52         -- CVF_IPI_SAIDA
+    , 2          -- CVF_IPI_ENTRADA
+    , 52         -- CVF_IPI_SAIDA_EXP
+    , :DETALHE   -- DESC_DETALHA_CLASS_FISC
+    )
+
+  key_list: |
+    SELECT
+      n.CLASSIFIC_FISCAL
+    from BASI_240 n
+    where n.CLASSIFIC_FISCAL <> '0'
+
+  delete: |
+    DELETE FROM BASI_240 n
+    where n.CLASSIFIC_FISCAL = :NCM
