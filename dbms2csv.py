@@ -242,41 +242,46 @@ class Main:
         finally:
             self.closeDataBase()
 
+    def getElementDef(self, aList, aKey, default):
+        return default if aKey not in aList else aList[aKey]
+
     def loadFunctionVariables(self):
         self.vOut.prnt('->loadFunctionVariables', 3)
         self.vOut.pprnt(self.iniConfig.items("functions"), 4)
 
         dictRowFunctions = []
-        for variable, value in self.iniConfig.items("functions"):
-            self.vOut.prnt('variable: {}'.format(variable), 4)
-            varParams = json.loads(value)
-            if 'count' in varParams:
-                funcParams = varParams['count']
-                dictRowFunctions.append([variable, count_field(
-                    '1' if 'start' not in funcParams else funcParams['start'],
-                    None if 'break' not in funcParams else funcParams['break'])
-                    ])
-            elif 'translate' in varParams:
-                funcParams = varParams['translate']
-                funcParams['from'] = self.fileWithDefaultDir(
-                        self.args.csv, funcParams['from'])
-                dictRowFunctions.append(
-                    [variable, translate_field(funcParams)])
-            elif 'trim' in varParams:
-                funcParams = varParams['trim']
-                dictRowFunctions.append(
-                    [variable, trim_field(funcParams['field'])])
-            elif 'str' in varParams:
-                funcParams = varParams['str']
-                dictRowFunctions.append(
-                    [variable, str_field(funcParams, variable)])
+        if 'functions' in self.iniConfig.sections():
+            for variable, value in self.iniConfig.items('functions'):
+                self.vOut.prnt('variable: {}'.format(variable), 4)
+                varParams = json.loads(value)
+                if 'count' in varParams:
+                    funcParams = varParams['count']
+                    dictRowFunctions.append([variable, count_field(
+                        self.getElementDef(funcParams, 'start', '1'),
+                        self.getElementDef(funcParams, 'break', None))
+                        ])
+                elif 'translate' in varParams:
+                    funcParams = varParams['translate']
+                    funcParams['from'] = self.fileWithDefaultDir(
+                            self.args.csv, funcParams['from'])
+                    dictRowFunctions.append(
+                        [variable, translate_field(funcParams)])
+                elif 'trim' in varParams:
+                    funcParams = varParams['trim']
+                    dictRowFunctions.append(
+                        [variable, trim_field(funcParams['field'])])
+                elif 'str' in varParams:
+                    funcParams = varParams['str']
+                    dictRowFunctions.append(
+                        [variable, str_field(funcParams, variable)])
         return dictRowFunctions
 
     def addVariablesToRow(self, dictRow):
-        for variable, value in self.iniConfig.items("variables"):
-            varParams = json.loads(value)
-            if 'value' in varParams.keys():
-                dictRow[variable] = varParams['value']
+        if 'variables' in self.iniConfig.sections():
+            for variable, value in self.iniConfig.items('variables'):
+                varParams = json.loads(value)
+                if 'value' in varParams.keys():
+                    dictRow[variable] = varParams['value']
 
     def execFunctionsToRow(self, dictRowFunctions, dictRow):
         self.vOut.prnt('->execFunctionsToRow', 4)
