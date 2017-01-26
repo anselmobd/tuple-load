@@ -238,7 +238,8 @@ class Main:
             self.connectDataBase()
 
             with open(self.args.csvFile, 'w') as self.csvNew:
-                self.executeQueries()
+                self.executeMaster()
+
         finally:
             self.closeDataBase()
 
@@ -291,9 +292,39 @@ class Main:
             self.vOut.prnt('column: {}'.format(function[0]), 4)
             dictRow[function[0]] = function[1](dictRow)
 
+    def executeMaster(self):
+        self.doHeader = True
+        if 'master.db' not in list(self.iniConfig['read']):
+            self.queryParam = None
+            self.executeQueries()
+        else:
+            if self.iniConfig['read']['master.db'] == 'csv':
+                paramsFile = self.iniConfig['read']['master.filename']
+                paramsFile = self.fileWithDefaultDir(self.args.csv, paramsFile)
+                self.vOut.prnt('paramsFile: {}'.format(paramsFile), 3)
+                self.vOut.prnt(
+                    'master.select: {}'.format(
+                        self.iniConfig['read']['master.select']), 3)
+                masterSelect = json.loads(
+                    self.iniConfig['read']['master.select'])
+                self.vOut.prnt('masterSelect: {}'.format(masterSelect, 3))
+                keys = masterSelect['keys']
+                self.vOut.prnt('keys: {}'.format(keys, 3))
+                reader = csv.reader(open(paramsFile), delimiter=';')
+                columns = next(reader)
+                for row in reader:
+                    dictRow = dict(zip(columns, row))
+                    for key in keys:
+                        self.vOut.prnt('key: {}'.format(key, 3))
+                        self.vOut.prnt(
+                            'dictRow[key]: {}'.format(dictRow[key], 3))
+
+                    self.queryParam = [dictRow[key] for key in keys]
+                    self.vOut.pprnt(self.queryParam, 4)
+                    self.executeQueries()
+
     def executeQueries(self):
         self.vOut.prnt('->executeQueries', 2)
-        self.doHeader = True
         for i in range(10):
             if i == 0:
                 sqlVar = 'sql'
@@ -305,7 +336,10 @@ class Main:
                 self.executeQuery(sqlF)
 
     def executeQuery(self, sqlF):
-        curF = self.db.cursorExecute(sqlF)
+        self.vOut.prnt('->executeQuery', 3)
+
+        curF = self.db.cursorExecute(sqlF, self.queryParam)
+        # curF = self.db.cursorExecute(sqlF, data=[('302')])
 
         columns = [column[0].lower() for column in curF.description]
 
