@@ -96,13 +96,25 @@ def str_field(methodDict, variable):
 
         if isinstance(dictRow[field], str):
             if method['method'] == 'rjust':
-                # print('str_field->rjust')
                 size = int(method['args'][0])
                 fill = method['args'][1]
-                # print('fill: "{}"'.format(fill))
                 result = dictRow[field].rjust(size, fill)
             elif method['method'] == 'strip':
                 result = dictRow[field].strip()
+            elif method['method'] == 'char':
+                pos = int(method['args'][0])
+                result = dictRow[field][pos]
+            elif method['method'] == 'slice':
+                ini = int(method['args'][0])
+                if len(method['args']) > 1 and method['args'][1] != '':
+                    end = int(method['args'][1])
+                else:
+                    end = None
+                if len(method['args']) > 2 and method['args'][2] != '':
+                    step = int(method['args'][2])
+                else:
+                    step = None
+                result = dictRow[field][ini:end:step]
         return result
     return inner_func
 
