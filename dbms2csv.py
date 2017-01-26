@@ -385,11 +385,14 @@ class Main:
 
             # sys.exit(2)
 
-    def sortCsv(self, args):
+    def sortCsv(self, rule):
         self.vOut.prnt('->sortCsv', 3)
+        varParams = json.loads(rule)
+        self.vOut.pprnt(varParams, 3)
         reader = csv.reader(open(self.args.csvFile), delimiter=';')
         cab = next(reader)
-        sortedlist = sorted(reader, key=operator.itemgetter(0))
+        keyFieldIndex = cab.index(varParams['field'].upper())
+        sortedlist = sorted(reader, key=operator.itemgetter(keyFieldIndex))
 
         filename, file_extension = os.path.splitext(self.args.csvFile)
         writer = csv.writer(
