@@ -6,6 +6,7 @@ import os.path
 import locale
 import contextlib
 from pprint import pprint
+import operator
 
 import argparse
 import configparser
@@ -238,19 +239,20 @@ class Main:
 
             with open(self.args.csvFile, 'w') as self.csvNew:
                 self.executeQueries()
-
         finally:
             self.closeDataBase()
+
+        self.doPostProcess()
 
     def getElementDef(self, aList, aKey, default):
         return default if aKey not in aList else aList[aKey]
 
     def loadFunctionVariables(self):
         self.vOut.prnt('->loadFunctionVariables', 3)
-        self.vOut.pprnt(self.iniConfig.items("functions"), 4)
 
         dictRowFunctions = []
         if 'functions' in self.iniConfig.sections():
+            self.vOut.pprnt(self.iniConfig.items("functions"), 4)
             for variable, value in self.iniConfig.items('functions'):
                 self.vOut.prnt('variable: {}'.format(variable), 4)
                 varParams = json.loads(value)
@@ -382,6 +384,32 @@ class Main:
             self.csvNew.write('{}\n'.format(dataLine))
 
             # sys.exit(2)
+
+    def sortCsv(self, args):
+        self.vOut.prnt('->sortCsv', 3)
+        reader = csv.reader(open(self.args.csvFile), delimiter=';')
+        cab = next(reader)
+        sortedlist = sorted(reader, key=operator.itemgetter(0))
+
+        filename, file_extension = os.path.splitext(self.args.csvFile)
+        writer = csv.writer(
+            open('{}.sorted{}'.format(filename, file_extension),
+                 'w', newline=''),
+            delimiter=';',
+            quoting=csv.QUOTE_NONNUMERIC)
+        writer.writerow(cab)
+        for row in sortedlist:
+            writer.writerow(row)
+
+    def doPostProcess(self):
+        self.vOut.prnt('->doPostProcess', 3)
+
+        if 'post_process' in self.iniConfig.sections():
+            self.vOut.pprnt(self.iniConfig.items('post_process'), 4)
+            for variable, value in self.iniConfig.items('post_process'):
+                self.vOut.pprnt(variable, 4)
+                if variable == 'sort':
+                    self.sortCsv(value)
 
     def main(self):
         self.parseArgs()
