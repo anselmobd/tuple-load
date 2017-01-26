@@ -284,7 +284,14 @@ class Main:
             for variable, value in self.iniConfig.items('variables'):
                 varParams = json.loads(value)
                 if 'value' in varParams.keys():
-                    dictRow[variable] = varParams['value']
+                    if 'type' in varParams.keys():
+                        varType = varParams['type']
+                    else:
+                        varType = 't'
+                    if varType == 'n':
+                        dictRow[variable] = float(varParams['value'])
+                    else:
+                        dictRow[variable] = varParams['value']
 
     def execFunctionsToRow(self, dictRowFunctions, dictRow):
         self.vOut.prnt('->execFunctionsToRow', 4)
@@ -390,10 +397,14 @@ class Main:
                         '"{}"'.format(colValue.replace('"', '""'))
 
                 elif colType == 'n':
+                    if 'format' in colParams:
+                        colFormat = colParams['format']
+                    else:
+                        colFormat = '%d'
                     if not colValue:
                         colValue = 0
                     colValue = \
-                        locale.format(colParams['format'], colValue)
+                        locale.format(colFormat, colValue)
 
                 elif colType == 'd':
                     if not colValue:
