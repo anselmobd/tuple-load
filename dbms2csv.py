@@ -7,8 +7,8 @@ import locale
 import contextlib
 from pprint import pprint
 import operator
+import subprocess
 
-import argparse
 import configparser
 import json
 import csv
@@ -385,24 +385,36 @@ class Main:
 
             # sys.exit(2)
 
-    def sortCsv(self, rule):
+    def sortCsv(self, varParams, fromCsv, toCsv):
         self.vOut.prnt('->sortCsv', 3)
-        varParams = json.loads(rule)
         self.vOut.pprnt(varParams, 3)
-        reader = csv.reader(open(self.args.csvFile), delimiter=';')
+        reader = csv.reader(open(fromCsv), delimiter=';')
         cab = next(reader)
         keyFieldIndex = cab.index(varParams['field'].upper())
         sortedlist = sorted(reader, key=operator.itemgetter(keyFieldIndex))
 
-        filename, file_extension = os.path.splitext(self.args.csvFile)
         writer = csv.writer(
-            open('{}.sorted{}'.format(filename, file_extension),
-                 'w', newline=''),
+            open(toCsv, 'w', newline=''),
             delimiter=';',
             quoting=csv.QUOTE_NONNUMERIC)
         writer.writerow(cab)
         for row in sortedlist:
             writer.writerow(row)
+
+    def external(self, varParams, fromCsv, toCsv):
+        self.vOut.prnt('->external', 3)
+        self.vOut.pprnt(varParams, 3)
+        try:
+            retcode = subprocess.call(
+                './{} {} {}'.format(varParams['script'], fromCsv, toCsv),
+                shell=True)
+            if retcode < 0:
+                print("Child was terminated by signal",
+                      -retcode, file=sys.stderr)
+            else:
+                print("Child returned", retcode, file=sys.stderr)
+        except OSError as e:
+            print("Execution failed:", e, file=sys.stderr)
 
     def doPostProcess(self):
         self.vOut.prnt('->doPostProcess', 3)
@@ -411,8 +423,20 @@ class Main:
             self.vOut.pprnt(self.iniConfig.items('post_process'), 4)
             for variable, value in self.iniConfig.items('post_process'):
                 self.vOut.pprnt(variable, 4)
+                varParams = json.loads(value)
+                if 'id' in varParams:
+                    postProcId = varParams['id']
+                else:
+                    postProcId = variable
+
+                file_name, file_ext = os.path.splitext(self.args.csvFile)
+                newCsv = '{}.{}{}'.format(file_name, postProcId, file_ext)
+
                 if variable == 'sort':
-                    self.sortCsv(value)
+                    self.sortCsv(varParams, self.args.csvFile, newCsv)
+                if variable == 'external':
+                    self.external(varParams, self.args.csvFile, newCsv)
+                self.args.csvFile = newCsv
 
     def main(self):
         self.parseArgs()
