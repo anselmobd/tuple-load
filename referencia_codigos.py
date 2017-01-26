@@ -9,7 +9,7 @@ import csv
 
 refs = []
 
-verbose = True
+verbose = False
 
 
 def conta(ref4):
@@ -26,7 +26,8 @@ def conta(ref4):
 
 csvFile = sys.argv[1]
 refFile = sys.argv[2]
-verbose = sys.argv[3] == 'v'
+if len(sys.argv) > 3:
+    verbose = sys.argv[3] == 'v'
 
 if verbose:
     pprint(sys.argv)

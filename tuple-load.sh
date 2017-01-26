@@ -29,7 +29,6 @@ fi
 ./dbms2csv.py produto_colecao.ini _produto_colecao.csv $VERBOSE
 
 # ./dbms2csv.py produto_referencias.ini _produto_referencias.csv $VERBOSE
-# ./referencia.py csv/_produto_referencias.sorted.csv csv/_produto_referencias_codigos.csv n
 
 # delete
 
