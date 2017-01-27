@@ -69,7 +69,7 @@ sql:
     LEFT JOIN BASI_030 rb
       ON rb.REFERENCIA = rtcc.GRUPO
     WHERE rtcc.TIPO_INFORMACAO = 12
-      AND rtcc.NIVEL_ESTRUTURA = '2'
+      AND rtcc.NIVEL = '2'
       AND rb.CODIGO_CONTABIL=99
 
   delete: |
