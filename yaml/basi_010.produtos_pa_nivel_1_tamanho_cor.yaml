@@ -20,14 +20,9 @@ sql:
 
   update: |
     UPDATE BASI_010 SET
-      CODIGO_VELHO = :CODITEMPROD + ' ' + :CODTAM + ' ' + :CODCOR
-    , DESCRICAO_15 = (
-        SELECT
-          DESCRICAO
-        FROM BASI_100
-        WHERE COR_SORTIMENTO = :COR
-          AND TIPO_COR = 1
-      )
+      CODIGO_VELHO = :CODITEMPROD || ' ' || :CODTAM || ' ' || :CODCOR
+    , DESCRICAO_15 = substr(:DESCRCOR, 1, 20)
+    , COMPLEMENTO = :DESCRCOR
     , NARRATIVA = (
         (
           SELECT
@@ -56,7 +51,7 @@ sql:
     , NUMERO_ALTERNATI = 1
     , ALTERNATIVA_CUSTOS = 1
     , ROTEIRO_CUSTOS = 1
-    WHERE NIVEL_ESTRUTURA = '1'
+    WHERE NIVEL_ESTRUTURA = 1
       AND GRUPO_ESTRUTURA = :REFERENCIA
       AND SUBGRU_ESTRUTURA = :TAM
       AND ITEM_ESTRUTURA = :COR
@@ -70,6 +65,7 @@ sql:
     , ITEM_ESTRUTURA
     , CODIGO_VELHO
     , DESCRICAO_15
+    , COMPLEMENTO
     , NARRATIVA
     , CLASSIFIC_FISCAL
     , DATA_CADASTRO
@@ -82,14 +78,9 @@ sql:
     , :REFERENCIA
     , :TAM
     , :COR
-    , :CODITEMPROD + :CODTAM + :CODCOR
-    , (
-        SELECT
-          DESCRICAO
-        FROM BASI_100
-        WHERE COR_SORTIMENTO = :COR
-          AND TIPO_COR = 1
-      )
+    , :CODITEMPROD || ' ' || :CODTAM || ' ' || :CODCOR
+    , substr(:DESCRCOR, 1, 20)
+    , :DESCRCOR
     , (
         (
           SELECT
