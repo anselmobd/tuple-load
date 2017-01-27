@@ -30,7 +30,12 @@ sql:
     , CLASSIFIC_FISCAL=:CLASSIFIC_FISCAL
     , LINHA_PRODUTO=:LINHA_PRODUTO
     , ARTIGO=:ARTIGO
-    , COLECAO=:COLECAO
+    , COLECAO=(
+        SELECT
+          c.COLECAO
+        from basi_140 c
+        where c.DESCR_COLECAO = :CODCOLECAO
+      )
     WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
       AND REFERENCIA=:REFERENCIA
 
@@ -58,7 +63,12 @@ sql:
     , :CLASSIFIC_FISCAL
     , :LINHA_PRODUTO
     , :ARTIGO
-    , :COLECAO
+    , (
+        SELECT
+          c.COLECAO
+        from basi_140 c
+        where c.DESCR_COLECAO = :CODCOLECAO
+      )
     )
 
   key_list: |
