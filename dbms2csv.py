@@ -60,8 +60,11 @@ def translate_field(queryDict):
                         break
                 else:
                     columns = row
-            if (not result) and ('default' in query):
-                result = query['default']
+            if (not result):
+                if ('default' in query):
+                    result = query['default']
+                elif ('field_default' in query):
+                    result = dictRow[query['field_default']]
             if ('type' in query) and (query['type'] == 'n'):
                 result = float(result)
         return result
