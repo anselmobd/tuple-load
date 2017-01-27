@@ -40,8 +40,8 @@ sql:
 
   key_list: |
     SELECT
-      NIVEL_ESTRUTURA
-    , ARTIGO
+      ARTIGO
+    , NIVEL_ESTRUTURA
     FROM BASI_290
     WHERE NIVEL_ESTRUTURA='1'
 
