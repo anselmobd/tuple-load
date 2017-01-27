@@ -2,6 +2,7 @@
 # -*- coding: utf8 -*-
 
 import sys
+import re
 from pprint import pprint
 
 import csv
@@ -41,7 +42,14 @@ for row in reader:
     if verbose:
         print('codigo {}'.format(pCod))
 
-    refPa = pCod.rjust(5, '0')
+    regexNum = "^[^\d]*(\d+?)[^\d]*$"
+    reResult = re.search(regexNum, pCod)
+    if reResult:
+        refMaster = reResult.group(1)
+    else:
+        refMaster = ''
+
+    refPa = row[1]
     ref4 = refPa[1:]
     altM = ['N', 'P', 'Q', 'W', 'Y']
     altC = ['D', 'E', 'F', 'G', 'H']
@@ -57,7 +65,7 @@ for row in reader:
         refCo = altC[contRef4]+ref4
         refRi = altR[contRef4]+ref4
 
-    refs.append([ref4, pCod, refPa, refMd, refCo, refRi])
+    refs.append([ref4, pCod, refPa, refMd, refCo, refRi, refMaster])
     if verbose:
         print('refs = ')
         pprint(refs)
@@ -66,7 +74,7 @@ writer = csv.writer(
     open(refFile, 'w', newline=''),
     delimiter=';',
     quoting=csv.QUOTE_NONNUMERIC)
-cab = ['REFERENCIA', 'PA', 'MD', 'CO', 'RI']
+cab = ['REFERENCIA', 'PA', 'MD', 'CO', 'RI', 'REFMASTER']
 writer.writerow(cab)
 for row in refs:
     pprint(row)
