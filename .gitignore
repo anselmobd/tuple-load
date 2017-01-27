@@ -106,3 +106,6 @@ lixo*
 
 # backup
 *~
+
+# lock
+.~lock.*#
