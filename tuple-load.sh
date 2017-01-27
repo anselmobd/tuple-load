@@ -44,6 +44,8 @@ fi
 
 ./dbms2csv.py produto_md_tamanho.ini _produto_md_tamanho.csv $VERBOSE
 
+./dbms2csv.py produto_md_tamanho_cor.ini _produto_md_tamanho_cor.csv $VERBOSE
+
 # delete
 
 ./csv2oracle.py csv/_insumo_tecido_tamanho_cor_col.csv yaml/basi_400.produtos_referencia_nivel_2_tamanho_cor_col.yaml -d $VERBOSE
@@ -67,6 +69,8 @@ fi
 ./csv2oracle.py csv/_produto_pa_tamanho.csv yaml/basi_020.produtos_pa_nivel_1_tamanho.yaml -d $VERBOSE
 
 ./csv2oracle.py csv/_produto_pa_capa.csv  yaml/basi_030.produtos_pa_nivel_1.yaml -d $VERBOSE
+
+./csv2oracle.py csv/_produto_md_tamanho_cor.csv yaml/basi_010.produtos_md_nivel_1_tamanho_cor.yaml -d $VERBOSE
 
 ./csv2oracle.py csv/_produto_md_tamanho.csv yaml/basi_020.produtos_md_nivel_1_tamanho.yaml -d $VERBOSE
 
@@ -113,6 +117,8 @@ fi
 ./csv2oracle.py csv/_produto_md_capa.csv  yaml/basi_030.produtos_md_nivel_1.yaml -i $VERBOSE
 
 ./csv2oracle.py csv/_produto_md_tamanho.csv yaml/basi_020.produtos_md_nivel_1_tamanho.yaml -i $VERBOSE
+
+./csv2oracle.py csv/_produto_md_tamanho_cor.csv yaml/basi_010.produtos_md_nivel_1_tamanho_cor.yaml -i $VERBOSE
 
 ./csv2oracle.py csv/_produto_pa_capa.csv yaml/basi_030.produtos_pa_nivel_1.yaml -i $VERBOSE
 
