@@ -8,6 +8,7 @@ import contextlib
 from pprint import pprint
 import operator
 import subprocess
+import re
 
 import configparser
 import json
@@ -116,6 +117,11 @@ def str_field(methodDict, variable):
                 else:
                     step = None
                 result = dictRow[field][ini:end:step]
+            elif method['method'] == 're.group':
+                regex = method['args'][0]
+                reResult = re.search(regex, dictRow[field])
+                if reResult:
+                    result = reResult.group(1)
         return result
     return inner_func
 
@@ -255,7 +261,7 @@ class Main:
         if 'functions' in self.iniConfig.sections():
             self.vOut.pprnt(self.iniConfig.items("functions"), 4)
             for variable, value in self.iniConfig.items('functions'):
-                self.vOut.prnt('variable: {}'.format(variable), 4)
+                self.vOut.prnt('function variable: {}'.format(variable), 4)
                 varParams = json.loads(value)
                 if 'count' in varParams:
                     funcParams = varParams['count']
