@@ -1,0 +1,86 @@
+csv:
+
+  fields:
+
+    - CONTA_ESTOQUE:
+        type: integer
+
+  keys:
+    - NIVEL_ESTRUTURA
+    - REFERENCIA
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(REFERENCIA)
+    FROM BASI_030
+    WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
+      AND REFERENCIA=:REFERENCIA
+
+  update: |
+    UPDATE BASI_030 SET
+      DESCR_REFERENCIA= substr(:COD_ANT_MD || ' ' ||:DESCRICAO, 1, 30)
+    , UNIDADE_MEDIDA=:UNIDMEDIDA
+    , CONTA_ESTOQUE=:CONTA_ESTOQUE
+    , CODIGO_CONTABIL=:CODIGO_CONTABIL
+    , COMPRADO_FABRIC=2
+    , CLASSIFIC_FISCAL=:CLASSIFIC_FISCAL
+    , LINHA_PRODUTO=:LINHA_PRODUTO
+    , ARTIGO=:ARTIGO
+    , COLECAO=(
+        SELECT
+          c.COLECAO
+        from basi_140 c
+        where c.DESCR_COLECAO = :CODCOLECAO
+      )
+    WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
+      AND REFERENCIA=:REFERENCIA
+
+  insert: |
+    INSERT INTO BASI_030
+    ( NIVEL_ESTRUTURA
+    , REFERENCIA
+    , DESCR_REFERENCIA
+    , UNIDADE_MEDIDA
+    , CONTA_ESTOQUE
+    , CODIGO_CONTABIL
+    , COMPRADO_FABRIC
+    , CLASSIFIC_FISCAL
+    , LINHA_PRODUTO
+    , ARTIGO
+    , COLECAO
+    ) VALUES (
+      :NIVEL_ESTRUTURA
+    , :REFERENCIA
+    , substr(:COD_ANT_MD || ' ' ||:DESCRICAO, 1, 30)
+    , :UNIDMEDIDA
+    , :CONTA_ESTOQUE
+    , :CODIGO_CONTABIL
+    , 2
+    , :CLASSIFIC_FISCAL
+    , :LINHA_PRODUTO
+    , :ARTIGO
+    , (
+        SELECT
+          c.COLECAO
+        from basi_140 c
+        where c.DESCR_COLECAO = :CODCOLECAO
+      )
+    )
+
+  key_list: |
+    SELECT
+      NIVEL_ESTRUTURA
+    , REFERENCIA
+    FROM BASI_030
+    WHERE NIVEL_ESTRUTURA = '1'
+      AND CODIGO_CONTABIL=99
+      AND substr(REFERENCIA, 1, 1) in ('M', 'N', 'P', 'Q', 'W', 'Y')
+
+  delete: |
+    DELETE FROM BASI_030
+    WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
+      AND REFERENCIA=:REFERENCIA
