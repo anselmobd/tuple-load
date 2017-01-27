@@ -28,10 +28,13 @@ fi
 
 ./dbms2csv.py produto_colecao.ini _produto_colecao.csv $VERBOSE
 
-# Comentado por ser LENTO !!! Mas deve ser atualizado de vez em quando e na última carga
-# ./dbms2csv.py produto_f1_referencias.ini _produto_f1_referencias.csv $VERBOSE
+./dbms2csv.py produto_loteexpedicao_referencias.ini _produto_loteexpedicao_referencias.csv $VERBOSE
+
+./dbms2csv.py produto_fabric_capa.ini _produto_fabric_capa.csv $VERBOSE
 
 ./dbms2csv.py produto_pa_capa.ini _produto_pa_capa.csv $VERBOSE
+
+./dbms2csv.py produto_pa_tamanho.ini _produto_pa_tamanho.csv $VERBOSE
 
 # delete
 
@@ -51,7 +54,9 @@ fi
 
 ./csv2oracle.py _produto_colecao.csv -d $VERBOSE
 
-./csv2oracle.py csv/_produto_pa_capa.csv yaml/basi_030.produtos_pa_nivel_1.yaml -d $VERBOSE
+./csv2oracle.py csv/_produto_pa_tamanho.csv yaml/basi_020.produtos_pa_nivel_1_tamanho.yaml -d $VERBOSE
+
+./csv2oracle.py csv/_produto_pa_capa.csv  yaml/basi_030.produtos_pa_nivel_1.yaml -d $VERBOSE
 
 ./csv2oracle.py ncm.fixo.csv -d $VERBOSE
 
@@ -92,6 +97,8 @@ fi
 ./csv2oracle.py ncm.fixo.csv -i $VERBOSE
 
 ./csv2oracle.py csv/_produto_pa_capa.csv yaml/basi_030.produtos_pa_nivel_1.yaml -i $VERBOSE
+
+./csv2oracle.py csv/_produto_pa_tamanho.csv yaml/basi_020.produtos_pa_nivel_1_tamanho.yaml -i $VERBOSE
 
 ./csv2oracle.py _produto_colecao.csv -i $VERBOSE
 
