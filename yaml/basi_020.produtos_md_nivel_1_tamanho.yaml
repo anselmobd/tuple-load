@@ -58,7 +58,7 @@ sql:
       ON rb.REFERENCIA = rt.BASI030_REFERENC
     WHERE rt.BASI030_NIVEL030=1
       AND rb.CODIGO_CONTABIL=99
-      AND substr(rt.BASI030_REFERENC, 1, 1) in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
+      AND substr(rt.BASI030_REFERENC, 1, 1) in ('M', 'N', 'P', 'Q', 'W', 'Y')
 
   delete: |
     DELETE FROM BASI_020
