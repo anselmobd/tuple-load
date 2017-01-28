@@ -331,7 +331,17 @@ class Main:
                 self.vOut.prnt('keys: {}'.format(keys, 3))
                 reader = csv.reader(open(paramsFile), delimiter=';')
                 columns = next(reader)
+                countRows = 0
+                firstRows = -1
+                if 'master.first' in list(self.iniConfig['read']):
+                    firstRows = int(self.iniConfig['read']['master.first'])
+                skipRows = 0
+                if 'master.skip' in list(self.iniConfig['read']):
+                    skipRows = int(self.iniConfig['read']['master.skip'])
                 for row in reader:
+                    if skipRows > 0:
+                        skipRows -= 1
+                        continue
                     dictRow = dict(zip(columns, row))
                     for key in keys:
                         self.vOut.prnt('key: {}'.format(key, 3))
@@ -341,6 +351,9 @@ class Main:
                     self.queryParam = [dictRow[key] for key in keys]
                     self.vOut.pprnt(self.queryParam, 4)
                     self.executeQueries()
+                    countRows += 1
+                    if countRows == firstRows:
+                        break
 
     def executeQueries(self):
         self.vOut.prnt('->executeQueries', 2)
