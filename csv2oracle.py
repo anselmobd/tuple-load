@@ -25,6 +25,13 @@ class Main:
             print(_('file does not exist'))
             sys.exit(exitError)
 
+    def fileWithRequiredExtension(self, fileName, requiredExtension):
+        name, extension = os.path.splitext(fileName)
+        if extension == '.'+requiredExtension:
+            return fileName
+        else:
+            return '{}.{}'.format(fileName, requiredExtension)
+
     def fileWithDefaultDir(self, dire, fileName):
         path, name = os.path.split(fileName)
         if not path:
@@ -146,6 +153,9 @@ class Main:
             self.args.yamltad = False
         if self.args.insert == self.args.delete:
             self.args.insert = True
+
+        self.args.csvFile = \
+            self.fileWithRequiredExtension(self.args.csvFile, 'csv')
 
         self.args.csvFile = \
             self.fileWithDefaultDir(self.args.csv, self.args.csvFile)
