@@ -1,0 +1,230 @@
+csv:
+
+  keys:
+    - GRUPO_ITEM
+    - ALTERNATIVA_ITEM
+    - SEQUENCIA
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(GRUPO_COMP)
+    FROM BASI_050
+    WHERE NIVEL_ITEM = '1'
+      AND GRUPO_ITEM = :GRUPO_ITEM
+      AND ALTERNATIVA_ITEM = :ALTERNATIVA_ITEM
+      AND SEQUENCIA = :SEQUENCIA
+
+  update: |
+    UPDATE BASI_050 SET
+      SUB_ITEM               = '000'
+    , ITEM_ITEM              = '000000'
+    , NIVEL_COMP             =
+      ( SELECT max(tc1.NIVEL_ESTRUTURA)
+        FROM BASI_010 tc1
+        WHERE tc1.CODIGO_VELHO LIKE
+          :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
+      )
+    , GRUPO_COMP             =
+      ( SELECT max(tc2.GRUPO_ESTRUTURA)
+        FROM BASI_010 tc2
+        WHERE tc2.CODIGO_VELHO LIKE
+          :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
+      )
+    , SUB_COMP               =
+      case when :TAM is null then null else
+        ( SELECT max(tc3.SUBGRU_ESTRUTURA)
+          FROM BASI_010 tc3
+          WHERE tc3.CODIGO_VELHO LIKE
+            :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
+        )
+      end
+    , ITEM_COMP              =
+      case when :COR is null then null else
+        ( SELECT max(tc4.ITEM_ESTRUTURA)
+          FROM BASI_010 tc4
+          WHERE tc4.CODIGO_VELHO LIKE
+            :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
+        )
+      end
+    , ALTERNATIVA_COMP       = 1
+    , CONSUMO                = 1
+    , ESTAGIO                = 40
+    , TIPO_CALCULO           = 0
+    , LETRA_GRAFICO          = NULL
+    , QTDE_CAMADAS           = 0
+    , PERCENT_PERDAS         = 0
+    , NUMERO_GRAFICO         = 0
+    , QTDE_INICIAL           = 0
+    , QTDE_FINAL             = 0
+    , TENSAO                 = 0
+    , LFA                    = 0
+    , LOTE                   = 0
+    , FORNECEDOR             = NULL
+    , CONS_UN_REC            = 0
+    , SEQ_PRINCIPAL          = 0
+    , GRUPO_SIMILARES        = 0
+    , CENTRO_CUSTO           = 0
+    , CONS_UNID_MED_GENERICA = 0
+    , PERC_CONS_CALC         = 0
+    , CALCULA_COMPOSICAO     = 0
+    , RELACAO_BANHO          = 0
+    , QTDE_PECAS_ESTAMPADAS  = 0
+    , TIPO_TELA              = 0
+    , AREA_COBERTURA         = 0
+    , TIPO_APLICACAO         = 0
+    , TIPO_MEDIDA            = 0
+    , CODIGO_PROJETO         = '000000'
+    , SEQUENCIA_PROJETO      = 0
+    , TECIDO_PRINCIPAL       = 0
+    , VALOR_ML_L             = 0
+    , FATOR_CONVERSOR        = 0
+    , QTDE_CABOS             = 0
+    , VARIACAO               = 0
+    , AGRUP_TINGIMENTO       = 0
+    WHERE NIVEL_ITEM = '1'
+      AND GRUPO_ITEM = :GRUPO_ITEM
+      AND ALTERNATIVA_ITEM = :ALTERNATIVA_ITEM
+      AND SEQUENCIA = :SEQUENCIA
+
+  insert: |
+    INSERT INTO SYSTEXTIL.BASI_050 (
+      NIVEL_ITEM
+    , GRUPO_ITEM
+    , SUB_ITEM
+    , ITEM_ITEM
+    , ALTERNATIVA_ITEM
+    , SEQUENCIA
+    , NIVEL_COMP
+    , GRUPO_COMP
+    , SUB_COMP
+    , ITEM_COMP
+    , ALTERNATIVA_COMP
+    , CONSUMO
+    , ESTAGIO
+    , TIPO_CALCULO
+    , LETRA_GRAFICO
+    , QTDE_CAMADAS
+    , PERCENT_PERDAS
+    , NUMERO_GRAFICO
+    , QTDE_INICIAL
+    , QTDE_FINAL
+    , TENSAO
+    , LFA
+    , LOTE
+    , FORNECEDOR
+    , CONS_UN_REC
+    , SEQ_PRINCIPAL
+    , GRUPO_SIMILARES
+    , CENTRO_CUSTO
+    , CONS_UNID_MED_GENERICA
+    , PERC_CONS_CALC
+    , CALCULA_COMPOSICAO
+    , RELACAO_BANHO
+    , QTDE_PECAS_ESTAMPADAS
+    , TIPO_TELA
+    , AREA_COBERTURA
+    , TIPO_APLICACAO
+    , TIPO_MEDIDA
+    , CODIGO_PROJETO
+    , SEQUENCIA_PROJETO
+    , TECIDO_PRINCIPAL
+    , VALOR_ML_L
+    , FATOR_CONVERSOR
+    , QTDE_CABOS
+    , VARIACAO
+    , AGRUP_TINGIMENTO
+    ) VALUES (
+      '1'      -- NIVEL_ITEM
+    , :GRUPO_ITEM
+    , '000'    -- SUB_ITEM
+    , '000000' -- ITEM_ITEM
+    , :ALTERNATIVA_ITEM
+    , :SEQUENCIA
+    ,          -- NIVEL_COMP
+      ( SELECT max(tc1.NIVEL_ESTRUTURA)
+        FROM BASI_010 tc1
+        WHERE tc1.CODIGO_VELHO LIKE
+          :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
+      )
+    ,          -- GRUPO_COMP
+      ( SELECT max(tc2.GRUPO_ESTRUTURA)
+        FROM BASI_010 tc2
+        WHERE tc2.CODIGO_VELHO LIKE
+          :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
+      )
+    ,          -- SUB_COMP
+      case when :TAM is null then null else
+        ( SELECT max(tc3.SUBGRU_ESTRUTURA)
+          FROM BASI_010 tc3
+          WHERE tc3.CODIGO_VELHO LIKE
+            :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
+        )
+      end
+    ,          -- ITEM_COMP
+      case when :COR is null then null else
+        ( SELECT max(tc4.ITEM_ESTRUTURA)
+          FROM BASI_010 tc4
+          WHERE tc4.CODIGO_VELHO LIKE
+            :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
+        )
+      end
+    , 1        -- ALTERNATIVA_COMP
+    , 1        -- CONSUMO
+    , 40       -- ESTAGIO
+    , 0        -- TIPO_CALCULO
+    , NULL     -- LETRA_GRAFICO
+    , 0        -- QTDE_CAMADAS
+    , 0        -- PERCENT_PERDAS
+    , 0        -- NUMERO_GRAFICO
+    , 0        -- QTDE_INICIAL
+    , 0        -- QTDE_FINAL
+    , 0        -- TENSAO
+    , 0        -- LFA
+    , 0        -- LOTE
+    , NULL     -- FORNECEDOR
+    , 0        -- CONS_UN_REC
+    , 0        -- SEQ_PRINCIPAL
+    , 0        -- GRUPO_SIMILARES
+    , 0        -- CENTRO_CUSTO
+    , 0        -- CONS_UNID_MED_GENERICA
+    , 0        -- PERC_CONS_CALC
+    , 0        -- CALCULA_COMPOSICAO
+    , 0        -- RELACAO_BANHO
+    , 0        -- QTDE_PECAS_ESTAMPADAS
+    , 0        -- TIPO_TELA
+    , 0        -- AREA_COBERTURA
+    , 0        -- TIPO_APLICACAO
+    , 0        -- TIPO_MEDIDA
+    , '000000' -- CODIGO_PROJETO
+    , 0        -- SEQUENCIA_PROJETO
+    , 0        -- TECIDO_PRINCIPAL
+    , 0        -- VALOR_ML_L
+    , 0        -- FATOR_CONVERSOR
+    , 0        -- QTDE_CABOS
+    , 0        -- VARIACAO
+    , 0        -- AGRUP_TINGIMENTO
+    )
+
+  key_list: |
+    SELECT
+      es.GRUPO_ITEM
+    , es.ALTERNATIVA_ITEM
+    , es.SEQUENCIA
+    FROM BASI_050 es
+    LEFT JOIN BASI_030 rb
+      ON rb.REFERENCIA = es.GRUPO_ITEM
+         AND rb.NIVEL_ESTRUTURA = '1'
+    WHERE es.NIVEL_ITEM = '1'
+      AND rb.CODIGO_CONTABIL=99
+      AND es.GRUPO_ITEM <> '00103'
+
+  delete: |
+    DELETE FROM BASI_050
+    WHERE NIVEL_ITEM = '1'
+      AND GRUPO_ITEM = :GRUPO_ITEM
+      AND ALTERNATIVA_ITEM = :ALTERNATIVA_ITEM
+      AND SEQUENCIA = :SEQUENCIA
