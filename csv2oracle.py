@@ -72,7 +72,7 @@ class Main:
         parser.add_argument(
             "csvFile",
             help=_('data group CSV file name, in the format '
-                   'data_group_name[.version].csv'))
+                   'data_group_name[.version][.csv]'))
         parser.add_argument(
             "rulesFile",
             nargs='?',
