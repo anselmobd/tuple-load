@@ -160,6 +160,7 @@ class Main:
             self.db = Firebird(self.config.get(dbfrom, 'username'),
                                self.config.get(dbfrom, 'password'),
                                self.config.get(dbfrom, 'hostname'),
+                               self.config.get(dbfrom, 'port'),
                                self.config.get(dbfrom, 'database'),
                                self.config.get(dbfrom, 'charset'))
 

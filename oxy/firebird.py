@@ -9,11 +9,12 @@ import fdb
 class Firebird:
 
     def __init__(self, username, password,
-                 hostname, database, charset):
+                 hostname, port, database, charset):
 
         self.username = username
         self.password = password
         self.hostname = hostname
+        self.port = port
         self.database = database
         self.charset = charset
 
@@ -30,7 +31,7 @@ class Firebird:
             print('Firebird->connect start')
         try:
             self.con = fdb.connect(
-                dsn=self.hostname+':'+self.database,
+                dsn='{}/{}:{}'.format(self.hostname, self.port, self.database),
                 user=self.username,
                 password=self.password,
                 charset=self.charset

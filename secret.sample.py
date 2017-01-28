@@ -4,16 +4,25 @@
 
 DBSECRET = {
 
-    'db.from.name1': {
+    'db.to.systextil': {
+        'servicename': 'SE1',
+        'schema': 'SCHEM1',
         'username': 'user1',
-        'password': 'pass1',
-        'database': 'DB1',
-        'schema': 'SCHEM1'},
+        'password': 'pass1'
+        },
 
-    'db.to.name2': {
-        'username': 'username',
-        'password': 'password',
-        'servicename': 'service',
-        'schema': 'schem'}
+    'db.from.pccon': {
+        'database': 'DB2',
+        'schema': 'SCHEM2',
+        'username': 'user2',
+        'password': 'pass2'
+        },
+
+    'db.from.f1': {
+        'database': '/dir/db3.fdb',
+        'charset': 'win1252',
+        'username': 'user3',
+        'password': 'pass3'
+        }
 
     }
