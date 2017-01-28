@@ -180,11 +180,15 @@ class Main:
         parser.add_argument(
             "iniFile",
             help='data group INI file name, in the format '
-            '[dir/]data_group_name[.version].ini')
+            '[dir/]data_group_name[.version][.ini]')
         parser.add_argument(
             "csvFile",
-            help='CSV file to be created '
-            '[dir/]_file_name.csv')
+            nargs='?',
+            default='',
+            help='CSV file to be created, '
+            'in the format [dir/]_file_name[.csv] '
+            'By default the data group name is underscored and used: '
+            '_data_group_name')
         parser.add_argument(
             "--cfg", "--cfgfile",
             type=str,
@@ -211,7 +215,18 @@ class Main:
         self.args = parser.parse_args()
 
         self.args.iniFile = \
+            oxyu.fileWithRequiredExtension(self.args.iniFile, 'ini')
+
+        self.args.iniFile = \
             oxyu.fileWithDefaultDir(self.args.ini, self.args.iniFile)
+
+        if not self.args.csvFile:
+            self.args.csvFile, sAux = os.path.splitext(self.args.iniFile)
+            sAux, self.args.csvFile = os.path.split(self.args.csvFile)
+            self.args.csvFile = '_'+self.args.csvFile
+
+        self.args.csvFile = \
+            oxyu.fileWithRequiredExtension(self.args.csvFile, 'csv')
 
         self.args.csvFile = \
             oxyu.fileWithDefaultDir(self.args.csv, self.args.csvFile)
