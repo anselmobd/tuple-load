@@ -19,6 +19,7 @@ import gettext
 from oxy.arg import parse as argparse
 from oxy.mssql import Mssql
 from oxy.firebird import Firebird
+import oxy.usual as oxyu
 from oxy.usual import VerboseOutput
 
 
@@ -139,12 +140,6 @@ class Main:
                 description, fileName))
             sys.exit(exitError)
 
-    def fileWithDefaultDir(self, dire, fileName):
-        path, name = os.path.split(fileName)
-        if not path:
-            path = dire
-        return os.path.join(path, name)
-
     def connectDataBase(self):
         dbfrom = 'db.from.{}'.format(self.iniConfig.get('read', 'db'))
         dbms = self.config.get(dbfrom, 'dbms')
@@ -216,10 +211,10 @@ class Main:
         self.args = parser.parse_args()
 
         self.args.iniFile = \
-            self.fileWithDefaultDir(self.args.ini, self.args.iniFile)
+            oxyu.fileWithDefaultDir(self.args.ini, self.args.iniFile)
 
         self.args.csvFile = \
-            self.fileWithDefaultDir(self.args.csv, self.args.csvFile)
+            oxyu.fileWithDefaultDir(self.args.csv, self.args.csvFile)
 
     def configProcess(self):
         self.vOut.prnt('->configProcess', 2)
@@ -277,7 +272,7 @@ class Main:
                         ])
                 elif 'translate' in varParams:
                     funcParams = varParams['translate']
-                    funcParams['from'] = self.fileWithDefaultDir(
+                    funcParams['from'] = oxyu.fileWithDefaultDir(
                             self.args.csv, funcParams['from'])
                     dictRowFunctions.append(
                         [variable, translate_field(funcParams)])
@@ -319,7 +314,7 @@ class Main:
         else:
             if self.iniConfig['read']['master.db'] == 'csv':
                 paramsFile = self.iniConfig['read']['master.filename']
-                paramsFile = self.fileWithDefaultDir(self.args.csv, paramsFile)
+                paramsFile = oxyu.fileWithDefaultDir(self.args.csv, paramsFile)
                 self.vOut.prnt('paramsFile: {}'.format(paramsFile), 3)
                 self.vOut.prnt(
                     'master.select: {}'.format(
