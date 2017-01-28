@@ -8,6 +8,7 @@ fi
 
 # Order matters - Criation order
 iniFiles=(
+  "produto_loteexpedicao_referencias"
   "insumo_nao_tecido_codigos"
   "insumo_nao_tecido_capa"
   "insumo_nao_tecido_tamanho"
@@ -18,7 +19,6 @@ iniFiles=(
   "insumo_tecido_tamanho_cor"
   "insumo_tecido_tamanho_cor_col"
   "produto_colecao"
-  "produto_loteexpedicao_referencias"
   "produto_fabric_pa_capa"
   "produto_fabric_md_capa"
   "produto_pa_capa"
