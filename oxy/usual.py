@@ -1,7 +1,23 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
+import os
 from pprint import pprint
+
+
+def fileWithRequiredExtension(fileName, requiredExtension):
+    name, extension = os.path.splitext(fileName)
+    if extension == '.'+requiredExtension:
+        return fileName
+    else:
+        return '{}.{}'.format(fileName, requiredExtension)
+
+
+def fileWithDefaultDir(dire, fileName):
+    path, name = os.path.split(fileName)
+    if not path:
+        path = dire
+    return os.path.join(path, name)
 
 
 class VerboseOutput:

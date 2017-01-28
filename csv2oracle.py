@@ -14,6 +14,7 @@ import gettext
 
 from oxy.arg import parse as argparse
 from oxy.oracle import Oracle
+import oxy.usual as oxyu
 from oxy.usual import VerboseOutput
 
 
@@ -24,19 +25,6 @@ class Main:
         if not os.path.exists(fileName):
             print(_('file does not exist'))
             sys.exit(exitError)
-
-    def fileWithRequiredExtension(self, fileName, requiredExtension):
-        name, extension = os.path.splitext(fileName)
-        if extension == '.'+requiredExtension:
-            return fileName
-        else:
-            return '{}.{}'.format(fileName, requiredExtension)
-
-    def fileWithDefaultDir(self, dire, fileName):
-        path, name = os.path.split(fileName)
-        if not path:
-            path = dire
-        return os.path.join(path, name)
 
     def getRule(self, group, rulename):
         return self.rules[group][rulename]
@@ -155,10 +143,10 @@ class Main:
             self.args.insert = True
 
         self.args.csvFile = \
-            self.fileWithRequiredExtension(self.args.csvFile, 'csv')
+            oxyu.fileWithRequiredExtension(self.args.csvFile, 'csv')
 
         self.args.csvFile = \
-            self.fileWithDefaultDir(self.args.csv, self.args.csvFile)
+            oxyu.fileWithDefaultDir(self.args.csv, self.args.csvFile)
 
     def configProcess(self):
         self.vOut.prnt('->configProcess', 2)
@@ -196,12 +184,12 @@ class Main:
             if self.args.yamltad:
                 self.tableADFileName = ''.join((sqlTable, '.yaml'))
                 self.tableADFileName = \
-                    self.fileWithDefaultDir(self.args.yaml,
+                    oxyu.fileWithDefaultDir(self.args.yaml,
                                             self.tableADFileName)
             else:
                 self.tableADFileName = ''.join((sqlTable, '.json'))
                 self.tableADFileName = \
-                    self.fileWithDefaultDir(self.args.json,
+                    oxyu.fileWithDefaultDir(self.args.json,
                                             self.tableADFileName)
         else:
             self.tableADFileName = self.args.rulesFile
