@@ -9,6 +9,7 @@ from pprint import pprint
 import operator
 import subprocess
 import re
+import hashlib
 
 import configparser
 import json
@@ -112,7 +113,10 @@ def str_field(methodDict, variable):
                 pos = int(method['args'][0])
                 result = dictRow[field][pos]
             elif method['method'] == 'slice':
-                ini = int(method['args'][0])
+                if method['args'][0] != '':
+                    ini = int(method['args'][0])
+                else:
+                    ini = None
                 if len(method['args']) > 1 and method['args'][1] != '':
                     end = int(method['args'][1])
                 else:
@@ -478,8 +482,18 @@ class Main:
             delimiter=';',
             quoting=csv.QUOTE_NONNUMERIC)
         writer.writerow(cab)
+        if 'options' in varParams:
+            unique = 'unique' in varParams['options']
+        hashRows = []
         for row in sortedlist:
-            writer.writerow(row)
+            write = True
+            if unique:
+                hashValue = hashlib.md5(str(row).encode()).digest()
+                write = hashValue not in hashRows
+                if write:
+                    hashRows.append(hashValue)
+            if write:
+                writer.writerow(row)
 
     def external(self, varParams, fromCsv, toCsv):
         self.vOut.prnt('->external', 3)
