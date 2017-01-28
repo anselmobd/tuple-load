@@ -20,7 +20,7 @@ sql:
 
   update: |
     UPDATE BASI_010 SET
-      CODIGO_VELHO = :CODITEMPROD
+      CODIGO_VELHO = :CODITEMPROD || '.' || :CODTAM || '.' || :CODCOR
     , DESCRICAO_15 = (
         SELECT
           DESCRICAO
@@ -74,7 +74,7 @@ sql:
     , :REFERENCIA
     , :TAM
     , :COR
-    , :CODITEMPROD
+    , :CODITEMPROD || '.' || :CODTAM || '.' || :CODCOR
     , (
         SELECT
           DESCRICAO
