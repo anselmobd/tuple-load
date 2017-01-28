@@ -22,19 +22,20 @@ from oxy.firebird import Firebird
 from oxy.usual import VerboseOutput
 
 
-def count_field(valIni, fieldBreak):
+def count_field(valIni, valStep, fieldBreak):
     ''' Closure to "count" function variable '''
     ini = int(valIni)
+    step = int(valStep)
     breakVal = None
 
     def inner_func(dictRow):
-        nonlocal ini, breakVal
+        nonlocal ini, breakVal, step
         if fieldBreak:
             if (not breakVal) or breakVal != dictRow[fieldBreak]:
                 breakVal = dictRow[fieldBreak]
                 ini = int(valIni)
         result = ini
-        ini += 1
+        ini += step
         return result
     return inner_func
 
@@ -271,6 +272,7 @@ class Main:
                     funcParams = varParams['count']
                     dictRowFunctions.append([variable, count_field(
                         self.getElementDef(funcParams, 'start', '1'),
+                        self.getElementDef(funcParams, 'step', '1'),
                         self.getElementDef(funcParams, 'break', None))
                         ])
                 elif 'translate' in varParams:
@@ -498,6 +500,7 @@ class Main:
         self.vOut = VerboseOutput(self.args.verbosity)
         self.configProcess()
         self.run()
+
 
 if __name__ == '__main__':
     tupleLoadGT = gettext.translation('tuple-load', 'po', fallback=True)
