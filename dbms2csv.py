@@ -486,6 +486,7 @@ class Main:
             delimiter=';',
             quoting=csv.QUOTE_NONNUMERIC)
         writer.writerow(cab)
+        unique = False
         if 'options' in varParams:
             unique = 'unique' in varParams['options']
         hashRows = []
