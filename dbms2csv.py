@@ -46,30 +46,48 @@ def translate_field(queryDict):
     ''' Closure to "translate" function variable '''
     query = queryDict
 
+    with open(query['from']) as transFile:
+        readCsv = csv.reader(transFile, delimiter=';')
+        columns = None
+        rows = []
+        for row in readCsv:
+            if columns:
+                rows.append(row)
+            else:
+                columns = row
+
     def inner_func(dictRow):
-        nonlocal query
+        nonlocal query, columns, rows
         result = None
-        with open(query['from']) as transFile:
-            readCsv = csv.reader(transFile, delimiter=';')
-            columns = None
-            for row in readCsv:
-                if columns:
-                    csvRow = dict(zip(columns, row))
-                    bOk = True
-                    for cond in query['where']:
-                        bOk = bOk and csvRow[cond[0]] == dictRow[cond[-1]]
-                    if bOk:
-                        result = csvRow[query['select']]
-                        break
+        for row in rows:
+            csvRow = dict(zip(columns, row))
+            bOk = True
+            for cond in query['where']:
+                if len(cond) > 2:
+                    # "#" meeans "=" only if dictRow[cond[-1]] is not
+                    # empty or null
+                    if cond[1] == '#':
+                        if dictRow[cond[-1]]:
+                            bOk = bOk and csvRow[cond[0]] == \
+                                dictRow[cond[-1]]
                 else:
-                    columns = row
-            if (not result):
-                if ('default' in query):
-                    result = query['default']
-                elif ('field_default' in query):
-                    result = dictRow[query['field_default']]
-            if ('type' in query) and (query['type'] == 'n'):
-                result = float(result)
+                    bOk = bOk and csvRow[cond[0]] == dictRow[cond[-1]]
+                if not bOk:
+                    break
+            if bOk:
+                result = csvRow[query['select']]
+                if 'other_fields' in query:
+                    result = [result]
+                    for other_field in query['other_fields']:
+                        result.append(csvRow[other_field[1]])
+                break
+        if (not result):
+            if ('default' in query):
+                result = query['default']
+            elif ('field_default' in query):
+                result = dictRow[query['field_default']]
+        if ('type' in query) and (query['type'] == 'n'):
+            result = float(result)
         return result
     return inner_func
 
@@ -131,6 +149,20 @@ def str_field(methodDict, variable):
                 reResult = re.search(regex, dictRow[field])
                 if reResult:
                     result = reResult.group(1)
+        return result
+    return inner_func
+
+
+def if_not_null_field(methodDict):
+    ''' Closure to if_not_null variable '''
+    method = methodDict
+
+    def inner_func(dictRow):
+        nonlocal method
+        if dictRow[method['test_field']] is None:
+            result = None
+        else:
+            result = dictRow[method['field']]
         return result
     return inner_func
 
@@ -297,6 +329,10 @@ class Main:
                     funcParams = varParams['translate']
                     funcParams['from'] = oxyu.fileWithDefaultDir(
                             self.args.csv, funcParams['from'])
+                    if 'other_fields' in funcParams:
+                        variable = [variable]
+                        for other_field in funcParams['other_fields']:
+                            variable.append(other_field[0])
                     dictRowFunctions.append(
                         [variable, translate_field(funcParams)])
                 elif 'trim' in varParams:
@@ -307,6 +343,10 @@ class Main:
                     funcParams = varParams['str']
                     dictRowFunctions.append(
                         [variable, str_field(funcParams, variable)])
+                elif 'if_not_null' in varParams:
+                    funcParams = varParams['if_not_null']
+                    dictRowFunctions.append(
+                        [variable, if_not_null_field(funcParams)])
         return dictRowFunctions
 
     def addVariablesToRow(self, dictRow):
@@ -327,7 +367,12 @@ class Main:
         self.vOut.prnt('->execFunctionsToRow', 4)
         for function in dictRowFunctions:
             self.vOut.prnt('column: {}'.format(function[0]), 4)
-            dictRow[function[0]] = function[1](dictRow)
+            result = function[1](dictRow)
+            if isinstance(function[0], str):
+                dictRow[function[0]] = result
+            else:
+                for idx, val in enumerate(function[0]):
+                    dictRow[val] = result[idx]
 
     def executeMaster(self):
         self.doHeader = True
@@ -362,9 +407,9 @@ class Main:
                         continue
                     dictRow = dict(zip(columns, row))
                     for key in keys:
-                        self.vOut.prnt('key: {}'.format(key, 3))
+                        self.vOut.prnt('key: {}'.format(key, 4))
                         self.vOut.prnt(
-                            'dictRow[key]: {}'.format(dictRow[key], 3))
+                            'dictRow["{}"]: {}'.format(key, dictRow[key], 3))
 
                     self.queryParam = [dictRow[key] for key in keys]
                     self.vOut.pprnt(self.queryParam, 4)
