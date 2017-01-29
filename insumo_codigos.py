@@ -25,9 +25,10 @@ def conta(ref4):
 
 
 csvFile = sys.argv[1]
-refFile = sys.argv[2]
-if len(sys.argv) > 3:
-    verbose = sys.argv[3] == 'v'
+nivel = sys.argv[2]
+refFile = sys.argv[3]
+if len(sys.argv) > 4:
+    verbose = sys.argv[4] == 'v'
 
 if verbose:
     pprint(sys.argv)
@@ -57,7 +58,7 @@ for row in reader:
         ini += step
 
     row.insert(0, '%s%03d' % (codini, ini))
-    row.insert(0, "9")
+    row.insert(0, nivel)
 
     if verbose:
         pprint(row)
