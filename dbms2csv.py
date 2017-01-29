@@ -244,6 +244,10 @@ class Main:
         self.iniConfig = configparser.RawConfigParser()
         self.iniConfig.read(self.args.iniFile)
 
+        if 'inactive' in self.iniConfig.sections():
+            self.vOut.prnt('Inactive INI file')
+            sys.exit(21)
+
         self.config = configparser.RawConfigParser()
         self.config.read(self.args.cfg)
 
@@ -534,7 +538,7 @@ class Main:
 
                 if variable == 'sort':
                     self.sortCsv(varParams, self.args.csvFile, newCsv)
-                if variable == 'external':
+                if variable.startswith('external'):
                     self.external(varParams, self.args.csvFile, newCsv)
                 self.args.csvFile = newCsv
 
