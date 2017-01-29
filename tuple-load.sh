@@ -38,10 +38,14 @@ echo
 echo "====="
 echo "Generate CSVs"
 echo
-read -p "Confirm executing 'Generate'? (c/n) " -n1 -s exec
+read -p "Confirm executing 'Generate'? (c/n/a/g) " -n1 -s exec
 echo
 
-if [ $exec = 'c' ]; then
+if [ $exec = 'g' ]; then
+  INI=$(date)
+fi
+
+if [ $exec = 'c' -o $exec = 'a' -o $exec = 'g' ]; then
 
   echo
   for iniFile in "${iniFiles[@]}"
@@ -50,10 +54,12 @@ if [ $exec = 'c' ]; then
     echo "====="
     echo "./dbms2csv.py ${iniFile} $VERBOSE"
     echo
-    read -p "Execute this command? (y/n) " -n1 -s exec
+    if [ $exec != 'a' -a $exec != 'g' ]; then
+      read -p "Execute this command? (y/n) " -n1 -s exec
+      echo
+    fi
     echo
-    echo
-    if [ $exec = 'y' ]; then
+    if [ $exec = 'y' -o $exec = 'a' -o $exec = 'g' ]; then
       ./dbms2csv.py "${iniFile}" $VERBOSE
       if [ $? -eq 0 ]; then
         echo
@@ -86,10 +92,10 @@ dataGroupFiles=(
   "_insumo_nao_tecido_loteexpedicao_capa"
   "_insumo_nao_tecido_loteexpedicao_tamanho"
   "_insumo_nao_tecido_loteexpedicao_tamanho_cor"
-  "_insumo_tecido_capa"
-  "_insumo_tecido_tamanho"
-  "_insumo_tecido_tamanho_cor"
-  "_insumo_tecido_tamanho_cor_col"
+  "_insumo_tecido_loteexpedicao_capa"
+  "_insumo_tecido_loteexpedicao_tamanho"
+  "_insumo_tecido_loteexpedicao_tamanho_cor"
+  "_insumo_tecido_loteexpedicao_tamanho_cor_col"
   "_produto_md_capa"
   "_produto_md_tamanho"
   "_produto_md_tamanho_cor"
@@ -104,10 +110,12 @@ echo
 echo "====="
 echo "Delete tuples no longer useful"
 echo
-read -p "Confirm executing 'Delete'? (c/n) " -n1 -s exec
-echo
+if [ $exec != 'g' ]; then
+  read -p "Confirm executing 'Delete'? (c/n/a) " -n1 -s exec
+  echo
+fi
 
-if [ $exec = 'c' ]; then
+if [ $exec = 'c' -o $exec = 'a' -o $exec = 'g' ]; then
 
   echo
   for (( idx=${#dataGroupFiles[@]}-1 ; idx>=0 ; idx-- )) ; do
@@ -115,10 +123,12 @@ if [ $exec = 'c' ]; then
     echo "====="
     echo "./csv2oracle.py ${dataGroupFiles[idx]} -d $VERBOSE"
     echo
-    read -p "Execute this command? (y/n) " -n1 -s exec
+    if [ $exec != 'a' -a $exec != 'g' ]; then
+      read -p "Execute this command? (y/n) " -n1 -s exec
+      echo
+    fi
     echo
-    echo
-    if [ $exec = 'y' ]; then
+    if [ $exec = 'y' -o $exec = 'a' -o $exec = 'g' ]; then
       ./csv2oracle.py ${dataGroupFiles[idx]} -d $VERBOSE
       if [ $? -eq 0 ]; then
         echo
@@ -142,10 +152,12 @@ echo
 echo "====="
 echo "Insert/Update tuples"
 echo
-read -p "Confirm executing 'Insert/Update'? (c/n) " -n1 -s exec
-echo
+if [ $exec != 'g' ]; then
+  read -p "Confirm executing 'Insert/Update'? (c/n/a) " -n1 -s exec
+  echo
+fi
 
-if [ $exec = 'c' ]; then
+if [ $exec = 'c' -o $exec = 'a' -o $exec = 'g' ]; then
 
   echo
   for dataGroupFile in "${dataGroupFiles[@]}"
@@ -154,10 +166,12 @@ if [ $exec = 'c' ]; then
     echo "====="
     echo "./csv2oracle.py ${dataGroupFile} -i $VERBOSE"
     echo
-    read -p "Execute this command? (y/n) " -n1 -s exec
+    if [ $exec != 'a' -a $exec != 'g' ]; then
+      read -p "Execute this command? (y/n) " -n1 -s exec
+      echo
+    fi
     echo
-    echo
-    if [ $exec = 'y' ]; then
+    if [ $exec = 'y' -o $exec = 'a' -o $exec = 'g' ]; then
       ./csv2oracle.py ${dataGroupFile} -i $VERBOSE
       if [ $? -eq 0 ]; then
         echo
@@ -175,3 +189,12 @@ if [ $exec = 'c' ]; then
 
 fi
 echo
+
+if [ $exec = 'g' ]; then
+  echo "Start at:"
+  echo $INI
+  echo
+  echo "End at:"
+  date
+  echo
+fi
