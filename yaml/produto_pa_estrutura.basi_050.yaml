@@ -1,8 +1,8 @@
 csv:
 
   keys:
-    - GRUPO_ITEM
     - ALTERNATIVA_ITEM
+    - GRUPO_ITEM
     - SEQUENCIA
 
 sql:
@@ -22,34 +22,10 @@ sql:
     UPDATE BASI_050 SET
       SUB_ITEM               = '000'
     , ITEM_ITEM              = '000000'
-    , NIVEL_COMP             =
-      ( SELECT max(tc1.NIVEL_ESTRUTURA)
-        FROM BASI_010 tc1
-        WHERE tc1.CODIGO_VELHO LIKE
-          :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
-      )
-    , GRUPO_COMP             =
-      ( SELECT max(tc2.GRUPO_ESTRUTURA)
-        FROM BASI_010 tc2
-        WHERE tc2.CODIGO_VELHO LIKE
-          :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
-      )
-    , SUB_COMP               =
-      case when :TAM is null then null else
-        ( SELECT max(tc3.SUBGRU_ESTRUTURA)
-          FROM BASI_010 tc3
-          WHERE tc3.CODIGO_VELHO LIKE
-            :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
-        )
-      end
-    , ITEM_COMP              =
-      case when :COR is null then null else
-        ( SELECT max(tc4.ITEM_ESTRUTURA)
-          FROM BASI_010 tc4
-          WHERE tc4.CODIGO_VELHO LIKE
-            :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
-        )
-      end
+    , NIVEL_COMP             = :NIVEL_COMP
+    , GRUPO_COMP             = :GRUPO_COMP
+    , SUB_COMP               = :SUB_COMP
+    , ITEM_COMP              = :ITEM_COMP
     , ALTERNATIVA_COMP       = 1
     , CONSUMO                = 1
     , ESTAGIO                = 40
@@ -144,34 +120,10 @@ sql:
     , '000000' -- ITEM_ITEM
     , :ALTERNATIVA_ITEM
     , :SEQUENCIA
-    ,          -- NIVEL_COMP
-      ( SELECT max(tc1.NIVEL_ESTRUTURA)
-        FROM BASI_010 tc1
-        WHERE tc1.CODIGO_VELHO LIKE
-          :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
-      )
-    ,          -- GRUPO_COMP
-      ( SELECT max(tc2.GRUPO_ESTRUTURA)
-        FROM BASI_010 tc2
-        WHERE tc2.CODIGO_VELHO LIKE
-          :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
-      )
-    ,          -- SUB_COMP
-      case when :TAM is null then null else
-        ( SELECT max(tc3.SUBGRU_ESTRUTURA)
-          FROM BASI_010 tc3
-          WHERE tc3.CODIGO_VELHO LIKE
-            :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
-        )
-      end
-    ,          -- ITEM_COMP
-      case when :COR is null then null else
-        ( SELECT max(tc4.ITEM_ESTRUTURA)
-          FROM BASI_010 tc4
-          WHERE tc4.CODIGO_VELHO LIKE
-            :COD||'.'||COALESCE(:TAM, '%', :TAM)||'.'||COALESCE(:COR, '%', :COR)
-        )
-      end
+    , :NIVEL_COMP
+    , :GRUPO_COMP
+    , :SUB_COMP
+    , :ITEM_COMP
     , 1        -- ALTERNATIVA_COMP
     , 1        -- CONSUMO
     , 40       -- ESTAGIO
@@ -211,8 +163,8 @@ sql:
 
   key_list: |
     SELECT
-      es.GRUPO_ITEM
-    , es.ALTERNATIVA_ITEM
+      es.ALTERNATIVA_ITEM
+    , es.GRUPO_ITEM
     , es.SEQUENCIA
     FROM BASI_050 es
     LEFT JOIN BASI_030 rb
