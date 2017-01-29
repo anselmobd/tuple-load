@@ -9,7 +9,8 @@ fi
 # Order matters - Criation order
 iniFiles=(
   "produto_loteexpedicao_referencias"
-  "insumo_nao_tecido_codigos"
+  "insumo_nao_tecido_codigo_antigo"
+  "insumo_nao_tecido_loteexpedicao_codigo_antigo"
   "insumo_nao_tecido_capa"
   "insumo_nao_tecido_tamanho"
   "insumo_nao_tecido_tamanho_cor"
