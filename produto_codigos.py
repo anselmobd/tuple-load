@@ -78,5 +78,6 @@ writer = csv.writer(
 cab = ['REFERENCIA', 'PA', 'MD', 'CO', 'RI', 'REFMASTER']
 writer.writerow(cab)
 for row in refs:
-    pprint(row)
+    if verbose:
+        pprint(row)
     writer.writerow(row[1:])
