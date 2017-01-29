@@ -25,6 +25,7 @@ def conta(ref4):
         print('conta = {}'.format(conta))
     return conta
 
+
 csvFile = sys.argv[1]
 refFile = sys.argv[2]
 if len(sys.argv) > 3:
