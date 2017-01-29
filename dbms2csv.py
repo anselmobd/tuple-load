@@ -498,9 +498,15 @@ class Main:
     def external(self, varParams, fromCsv, toCsv):
         self.vOut.prnt('->external', 3)
         self.vOut.pprnt(varParams, 3)
+        params = [fromCsv]
+        if 'args' in varParams:
+            for arg in varParams['args']:
+                params.append(arg)
+        params.append(toCsv)
         try:
             retcode = subprocess.call(
-                './{} {} {}'.format(varParams['script'], fromCsv, toCsv),
+                ('./{}'+(' {}'*len(params))).format(
+                    varParams['script'], *params),
                 shell=True)
             if retcode < 0:
                 print("Child was terminated by signal",
