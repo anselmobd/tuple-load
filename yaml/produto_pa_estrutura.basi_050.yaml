@@ -55,7 +55,7 @@ sql:
     , ESTAGIO                = 40
     , TIPO_CALCULO           = 0
     , LETRA_GRAFICO          = NULL
-    , QTDE_CAMADAS           = 0
+    , QTDE_CAMADAS           = :QTDE_CAMADAS
     , PERCENT_PERDAS         = 0
     , NUMERO_GRAFICO         = 0
     , QTDE_INICIAL           = 0
@@ -177,7 +177,7 @@ sql:
     , 40       -- ESTAGIO
     , 0        -- TIPO_CALCULO
     , NULL     -- LETRA_GRAFICO
-    , 0        -- QTDE_CAMADAS
+    , :QTDE_CAMADAS
     , 0        -- PERCENT_PERDAS
     , 0        -- NUMERO_GRAFICO
     , 0        -- QTDE_INICIAL
