@@ -27,8 +27,9 @@ class Main:
 
     def parseArgs(self):
         parser = argparse.ArgumentParser(
-            description=_('Join 2 CSV files with the same header '
-                          'avoiding duplication'),
+            description=_('Join 2 CSV files with compatible headers '
+                          '(all columns in first CSV must exist in '
+                          'second one) avoiding duplication'),
             epilog="(c) Tussor & Oxigenai",
             formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument(
@@ -94,31 +95,39 @@ class Main:
         with contextlib.suppress(FileNotFoundError):
             os.remove(self.args.outputCsvFile)
 
+    def writeRowByCab(self, row, rowCab, byCab):
+        self.vOut.pprnt(row, 4)
+        rowByCab = [row[rowCab.index(col)] for col in byCab]
+
+        hashValue = hashlib.md5(str(rowByCab).encode()).digest()
+        if hashValue not in self.hashRows:
+            self.hashRows.append(hashValue)
+            self.writer.writerow(rowByCab)
+
     def run(self):
         self.vOut.prnt('->run', 2)
 
         csvOne = csv.reader(open(self.args.oneCsvFile), delimiter=';')
-        cab = next(csvOne)
+        cabOne = next(csvOne)
 
         csvTwo = csv.reader(open(self.args.otherCsvFile), delimiter=';')
-        if cab != next(csvTwo):
-            raise 'The two CSVs files have not the same header.'
+        cabTwo = next(csvTwo)
 
-        writer = csv.writer(
+        for column in cabOne:
+            if column not in cabTwo:
+                raise 'The two CSVs files have not the same header.'
+
+        self.writer = csv.writer(
             open(self.args.outputCsvFile, 'w', newline=''),
             delimiter=';',
             quoting=csv.QUOTE_NONNUMERIC)
-        writer.writerow(cab)
+        self.writer.writerow(cabOne)
 
-        hashRows = []
-        for eachCsv in [csvOne, csvTwo]:
-            for row in eachCsv:
-                self.vOut.pprnt(row, 4)
-                hashValue = hashlib.md5(str(row).encode()).digest()
-                write = hashValue not in hashRows
-                if write:
-                    hashRows.append(hashValue)
-                    writer.writerow(row)
+        self.hashRows = []
+        for row in csvOne:
+            self.writeRowByCab(row, cabOne, cabOne)
+        for row in csvTwo:
+            self.writeRowByCab(row, cabTwo, cabOne)
 
     def main(self):
         self.parseArgs()
