@@ -160,7 +160,7 @@ def if_not_null_field(methodDict):
     def inner_func(dictRow):
         nonlocal method
         if dictRow[method['test_field']] is None:
-            result = None
+            result = method['else_value']
         else:
             result = dictRow[method['field']]
         return result
@@ -485,14 +485,17 @@ class Main:
                         '"{}"'.format(colValue.replace('"', '""'))
 
                 elif colType == 'n':
-                    if 'format' in colParams:
-                        colFormat = colParams['format']
-                    else:
-                        colFormat = '%d'
                     if not colValue:
                         colValue = 0
-                    colValue = \
-                        locale.format(colFormat, colValue)
+                    if 'sqlformat' in colParams:
+                        colFormat = colParams['sqlformat']
+                        colValue = colFormat % colValue
+                    else:
+                        if 'format' in colParams:
+                            colFormat = colParams['format']
+                        else:
+                            colFormat = '%d'
+                        colValue = locale.format(colFormat, colValue)
 
                 elif colType == 'd':
                     if not colValue:
