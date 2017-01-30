@@ -27,7 +27,7 @@ sql:
     , SUB_COMP               = :SUB_COMP
     , ITEM_COMP              = :ITEM_COMP
     , ALTERNATIVA_COMP       = 1
-    , CONSUMO                = 1
+    , CONSUMO                = :CONSUMO
     , ESTAGIO                = 40
     , TIPO_CALCULO           = 0
     , LETRA_GRAFICO          = NULL
@@ -125,7 +125,7 @@ sql:
     , :SUB_COMP
     , :ITEM_COMP
     , 1        -- ALTERNATIVA_COMP
-    , 1        -- CONSUMO
+    , :CONSUMO
     , 40       -- ESTAGIO
     , 0        -- TIPO_CALCULO
     , NULL     -- LETRA_GRAFICO
