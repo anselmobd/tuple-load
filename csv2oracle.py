@@ -238,7 +238,10 @@ class Main:
             columns = None
             for row in readCsv:
                 if columns:
-                    dictRow = dict(zip(columns, row))
+                    rowByColumns = [row[originalColumns.index(col)]
+                                    for col in columns]
+                    dictRow = dict(zip(columns, rowByColumns))
+
                     self.vOut.pprnt(dictRow, 3)
                     self.vOut.pprnt(
                         list(
@@ -247,7 +250,11 @@ class Main:
                     yield dictRow
                     # break
                 else:
-                    columns = row
+                    originalColumns = row
+                    if 'columns' in self.rules['csv']:
+                        columns = self.getRule('csv', 'columns')
+                    else:
+                        columns = originalColumns
 
     def insertUpdateRow(self, dictRow):
         self.vOut.prnt('->insertUpdate', 2)
