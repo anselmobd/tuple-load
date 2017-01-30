@@ -1,5 +1,16 @@
 csv:
 
+  columns:
+    - GRUPO_ITEM
+    - ALTERNATIVA_ITEM
+    - SEQUENCIA
+    - NIVEL_COMP
+    - GRUPO_COMP
+    - SUB_COMP
+    - ITEM_COMP
+    - QTDE_CAMADAS
+    - CONSUMO
+
   keys:
     - ALTERNATIVA_ITEM
     - GRUPO_ITEM
