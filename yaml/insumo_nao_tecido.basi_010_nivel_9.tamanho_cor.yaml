@@ -22,13 +22,7 @@ sql:
   update: |
     UPDATE BASI_010 SET
       CODIGO_VELHO = :CODITEMPROD || '.' || :CODTAM || '.' || :CODCOR
-    , DESCRICAO_15 = (
-        SELECT
-          DESCRICAO
-        FROM BASI_100
-        WHERE COR_SORTIMENTO = :COR
-          AND TIPO_COR = 1
-      )
+    , DESCRICAO_15 = :DESCRCOR
     , NARRATIVA = (
         (
           SELECT
@@ -43,16 +37,11 @@ sql:
           WHERE BASI030_NIVEL030 = :NIVEL_ESTRUTURA
             AND BASI030_REFERENC = :REFERENCIA
             AND TAMANHO_REF=:TAM
-        ) || ' ' || (
-          SELECT
-            DESCRICAO
-          FROM BASI_100
-          WHERE COR_SORTIMENTO = :COR
-            AND TIPO_COR = 1
-        )
+        ) || ' ' || :DESCRCOR
       )
     , CLASSIFIC_FISCAL = '0'
     , DATA_CADASTRO = TIMESTAMP '2017-01-24 00:00:00.000000'
+    , NARRATIVA2 = :COMPLEMENTOCOR || '-' || :CORINTEGRACAO
     WHERE NIVEL_ESTRUTURA = :NIVEL_ESTRUTURA
       AND GRUPO_ESTRUTURA = :REFERENCIA
       AND SUBGRU_ESTRUTURA = :TAM
@@ -70,19 +59,14 @@ sql:
     , NARRATIVA
     , CLASSIFIC_FISCAL
     , DATA_CADASTRO
+    , COMPLEMENTO
     ) VALUES (
       :NIVEL_ESTRUTURA
     , :REFERENCIA
     , :TAM
     , :COR
     , :CODITEMPROD || '.' || :CODTAM || '.' || :CODCOR
-    , (
-        SELECT
-          DESCRICAO
-        FROM BASI_100
-        WHERE COR_SORTIMENTO = :COR
-          AND TIPO_COR = 1
-      )
+    , :DESCRCOR
     , (
         (
           SELECT
@@ -97,16 +81,11 @@ sql:
           WHERE BASI030_NIVEL030 = :NIVEL_ESTRUTURA
             AND BASI030_REFERENC = :REFERENCIA
             AND TAMANHO_REF=:TAM
-        ) || ' ' || (
-          SELECT
-            DESCRICAO
-          FROM BASI_100
-          WHERE COR_SORTIMENTO = :COR
-            AND TIPO_COR = 1
-        )
+        ) || ' ' || :DESCRCOR
       )
     , '0'
     , TIMESTAMP '2017-01-24 00:00:00.000000'
+    , :DESCRCOR || '-' || :COMPLEMENTOCOR || '-' || :CORINTEGRACAO
     )
 
   key_list: |
