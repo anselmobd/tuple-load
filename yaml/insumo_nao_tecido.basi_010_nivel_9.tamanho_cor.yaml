@@ -95,10 +95,7 @@ sql:
     , rtc.SUBGRU_ESTRUTURA
     , rtc.ITEM_ESTRUTURA
     FROM BASI_010 rtc
-    LEFT JOIN BASI_030 rb
-      ON rb.REFERENCIA = rtc.GRUPO_ESTRUTURA
     WHERE rtc.NIVEL_ESTRUTURA = '9'
-      AND rb.CODIGO_CONTABIL = 99
 
   delete: |
     DELETE FROM BASI_010
