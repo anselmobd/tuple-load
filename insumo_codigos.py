@@ -44,7 +44,7 @@ writer = csv.writer(
 cab = ['NIVEL_ESTRUTURA', 'REFERENCIA', 'CODITEMPROD']
 writer.writerow(cab)
 
-valIni = 2
+valIni = 1
 step = 1
 breakVal = None
 
