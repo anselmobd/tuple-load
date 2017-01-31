@@ -8,7 +8,6 @@ csv:
     - GRUPO_COMP
     - SUB_COMP
     - ITEM_COMP
-    - QTDE_CAMADAS
     - CONSUMO
 
   keys:
@@ -42,7 +41,7 @@ sql:
     , ESTAGIO                = 40
     , TIPO_CALCULO           = 0
     , LETRA_GRAFICO          = NULL
-    , QTDE_CAMADAS           = :QTDE_CAMADAS
+    , QTDE_CAMADAS           = 0
     , PERCENT_PERDAS         = 0
     , NUMERO_GRAFICO         = 0
     , QTDE_INICIAL           = 0
@@ -140,7 +139,7 @@ sql:
     , 40       -- ESTAGIO
     , 0        -- TIPO_CALCULO
     , NULL     -- LETRA_GRAFICO
-    , :QTDE_CAMADAS
+    , 0        -- QTDE_CAMADAS
     , 0        -- PERCENT_PERDAS
     , 0        -- NUMERO_GRAFICO
     , 0        -- QTDE_INICIAL
@@ -178,12 +177,8 @@ sql:
     , es.GRUPO_ITEM
     , es.SEQUENCIA
     FROM BASI_050 es
-    LEFT JOIN BASI_030 rb
-      ON rb.REFERENCIA = es.GRUPO_ITEM
-         AND rb.NIVEL_ESTRUTURA = '1'
     WHERE es.NIVEL_ITEM = '1'
-      AND rb.CODIGO_CONTABIL=99
-      AND es.GRUPO_ITEM <> '00103'
+      AND es.GRUPO_ITEM not like '%00%'
 
   delete: |
     DELETE FROM BASI_050
