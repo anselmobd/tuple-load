@@ -54,11 +54,9 @@ sql:
       rt.BASI030_REFERENC
     , rt.TAMANHO_REF
     FROM BASI_020 rt
-    LEFT JOIN BASI_030 rb
-      ON rb.REFERENCIA = rt.BASI030_REFERENC
     WHERE rt.BASI030_NIVEL030=1
-      AND rb.CODIGO_CONTABIL=99
       AND substr(rt.BASI030_REFERENC, 1, 1) in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
+      AND rt.BASI030_REFERENC not like '%00%'
 
   delete: |
     DELETE FROM BASI_020

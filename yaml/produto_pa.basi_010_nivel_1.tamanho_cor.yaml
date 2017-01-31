@@ -117,11 +117,9 @@ sql:
     , rtc.SUBGRU_ESTRUTURA
     , rtc.ITEM_ESTRUTURA
     FROM BASI_010 rtc
-    LEFT JOIN BASI_030 rb
-      ON rb.REFERENCIA = rtc.GRUPO_ESTRUTURA
     WHERE rtc.NIVEL_ESTRUTURA='1'
-      AND rb.CODIGO_CONTABIL=99
       AND substr(rtc.GRUPO_ESTRUTURA, 1, 1) in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
+      AND rtc.GRUPO_ESTRUTURA not like '%00%'
 
   delete: |
     DELETE FROM BASI_010

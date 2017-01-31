@@ -77,8 +77,8 @@ sql:
     , REFERENCIA
     FROM BASI_030
     WHERE NIVEL_ESTRUTURA = '1'
-      AND CODIGO_CONTABIL=99
       AND substr(REFERENCIA, 1, 1) in ('M', 'N', 'P', 'Q', 'W', 'Y')
+      AND REFERENCIA not like '%00%'
 
   delete: |
     DELETE FROM BASI_030
