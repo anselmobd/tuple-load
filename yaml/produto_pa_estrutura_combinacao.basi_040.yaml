@@ -1,0 +1,95 @@
+csv:
+
+  keys:
+    - NIVEL_ITEM
+    - GRUPO_ITEM
+    - SUB_ITEM
+    - ITEM_ITEM
+    - ALTERNATIVA_ITEM
+    - SEQUENCIA
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(GRUPO_COMP)
+    FROM BASI_040
+    WHERE
+      NIVEL_ITEM             = :NIVEL_ITEM
+    , GRUPO_ITEM             = :GRUPO_ITEM
+    , SUB_ITEM               = :SUB_ITEM
+    , ITEM_ITEM              = :ITEM_ITEM
+    , ALTERNATIVA_ITEM       = :ALTERNATIVA_ITEM
+    , SEQUENCIA              = :SEQUENCIA
+
+  update: |
+    UPDATE BASI_040 SET
+    , SUB_COMP               = :SUB_COMP
+    , ITEM_COMP              = :ITEM_COMP
+    , CONSUMO                = :CONSUMO
+    , CONS_UNID_MED_GENERICA = 0        -- f
+    , SEQUENCIA_TAMANHO      = 0        -- select
+    , ALTERNATIVA_COMP       = 1        -- f
+    , CODIGO_PROJETO         = '000000' -- f
+    , SEQUENCIA_PROJETO      = 0        -- f
+    WHERE
+      NIVEL_ITEM             = :NIVEL_ITEM
+    , GRUPO_ITEM             = :GRUPO_ITEM
+    , SUB_ITEM               = :SUB_ITEM
+    , ITEM_ITEM              = :ITEM_ITEM
+    , ALTERNATIVA_ITEM       = :ALTERNATIVA_ITEM
+    , SEQUENCIA              = :SEQUENCIA
+
+  insert: |
+    INSERT INTO SYSTEXTIL.BASI_040 (
+      NIVEL_ITEM
+    , GRUPO_ITEM
+    , SUB_ITEM
+    , ITEM_ITEM
+    , ALTERNATIVA_ITEM
+    , SEQUENCIA
+    , SUB_COMP
+    , ITEM_COMP
+    , CONSUMO
+    , CONS_UNID_MED_GENERICA
+    , SEQUENCIA_TAMANHO
+    , ALTERNATIVA_COMP
+    , CODIGO_PROJETO
+    , SEQUENCIA_PROJETO
+    ) VALUES (
+      :NIVEL_ITEM
+    , :GRUPO_ITEM
+    , :SUB_ITEM
+    , :ITEM_ITEM
+    , :ALTERNATIVA_ITEM
+    , :SEQUENCIA
+    , :SUB_COMP
+    , :ITEM_COMP
+    , :CONSUMO
+    , 0        -- f CONS_UNID_MED_GENERICA
+    , 0        -- select SEQUENCIA_TAMANHO
+    , 1        -- f ALTERNATIVA_COMP
+    , '000000' -- f CODIGO_PROJETO
+    , 0        -- f SEQUENCIA_PROJETO
+    )
+
+  key_list: |
+    SELECT
+      es.ALTERNATIVA_ITEM
+    , es.GRUPO_ITEM
+    , es.SEQUENCIA
+    FROM BASI_040 es
+    WHERE es.NIVEL_ITEM = '1'
+      AND es.GRUPO_ITEM not like '%00%'
+
+  delete: |
+    DELETE FROM BASI_040
+    WHERE
+      NIVEL_ITEM             = :NIVEL_ITEM
+    , GRUPO_ITEM             = :GRUPO_ITEM
+    , SUB_ITEM               = :SUB_ITEM
+    , ITEM_ITEM              = :ITEM_ITEM
+    , ALTERNATIVA_ITEM       = :ALTERNATIVA_ITEM
+    , SEQUENCIA              = :SEQUENCIA
