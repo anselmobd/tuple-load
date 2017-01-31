@@ -30,6 +30,7 @@ iniFiles=(
   "produto_md_tamanho"
   "produto_md_tamanho_cor"
   "componentes_tamanho_cor"
+  "produto_md_estrutura"
   "produto_pa_estrutura"
 )
 
@@ -83,7 +84,7 @@ dataGroupFiles=(
   "unidades_de_medida.fixo"
   "tamanho.fixo"
   "cor.fixo"
-  "conta_de_estoque.v161202"
+  "conta_de_estoque"
   "tecido-linha_de_produto"
   "tecido-artigo_de_produto"
   "ncm.fixo"
