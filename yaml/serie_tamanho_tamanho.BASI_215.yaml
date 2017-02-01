@@ -1,0 +1,48 @@
+csv:
+
+  fields:
+
+    CODIGO:
+      type: integer
+
+  keys:
+    - SERIE_TAMANHO
+    - TAMANHO
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(c.TAMANHO)
+    from BASI_215 c
+    where c.SERIE_TAMANHO = :SERIE_TAMANHO
+      and c.TAMANHO = :TAMANHO
+
+  update: |
+    UPDATE BASI_215 c
+    set
+      c.TAMANHO = :TAMANHO
+    where c.SERIE_TAMANHO = :SERIE_TAMANHO
+      and c.TAMANHO = :TAMANHO
+
+  insert: |
+    INSERT INTO BASI_215 (
+      SERIE_TAMANHO
+    , TAMANHO
+    ) VALUES (
+      :SERIE_TAMANHO
+    , :TAMANHO
+    )
+
+  key_list: |
+    SELECT
+      c.SERIE_TAMANHO
+    , c.TAMANHO
+    from BASI_215 c
+
+  delete: |
+    DELETE FROM BASI_215 c
+    where c.SERIE_TAMANHO = :SERIE_TAMANHO
+      and c.TAMANHO = :TAMANHO
