@@ -1,0 +1,49 @@
+csv:
+
+  fields:
+
+    CODIGO:
+      type: integer
+
+  keys:
+    - CODIGO
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(c.DESCRICAO)
+    from HDOC_001 c
+    where c.TIPO = 516
+      and c.CODIGO = :CODIGO
+
+  update: |
+    UPDATE HDOC_001 c
+    set
+      c.DESCRICAO = :DESCRICAO
+    where c.TIPO = 516
+      and c.CODIGO = :CODIGO
+
+  insert: |
+    INSERT INTO HDOC_001 (
+      TIPO
+    , CODIGO
+    , DESCRICAO
+    ) VALUES (
+      516
+    , :CODIGO
+    , :DESCRICAO
+    )
+
+  key_list: |
+    SELECT
+      c.CODIGO
+    from HDOC_001 c
+    where c.TIPO = 516
+
+  delete: |
+    DELETE FROM HDOC_001 c
+    where c.TIPO = 516
+      and c.CODIGO = :CODIGO
