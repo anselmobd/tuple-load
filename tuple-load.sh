@@ -84,6 +84,8 @@ dataGroupFiles=(
   "faixa_etaria"
   "unidades_de_medida.fixo"
   "tamanho.fixo"
+  "serie_tamanho"
+  "serie_tamanho_tamanho"
   "cor.fixo"
   "conta_de_estoque"
   "tecido-linha_de_produto"
