@@ -30,8 +30,8 @@ iniFiles=(
   "produto_md_tamanho"
   "produto_md_tamanho_cor"
   "componentes_tamanho_cor"
-  "produto_md_estrutura"
   "produto_pa_estrutura"
+  "produto_md_estrutura"
 )
 
 # generate
@@ -81,6 +81,7 @@ fi
 
 # Order matters - Criation order
 dataGroupFiles=(
+  "faixa_etaria"
   "unidades_de_medida.fixo"
   "tamanho.fixo"
   "cor.fixo"
@@ -104,7 +105,7 @@ dataGroupFiles=(
   "_produto_pa_capa"
   "_produto_pa_tamanho"
   "_produto_pa_tamanho_cor"
-  "_produto_pa_estrutura"
+  "_produto_md_estrutura.pamd"
 )
 
 # delete
