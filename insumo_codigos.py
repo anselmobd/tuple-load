@@ -41,7 +41,7 @@ writer = csv.writer(
     open(refFile, 'w', newline=''),
     delimiter=';',
     quoting=csv.QUOTE_NONNUMERIC)
-cab = ['NIVEL_ESTRUTURA', 'REFERENCIA', 'CODITEMPROD']
+cab = ['NIVEL_ESTRUTURA', 'REFERENCIA', 'VERSAOORDER', 'CODITEMPROD']
 writer.writerow(cab)
 
 valIni = 1
