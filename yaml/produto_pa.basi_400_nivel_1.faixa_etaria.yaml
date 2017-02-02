@@ -1,0 +1,65 @@
+csv:
+
+  keys:
+    - REFERENCIA
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(CODIGO_INFORMACAO)
+    FROM BASI_400
+    WHERE NIVEL = '1'
+      AND GRUPO = :REFERENCIA
+      AND SUBGRUPO = '000'
+      AND ITEM = '000000'
+      AND TIPO_INFORMACAO = 805
+
+  update: |
+    UPDATE BASI_400 SET
+      CODIGO_INFORMACAO = :CODIGO_INFORMACAO
+    WHERE NIVEL = '1'
+      AND GRUPO = :REFERENCIA
+      AND SUBGRUPO = '000'
+      AND ITEM = '000000'
+      AND TIPO_INFORMACAO = 805
+
+  insert: |
+    INSERT INTO SYSTEXTIL.BASI_400
+    (NIVEL, GRUPO, SUBGRUPO, ITEM, TIPO_INFORMACAO, CODIGO_INFORMACAO)
+    VALUES('1', '00111', '000', '000000', 805, 876);
+
+    INSERT INTO BASI_400
+    ( NIVEL
+    -- :CODITEMPROD
+    , GRUPO
+    , SUBGRUPO
+    , ITEM
+    , TIPO_INFORMACAO
+    , CODIGO_INFORMACAO
+    )
+    VALUES
+    ( '1'
+    , :REFERENCIA
+    , '000'
+    , '000000'
+    , 805
+    , :CODIGO_INFORMACAO
+    )
+
+  key_list: |
+    SELECT
+      rtcc.GRUPO
+    FROM BASI_400 rtcc
+    WHERE rtcc.TIPO_INFORMACAO = 805
+      AND rtcc.NIVEL = '1'
+
+  delete: |
+    DELETE FROM BASI_400
+    WHERE NIVEL = '1'
+      AND GRUPO = :REFERENCIA
+      AND SUBGRUPO = '000'
+      AND ITEM = '000000'
+      AND TIPO_INFORMACAO = 805
