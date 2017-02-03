@@ -1,5 +1,15 @@
 csv:
 
+  columns:
+    - NIVEL_ITEM
+    - GRUPO_ITEM
+    - SUB_ITEM
+    - ITEM_ITEM
+    - ALTERNATIVA_ITEM
+    - SEQUENCIA
+    - SUB_COMP
+    - ITEM_COMP
+
   keys:
     - NIVEL_ITEM
     - GRUPO_ITEM
@@ -14,33 +24,40 @@ sql:
 
   key_count: |
     SELECT
-      count(GRUPO_COMP)
+      count(ITEM_COMP)
     FROM BASI_040
-    WHERE
-      NIVEL_ITEM             = :NIVEL_ITEM
-    , GRUPO_ITEM             = :GRUPO_ITEM
-    , SUB_ITEM               = :SUB_ITEM
-    , ITEM_ITEM              = :ITEM_ITEM
-    , ALTERNATIVA_ITEM       = :ALTERNATIVA_ITEM
-    , SEQUENCIA              = :SEQUENCIA
+    WHERE NIVEL_ITEM       = :NIVEL_ITEM
+      AND GRUPO_ITEM       = :GRUPO_ITEM
+      AND SUB_ITEM         = :SUB_ITEM
+      AND ITEM_ITEM        = :ITEM_ITEM
+      AND ALTERNATIVA_ITEM = :ALTERNATIVA_ITEM
+      AND SEQUENCIA        = :SEQUENCIA
 
   update: |
     UPDATE BASI_040 SET
-    , SUB_COMP               = :SUB_COMP
+      SUB_COMP               = :SUB_COMP
     , ITEM_COMP              = :ITEM_COMP
-    , CONSUMO                = :CONSUMO
+    , CONSUMO                =
+      ( SELECT CONSUMO
+        FROM BASI_050
+        WHERE NIVEL_ITEM       = :NIVEL_ITEM
+          AND GRUPO_ITEM       = :GRUPO_ITEM
+          AND SUB_ITEM         = :SUB_ITEM
+          AND ITEM_ITEM        = :ITEM_ITEM
+          AND ALTERNATIVA_ITEM = :ALTERNATIVA_ITEM
+          AND SEQUENCIA        = :SEQUENCIA
+      ) -- :CONSUMO
     , CONS_UNID_MED_GENERICA = 0        -- f
     , SEQUENCIA_TAMANHO      = 0        -- select
     , ALTERNATIVA_COMP       = 1        -- f
     , CODIGO_PROJETO         = '000000' -- f
     , SEQUENCIA_PROJETO      = 0        -- f
-    WHERE
-      NIVEL_ITEM             = :NIVEL_ITEM
-    , GRUPO_ITEM             = :GRUPO_ITEM
-    , SUB_ITEM               = :SUB_ITEM
-    , ITEM_ITEM              = :ITEM_ITEM
-    , ALTERNATIVA_ITEM       = :ALTERNATIVA_ITEM
-    , SEQUENCIA              = :SEQUENCIA
+    WHERE NIVEL_ITEM       = :NIVEL_ITEM
+      AND GRUPO_ITEM       = :GRUPO_ITEM
+      AND SUB_ITEM         = :SUB_ITEM
+      AND ITEM_ITEM        = :ITEM_ITEM
+      AND ALTERNATIVA_ITEM = :ALTERNATIVA_ITEM
+      AND SEQUENCIA        = :SEQUENCIA
 
   insert: |
     INSERT INTO SYSTEXTIL.BASI_040 (
@@ -67,7 +84,15 @@ sql:
     , :SEQUENCIA
     , :SUB_COMP
     , :ITEM_COMP
-    , :CONSUMO
+    , ( SELECT CONSUMO
+        FROM BASI_050
+        WHERE NIVEL_ITEM       = :NIVEL_ITEM
+          AND GRUPO_ITEM       = :GRUPO_ITEM
+          AND SUB_ITEM         = :SUB_ITEM
+          AND ITEM_ITEM        = :ITEM_ITEM
+          AND ALTERNATIVA_ITEM = :ALTERNATIVA_ITEM
+          AND SEQUENCIA        = :SEQUENCIA
+      ) -- :CONSUMO
     , 0        -- f CONS_UNID_MED_GENERICA
     , 0        -- select SEQUENCIA_TAMANHO
     , 1        -- f ALTERNATIVA_COMP
@@ -86,10 +111,9 @@ sql:
 
   delete: |
     DELETE FROM BASI_040
-    WHERE
-      NIVEL_ITEM             = :NIVEL_ITEM
-    , GRUPO_ITEM             = :GRUPO_ITEM
-    , SUB_ITEM               = :SUB_ITEM
-    , ITEM_ITEM              = :ITEM_ITEM
-    , ALTERNATIVA_ITEM       = :ALTERNATIVA_ITEM
-    , SEQUENCIA              = :SEQUENCIA
+    WHERE NIVEL_ITEM       = :NIVEL_ITEM
+      AND GRUPO_ITEM       = :GRUPO_ITEM
+      AND SUB_ITEM         = :SUB_ITEM
+      AND ITEM_ITEM        = :ITEM_ITEM
+      AND ALTERNATIVA_ITEM = :ALTERNATIVA_ITEM
+      AND SEQUENCIA        = :SEQUENCIA
