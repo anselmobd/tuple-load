@@ -1,0 +1,215 @@
+csv:
+
+  fields:
+
+    FORNECEDOR9:
+      type: integer
+
+    FORNECEDOR4:
+      type: integer
+
+    FORNECEDOR2:
+      type: integer
+
+  keys:
+    - FORNECEDOR9
+    - FORNECEDOR4
+    - FORNECEDOR2
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(f.NOME_FORNECEDOR)
+    FROM SUPR_010 f
+    WHERE f.FORNECEDOR9=:FORNECEDOR9
+      AND f.FORNECEDOR4=:FORNECEDOR4
+      AND f.FORNECEDOR2=:FORNECEDOR2
+
+  update: |
+    UPDATE SUPR_010 f
+    set
+      f.NOME_FORNECEDOR = :NOME_FORNECEDOR
+    , f.NOME_FANTASIA = :NOME_FANTASIA
+    , f.TELEFONE_FORNE = :TELEFONE_FORNE
+    , f.CEP_FORNECEDOR = :CEP_FORNECEDOR
+    , f.ENDERECO_FORNE = :ENDERECO_FORNE
+    , f.BAIRRO = :BAIRRO
+    , f.COD_CIDADE = 7459
+    , f.FAX_FORNECEDOR = :FAX_FORNECEDOR
+    , f.E_MAIL = :E_MAIL
+    WHERE f.FORNECEDOR9=:FORNECEDOR9
+      AND f.FORNECEDOR4=:FORNECEDOR4
+      AND f.FORNECEDOR2=:FORNECEDOR2
+
+  insert: |
+    INSERT INTO SUPR_010 (
+      FORNECEDOR9
+    , FORNECEDOR4
+    , FORNECEDOR2
+    , NOME_FORNECEDOR
+    , NOME_FANTASIA
+    , SIT_FORNECEDOR
+    , TELEFONE_FORNE
+    , CEP_FORNECEDOR
+    , ENDERECO_FORNE
+    , INSCR_EST_FORNE
+    , CX_POSTAL_FORNE
+    , TELEX_FORNECEDOR
+    , FAX_FORNECEDOR
+    , BAIRRO
+    , COD_CIDADE
+    , DATA_CADASTRO
+    , COD_EMPRESA
+    , TIPO_FORNECEDOR
+    , NOME_DE_CONTATO
+    , OBSERVACOES
+    , CONTA_CONTABIL
+    , E_MAIL
+    , CODIGO_CONTABIL
+    , DIAS_BASE_FRETE
+    , BANCO_SISPAG
+    , AGENCIA_SISPAG
+    , DIG_AGE_SISPAG
+    , CONTA_SISPAG
+    , DIG_CTA_SISPAG
+    , DIG_CTA_SISPAG2
+    , CODIGO_FORNECEDOR
+    , DATA_ATUALIZACAO
+    , TIPO_PAGAMENTO
+    , SITE
+    , TRANSF_ARQ_MAGNETICO_FRETE
+    , RPT_ARQ_REMESSA_FRETE
+    , NIVEL_PRODUTO_FRETE
+    , GRUPO_PRODUTO_FRETE
+    , SUBGRU_PRODUTO_FRETE
+    , ITEM_PRODUTO_FRETE
+    , CODIGO_PORTADOR_FRETE
+    , TIPO_TITULO_FRETE
+    , CENTRO_CUSTOS_FRETE
+    , COD_NATUREZA_NFE_FRETE
+    , EST_NATUREZA_NFE_FRETE
+    , ESPECIE_DOCTO_NFE_FRETE
+    , COND_PAGTO_NFE_FRETE
+    , COD_CANCELAMENTO
+    , DATA_CANCELAMENTO
+    , TP_PROD_01
+    , TP_PROD_02
+    , TP_PROD_03
+    , TP_PROD_04
+    , TP_PROD_05
+    , UTI_DUP_UNICA
+    , TIPO_FRETE
+    , COND_PAGTO
+    , CNPJTRANS9
+    , CNPJTRANS4
+    , CNPJTRANS2
+    , IDIOMA_PC
+    , INSC_MUNICIPAL
+    , CELULAR_FORNECEDOR
+    , CALL_FREE_FORNECEDOR
+    , INCIDE_IMPOSTO
+    , NUMERO_IMOVEL
+    , COMPLEMENTO
+    , COD_CIDADE_ZONA_FRANCA
+    , INSCR_INSS
+    , COD_RELACION_SPED_CTB
+    , NFE_E_MAIL
+    , EMITE_NFE
+    , LOTE_FORNECEDOR
+    , LOTE_CONSIGNADO
+    , OPTANTE_SIMPLES
+    , PERM_MULT_GENERICO
+    ) VALUES (
+      :FORNECEDOR9
+    , :FORNECEDOR4
+    , :FORNECEDOR2
+    , :NOME_FORNECEDOR
+    , :NOME_FANTASIA
+    , 1                                      -- SIT_FORNECEDOR
+    , :TELEFONE_FORNE
+    , :CEP_FORNECEDOR
+    , :ENDERECO_FORNE
+    , 'ISENTO'                               -- INSCR_EST_FORNE
+    , '0'                                    -- CX_POSTAL_FORNE
+    , 0                                      -- TELEX_FORNECEDOR
+    , :FAX_FORNECEDOR
+    , :BAIRRO
+    , 07459                                  -- COD_CIDADE
+    , TIMESTAMP '2003-11-25 00:00:00.000000' -- DATA_CADASTRO
+    , 0                                      -- COD_EMPRESA
+    , 0                                      -- TIPO_FORNECEDOR
+    , '.'                                    -- NOME_DE_CONTATO
+    , NULL                                   -- OBSERVACOES
+    , NULL                                   -- CONTA_CONTABIL
+    , :E_MAIL
+    , 0                                      -- CODIGO_CONTABIL
+    , 0                                      -- DIAS_BASE_FRETE
+    , 0                                      -- BANCO_SISPAG
+    , 0                                      -- AGENCIA_SISPAG
+    , 0                                      -- DIG_AGE_SISPAG
+    , 0                                      -- CONTA_SISPAG
+    , 0                                      -- DIG_CTA_SISPAG
+    , NULL                                   -- DIG_CTA_SISPAG2
+    , '0'                                    -- CODIGO_FORNECEDOR
+    , NULL                                   -- DATA_ATUALIZACAO
+    , 1                                      -- TIPO_PAGAMENTO
+    , NULL                                   -- SITE
+    , 2                                      -- TRANSF_ARQ_MAGNETICO_FRETE
+    , ' '                                    -- RPT_ARQ_REMESSA_FRETE
+    , '0'                                    -- NIVEL_PRODUTO_FRETE
+    , '00000'                                -- GRUPO_PRODUTO_FRETE
+    , '000'                                  -- SUBGRU_PRODUTO_FRETE
+    , '000000'                               -- ITEM_PRODUTO_FRETE
+    , 0                                      -- CODIGO_PORTADOR_FRETE
+    , 0                                      -- TIPO_TITULO_FRETE
+    , 0                                      -- CENTRO_CUSTOS_FRETE
+    , 0                                      -- COD_NATUREZA_NFE_FRETE
+    , ' '                                    -- EST_NATUREZA_NFE_FRETE
+    , ' '                                    -- ESPECIE_DOCTO_NFE_FRETE
+    , 0                                      -- COND_PAGTO_NFE_FRETE
+    , 0                                      -- COD_CANCELAMENTO
+    , NULL                                   -- DATA_CANCELAMENTO
+    , 0                                      -- TP_PROD_01
+    , 0                                      -- TP_PROD_02
+    , 0                                      -- TP_PROD_03
+    , 0                                      -- TP_PROD_04
+    , 0                                      -- TP_PROD_05
+    , 2                                      -- UTI_DUP_UNICA
+    , 0                                      -- TIPO_FRETE
+    , 0                                      -- COND_PAGTO
+    , 0                                      -- CNPJTRANS9
+    , 0                                      -- CNPJTRANS4
+    , 0                                      -- CNPJTRANS2
+    , 0                                      -- IDIOMA_PC
+    , NULL                                   -- INSC_MUNICIPAL
+    , 0                                      -- CELULAR_FORNECEDOR
+    , NULL                                   -- CALL_FREE_FORNECEDOR
+    , NULL                                   -- INCIDE_IMPOSTO
+    , ' '                                    -- NUMERO_IMOVEL
+    , NULL                                   -- COMPLEMENTO
+    , 0                                      -- COD_CIDADE_ZONA_FRANCA
+    , NULL                                   -- INSCR_INSS
+    , 0                                      -- COD_RELACION_SPED_CTB
+    , NULL                                   -- NFE_E_MAIL
+    , 'N'                                    -- EMITE_NFE
+    , 0                                      -- LOTE_FORNECEDOR
+    , 0                                      -- LOTE_CONSIGNADO
+    , 0                                      -- OPTANTE_SIMPLES
+    , 0                                      -- PERM_MULT_GENERICO
+    )
+
+  key_list: |
+    SELECT
+      f.FORNECEDOR9
+    , f.FORNECEDOR4
+    , f.FORNECEDOR2
+    from SUPR_010 f
+
+  delete: |
+    DELETE FROM SUPR_010 f
+    WHERE f.FORNECEDOR9=:FORNECEDOR9
+      AND f.FORNECEDOR4=:FORNECEDOR4
+      AND f.FORNECEDOR2=:FORNECEDOR2
