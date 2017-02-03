@@ -35,6 +35,10 @@ iniFiles=(
   "componentes_tamanho_cor"
   "produto_pa_estrutura"
   "produto_md_estrutura"
+  "produto_pa_estrutura_combinacao_cor_d"
+  "produto_pa_estrutura_combinacao_cor_m"
+  "produto_md_estrutura_combinacao_cor_d"
+  "produto_md_estrutura_combinacao_cor_m"
 )
 
 # generate
