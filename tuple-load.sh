@@ -3,11 +3,12 @@
 if [ $1 ] ; then
   VERBOSE=$1
 else
-  VERBOSE="-vvv"
+  VERBOSE=""
 fi
 
 # Order matters - Criation order
 iniFiles=(
+  "fornecedor"
   "produto_loteexpedicao_referencias"
   "insumo_nao_tecido_codigo_antigo"
   "insumo_nao_tecido_loteexpedicao_codigo_antigo"
@@ -39,6 +40,10 @@ iniFiles=(
   "produto_pa_estrutura_combinacao_cor_m"
   "produto_md_estrutura_combinacao_cor_d"
   "produto_md_estrutura_combinacao_cor_m"
+  "produto_pa_estrutura_combinacao_tamanho_d"
+  "produto_pa_estrutura_combinacao_tamanho_m"
+  "produto_md_estrutura_combinacao_tamanho_d"
+  "produto_md_estrutura_combinacao_tamanho_m"
 )
 
 # generate
@@ -100,6 +105,7 @@ dataGroupFiles=(
   "ncm.fixo"
   "produto-linha_de_produto"
   "produto-artigo_de_produto"
+  "fornecedor"
   "_produto_colecao"
   "_insumo_nao_tecido_loteexpedicao_capa"
   "_insumo_nao_tecido_loteexpedicao_tamanho"
@@ -115,6 +121,7 @@ dataGroupFiles=(
   "_produto_pa_tamanho"
   "_produto_pa_tamanho_cor"
   "_produto_md_estrutura.pamd"
+  "_produto_md_estrutura_combinacao_tamanho_m.1.2.3.4.5.6"
 )
 
 # delete
