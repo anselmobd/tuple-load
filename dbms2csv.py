@@ -149,6 +149,20 @@ def str_field(methodDict, variable):
                 reResult = re.search(regex, dictRow[field])
                 if reResult:
                     result = reResult.group(1)
+            elif method['method'] == 'format':
+                args = [field] + method['other_fields']
+                values = [dictRow[a] for a in args]
+                result = method['format'].format(*values)
+            elif method['method'] == 'cnpj_digits':
+                cnpj = oxyu.Cnpj()
+                result = cnpj.digits(dictRow[field])
+            elif method['method'] == 'only_digits':
+                result = re.sub("[^0-9]", "", dictRow[field])
+            elif method['method'] == 'int':
+                try:
+                    result = int(dictRow[field])
+                except Exception as e:
+                    result = 0
         return result
     return inner_func
 
