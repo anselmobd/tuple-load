@@ -50,6 +50,9 @@ class Cnpj:
         """
         Class to interact with CNPJ brazilian numbers
         """
+        # assert(self.validate('61882613000194'))
+        # assert(self.validate('061882613000190'))
+        # assert(not self.validate('61882613000195'))
         pass
 
     def validate(self, cnpj):
@@ -67,6 +70,14 @@ class Cnpj:
         """
         return bool(cnpj[-2:] == self.digits(cnpj))
 
+    def factors_gen(self, size):
+        for position in range(size, 0, -1):
+            factor = (position - 1) % 8 + 2
+            yield factor
+
+    def factors_list(self, size):
+        return [f for f in self.factors_gen(size)]
+
     def digits(self, cnpj):
         """
         Method to calculate the last two digits from brazilian CNPJs.
@@ -83,9 +94,6 @@ class Cnpj:
             print(Cnpj().digits('69.435.154/0001-02'))  # 02
             print(Cnpj().digits('69.435.154/0001-01'))  # 02
         """
-        # defining some variables
-        lista_validacao_um = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
-        lista_validacao_dois = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
 
         # cleaning the cnpj
         cnpj = re.sub("[^0-9]", "", cnpj)
@@ -96,68 +104,25 @@ class Cnpj:
                 'Argument cnpj "{}" must contain from 12 to 15 digits '
                 'and contain {}'.format(cnpj, len(cnpj)))
 
-        # calculating the first digit
-        soma = 0
-        id = 0
-        for numero in cnpj:
+        # Removing digits
+        if len(cnpj) >= 14:
+            cnpj = cnpj[:-2]
 
-            # to do not raise indexerrors
-            try:
-                lista_validacao_um[id]
-            except:
-                break
+        for i in range(2):
+            factors = self.factors_list(len(cnpj))
 
-            soma += int(numero) * int(lista_validacao_um[id])
-            id += 1
+            # calculating the first digit
+            soma = 0
+            for number, factor in zip(cnpj, factors):
+                soma += int(number) * factor
+                # print(number, factor, soma)
 
-        soma = soma % 11
-        if soma < 2:
-            digito_um = 0
-        else:
-            digito_um = 11 - soma
+            soma = soma % 11
+            digito = 0 if soma < 2 else 11 - soma
 
-        # converting to string, for later comparison
-        digito_um = str(digito_um)
+            cnpj = '{}{}'.format(cnpj, digito)
 
-        # calculating the second digit
-        # suming the two lists
-        soma = 0
-        id = 0
-
-        # suming the two lists
-        for numero in cnpj:
-
-            # to do not raise indexerrors
-            try:
-                lista_validacao_dois[id]
-            except:
-                break
-
-            soma += int(numero) * int(lista_validacao_dois[id])
-            id += 1
-
-        # defining the digit
-        soma = soma % 11
-        if soma < 2:
-            digito_dois = 0
-        else:
-            digito_dois = 11 - soma
-
-        digito_dois = str(digito_dois)
-
-        # returnig
-        return digito_um + digito_dois
-
-    def format(self, cnpj):
-        """
-        Method to format cnpj numbers.
-        Tests:
-
-        >>> print Cnpj().format('53612734000198')
-        53.612.734/0001-98
-        """
-        return "%s.%s.%s/%s-%s" % \
-            (cnpj[0:2], cnpj[2:5], cnpj[5:8], cnpj[8:12], cnpj[12:14])
+        return cnpj[-2:]
 
 
 if __name__ == '__main__':
