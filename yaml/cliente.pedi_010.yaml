@@ -1,0 +1,63 @@
+csv:
+
+  fields:
+
+    CGC_9:
+      type: integer
+
+    CGC_4:
+      type: integer
+
+    CGC_2:
+      type: integer
+
+  keys:
+    - CGC_9
+    - CGC_4
+    - CGC_2
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(c.NOME_CLIENTE)
+    FROM PEDI_010 c
+    WHERE c.CGC_9 = :CGC_9
+      AND c.CGC_4 = :CGC_4
+      AND c.CGC_2 = :CGC_2
+
+  update: |
+    UPDATE PEDI_010 c
+    set
+      c.NOME_CLIENTE = :NOME_CLIENTE
+    WHERE c.CGC_9 = :CGC_9
+      AND c.CGC_4 = :CGC_4
+      AND c.CGC_2 = :CGC_2
+
+  insert: |
+    INSERT INTO PEDI_010 (
+      NOME_CLIENTE
+    , CGC_9
+    , CGC_4
+    , CGC_2
+    ) VALUES (
+      :NOME_CLIENTE
+    , :CGC_9
+    , :CGC_4
+    , :CGC_2
+    )
+
+  key_list: |
+    SELECT
+      c.CGC_9
+    , c.CGC_4
+    , c.CGC_2
+    from PEDI_010 c
+
+  delete: |
+    DELETE FROM PEDI_010 x
+    WHERE c.CGC_9 = :CGC_9
+      AND c.CGC_4 = :CGC_4
+      AND c.CGC_2 = :CGC_2
