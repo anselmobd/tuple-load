@@ -154,8 +154,7 @@ def str_field(methodDict, variable):
                 values = [dictRow[a] for a in args]
                 result = method['format'].format(*values)
             elif method['method'] == 'cnpj_digits':
-                cnpj = oxyu.Cnpj()
-                result = cnpj.digits(dictRow[field])
+                result = oxyu.Cnpj().digits(dictRow[field])
             elif method['method'] == 'only_digits':
                 result = re.sub("[^0-9]", "", dictRow[field])
             elif method['method'] == 'int':
