@@ -75,9 +75,6 @@ class Cnpj:
             factor = (position - 1) % 8 + 2
             yield factor
 
-    def factors_list(self, size):
-        return [f for f in self.factors_gen(size)]
-
     def digits(self, cnpj):
         """
         Method to calculate the last two digits from brazilian CNPJs.
@@ -109,13 +106,11 @@ class Cnpj:
             cnpj = cnpj[:-2]
 
         for i in range(2):
-            factors = self.factors_list(len(cnpj))
 
-            # calculating the first digit
+            # calculating a digit
             soma = 0
-            for number, factor in zip(cnpj, factors):
+            for number, factor in zip(cnpj, self.factors_gen(len(cnpj))):
                 soma += int(number) * factor
-                # print(number, factor, soma)
 
             soma = soma % 11
             digito = 0 if soma < 2 else 11 - soma
