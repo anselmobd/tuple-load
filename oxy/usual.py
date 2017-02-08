@@ -40,6 +40,13 @@ class VerboseOutput:
         if self.verbosity >= verbosity:
             pprint(obj)
 
+    def ppr(self, verbosity, *obj):
+        ''' PPrint 1 or more objects if verbosity >= x '''
+        if not isinstance(verbosity, int):
+            verbosity, *obj = 1, verbosity
+        for o in obj:
+            self.pprnt(o, verbosity)
+
 
 class Cnpj:
     """
