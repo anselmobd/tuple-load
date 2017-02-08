@@ -359,13 +359,8 @@ class Main:
         dictRowFunctions = []
         if self.iniIn('functions'):
             self.vOut.pprnt(self.iniConfig['functions'], 4)
-            # self.vOut.pprnt(self.iniConfig.items("functions"), 4)
-            # for variable, value in self.iniConfig.items('functions'):
-            pprint(self.iniConfig['functions'])
             for variable in self.iniConfig['functions']:
-                pprint(variable)
                 value = self.iniConfig['functions'][variable]
-                pprint(value)
                 self.vOut.prnt('function variable: {}'.format(variable), 4)
                 if self.args.iniyaml:
                     varParams = value
