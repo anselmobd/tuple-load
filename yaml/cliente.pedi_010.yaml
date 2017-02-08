@@ -1,5 +1,13 @@
 csv:
 
+  columns:
+    - CGC_9
+    - CGC_4
+    - CGC_2
+    - NOME_CLIENTE
+    - ENDERECO_CLIENTE
+    - BAIRRO
+
   fields:
 
     CGC_9:
@@ -32,22 +40,22 @@ sql:
     UPDATE PEDI_010 c
     set
       c.NOME_CLIENTE               = :NOME_CLIENTE
-    , FANTASIA_CLIENTE             = 'CRIATEX'
+    , FANTASIA_CLIENTE             = 'FISICO'
     , SITUACAO_CLIENTE             = 1
-    , TELEFONE_CLIENTE             = 33702121
+    , TELEFONE_CLIENTE             = 12332165
     , TELEX_CLIENTE                = 0
-    , FAX_CLIENTE                  = 0
+    , FAX_CLIENTE                  = 1
     , ENDERECO_CLIENTE             = :ENDERECO_CLIENTE
-    , CEP_CLIENTE                  = 89250000
-    , CXPOSTAL_CLIENTE             = ' '
+    , CEP_CLIENTE                  = 12345678
+    , CXPOSTAL_CLIENTE             = NULL
     , INSC_EST_CLIENTE             = 'ISENTO'
-    , PORTADOR_CLIENTE             = 1
-    , DATA_CAD_CLIENTE             = TIMESTAMP '2016=02=17 00:00:00.000000'
+    , PORTADOR_CLIENTE             = 0
+    , DATA_CAD_CLIENTE             = TIMESTAMP '2017-02-07 00:00:00.000000'
     , DATA_EXC_CLIENTE             = NULL
     , MOT_EXC_CLIENTE              = 0
-    , CDREPRES_CLIENTE             = 1
+    , CDREPRES_CLIENTE             = 0
     , BAIRRO                       = :BAIRRO
-    , COD_CIDADE                   = 4548
+    , COD_CIDADE                   = 1234
     , COD_CLIENTE                  = 0
     , DIG_CLIENTE                  = 0
     , SUB_REGIAO                   = 0
@@ -56,7 +64,7 @@ sql:
     , MAIOR_ACUMULO                = 0
     , MAIOR_ATRASO                 = 0
     , ATRASO_MEDIO                 = 0
-    , DATA_FUNDACAO                = TIMESTAMP '2015=01=01 00:00:00.000000'
+    , DATA_FUNDACAO                = NULL
     , NUMERO_FILIAIS               = 0
     , FATURAMENTO_ANO              = 0
     , ANO_FATURAMENTO              = 0
@@ -75,31 +83,31 @@ sql:
     , COD_RAMO_ATIV                = 0
     , CONCEITO_CLIENTE             = 0
     , TIPO_CLIENTE                 = 0
-    , PORTE_CLIENTE                = 1
+    , PORTE_CLIENTE                = 0
     , SEGMENTO_MERCADO             = 0
     , PARTICIP_EMPRESA             = 0
-    , DATA_ULT_COMPRA              = TIMESTAMP '2016=04=25 00:00:00.000000'
-    , FISICA_JURIDICA              = 2
-    , ENVIA_MALA                   = 2
-    , FAIXA_ETARIA                 = 6
+    , DATA_ULT_COMPRA              = NULL
+    , FISICA_JURIDICA              = 2 -- juridica
+    , ENVIA_MALA                   = 1
+    , FAIXA_ETARIA                 = 0
     , TIPO_PRODUTO                 = NULL
     , CLIENTE_PECA                 = 0
-    , LOCAL_COMPRA                 = 3
+    , LOCAL_COMPRA                 = 0
     , VALOR_ULT_COMPRA             = 0
-    , NR_SUFRAMA_CLI               = ' '
+    , NR_SUFRAMA_CLI               = NULL
     , TRAN_CLI_FORNE9              = 0
     , TRAN_CLI_FORNE4              = 0
     , TRAN_CLI_FORNE2              = 0
-    , VL_MAIOR_PEDIDO              = 350
+    , VL_MAIOR_PEDIDO              = 0
     , DT_MAIOR_PEDIDO              = NULL
     , TIPO_PRODUTO1                = NULL
     , TIPO_PRODUTO2                = NULL
     , TIPO_PRODUTO3                = NULL
-    , LIMITE_MAX_PED1              = 1000000
-    , LIMITE_MAX_PED2              = 1000000
-    , LIMITE_MAX_PED4              = 1000000
-    , LIMITE_MAX_PED7              = 1000000
-    , UNIDADE_LIM_PED              = 2
+    , LIMITE_MAX_PED1              = 0
+    , LIMITE_MAX_PED2              = 0
+    , LIMITE_MAX_PED4              = 0
+    , LIMITE_MAX_PED7              = 0
+    , UNIDADE_LIM_PED              = 0
     , CONTA_CONTABIL               = NULL
     , PRAZO_MEDIO                  = 0
     , DATA_ULT_FATUR               = NULL
@@ -108,7 +116,7 @@ sql:
     , VAL_MAIOR_FATUR              = 0
     , FORMA_PAGAMENTO              = 9
     , ACUMULADO_VENDAS             = 0
-    , E_MAIL                       = 'gisela@systextil.com.br'
+    , E_MAIL                       = NULL
     , CODIGO_CONTABIL              = 0
     , INSTRUCAO_INT                = 0
     , DIAS_INSTR_1                 = 0
@@ -116,18 +124,18 @@ sql:
     , INSTRUCAO_INT_2              = 0
     , DIAS_INSTR_2                 = 0
     , PERC_DESC_DUPLIC             = 0
-    , MENSAGEM_COBR                = ' '
-    , CODIGO_CLIENTE               = '123456'
+    , MENSAGEM_COBR                = NULL
+    , CODIGO_CLIENTE               = NULL
     , TIPO_CLI_EXTERIOR            = 0
     , PERC_ENCARGOS                = 0
-    , CLIENTE_ISENTO               = 1
+    , CLIENTE_ISENTO               = 0
     , PERC_VERBA_PROP              = 0
     , CAPITAL_INTERIOR             = 0
-    , VAL_LIM_CREDITO              = TIMESTAMP '1950=02=17 00:00:00.000000'
+    , VAL_LIM_CREDITO              = TIMESTAMP '2017-02-07 00:00:00.000000'
     , DATA_VENCTO                  = NULL
-    , SITUACAO_CADASTRO            = 1
-    , DATA_COMPL_CADASTRO          = TIMESTAMP '2016=02=17 00:00:00.000000'
-    , CRITERIO_ATENDIMENTO         = 2
+    , SITUACAO_CADASTRO            = 4
+    , DATA_COMPL_CADASTRO          = TIMESTAMP '2017-02-07 00:00:00.000000'
+    , CRITERIO_ATENDIMENTO         = 0
     , ATIV_CONFECCAO               = 0
     , ATIV_ATAC_CONF               = 0
     , ATIV_VAR_CONF                = 0
@@ -186,15 +194,15 @@ sql:
     , DATA_ULT_ATU_MERC            = NULL
     , OBS_MALA_DIRETA              = ' '
     , OBS_COMERCIAL                = NULL
-    , SIT_CARTELA                  = 0
-    , DT_CARTELA                   = NULL
+    , SIT_CARTELA                  = 1
+    , DT_CARTELA                   = TIMESTAMP '2017-02-07 00:00:00.000000'
     , OBS_CARTELA                  = ' '
     , VIP                          = 0
     , COD_SIT_COBRANCA             = 0
     , DATA_SIT_COBRANCA            = NULL
     , DATA_PROX_COBRANCA           = NULL
     , SIT_ZONEAMENTO               = 2
-    , OBS_ZONEAMENTO               = ' '
+    , OBS_ZONEAMENTO               = NULL
     , COD_SIT_COMERCIAL            = 0
     , DATA_SIT_COMERCIAL           = NULL
     , DATA_REATIVACAO              = NULL
@@ -204,7 +212,7 @@ sql:
     , ISENTO_SERASA                = 0
     , DATA_VALID_SUFRAMA           = NULL
     , DIGITACAO_PEDIDO             = 0
-    , DT_ALT_LIM_CREDITO           = TIMESTAMP '2016=02=17 00:00:00.000000'
+    , DT_ALT_LIM_CREDITO           = NULL
     , LANCA_COLECAO                = NULL
     , MARCAS_PROPRIAS              = 0
     , FORNE_PROD                   = 0
@@ -229,7 +237,7 @@ sql:
     , VAL_MAIOR_FATUR_ANT          = 0
     , DATA_MAIOR_TIT_ANT           = NULL
     , MAIOR_TITULO_ANT             = 0
-    , DATA_ULT_COMPRA_ANT          = TIMESTAMP '2016=04=25 00:00:00.000000'
+    , DATA_ULT_COMPRA_ANT          = NULL
     , VALOR_ULT_COMPRA_ANT         = 0
     , DATA_ULT_FATUR_ANT           = NULL
     , VALOR_ULT_FATUR_ANT          = 0
@@ -238,7 +246,7 @@ sql:
     , DT_MAIOR_ACUMULO_ANT         = NULL
     , MAIOR_ACUMULO_ANT            = 0
     , DT_MAIOR_PEDIDO_ANT          = NULL
-    , VL_MAIOR_PEDIDO_ANT          = 350
+    , VL_MAIOR_PEDIDO_ANT          = 0
     , CODIGO_EMPRESA               = 0
     , TIPO_FRETE                   = 0
     , CLI_QUEBRA_PECA              = 0
@@ -247,15 +255,15 @@ sql:
     , CLI_QUEBRA_FIOS              = 0
     , ACEITA_DESP_COBR             = 2
     , CELULAR_CLIENTE              = 0
-    , CALL_FREE_CLIENTE            = ' '
-    , CLIENTE_INTEGRACAO           = ' '
-    , NUMERO_IMOVEL                = '20'
-    , COMPLEMENTO                  = ' '
+    , CALL_FREE_CLIENTE            = NULL
+    , CLIENTE_INTEGRACAO           = NULL
+    , NUMERO_IMOVEL                = '123'
+    , COMPLEMENTO                  = '1'
     , COD_CIDADE_ZONA_FRANCA       = 0
-    , DES_ABREVIATURA              = ' '
+    , DES_ABREVIATURA              = '0'
     , IND_ENVIA_INFOTINT           = 'S'
     , COD_RELACION_SPED_CTB        = 0
-    , NFE_E_MAIL                   = 'gisela@systextil.com.br'
+    , NFE_E_MAIL                   = NULL
     , PRIORIDADE_SUGESTAO          = 9
     , IND_DESC_PIS_COFINS          = 'N'
     , SENHA_WEB                    = NULL
@@ -527,26 +535,26 @@ sql:
     , DATA_LIMITE_VENDA_TIT_ATRASO
     , CREDITO_TROCA
     ) VALUES (
-      :CGC_9
-    , :CGC_4
-    , :CGC_2
-    , :NOME_CLIENTE
-    , 'CRIATEX'                              -- FANTASIA_CLIENTE
+      :CGC_9                                 -- CGC_9
+    , :CGC_4                                 -- CGC_4
+    , :CGC_2                                 -- CGC_2
+    , :NOME_CLIENTE                          -- NOME_CLIENTE
+    , 'FISICO'                               -- FANTASIA_CLIENTE
     , 1                                      -- SITUACAO_CLIENTE
-    , 33702121                               -- TELEFONE_CLIENTE
+    , 12332165                               -- TELEFONE_CLIENTE
     , 0                                      -- TELEX_CLIENTE
-    , 0                                      -- FAX_CLIENTE
-    , :ENDERECO_CLIENTE
-    , 89250000                               -- CEP_CLIENTE
-    , ' '                                    -- CXPOSTAL_CLIENTE
+    , 1                                      -- FAX_CLIENTE
+    , :ENDERECO_CLIENTE                      -- ENDERECO_CLIENTE
+    , 12345678                               -- CEP_CLIENTE
+    , NULL                                   -- CXPOSTAL_CLIENTE
     , 'ISENTO'                               -- INSC_EST_CLIENTE
-    , 1                                      -- PORTADOR_CLIENTE
-    , TIMESTAMP '2016-02-17 00:00:00.000000' -- DATA_CAD_CLIENTE
+    , 0                                      -- PORTADOR_CLIENTE
+    , TIMESTAMP '2017-02-07 00:00:00.000000' -- DATA_CAD_CLIENTE
     , NULL                                   -- DATA_EXC_CLIENTE
     , 0                                      -- MOT_EXC_CLIENTE
-    , 1                                      -- CDREPRES_CLIENTE
-    , :BAIRRO
-    , 4548                                   -- COD_CIDADE
+    , 0                                      -- CDREPRES_CLIENTE
+    , :BAIRRO                                -- BAIRRO
+    , 1234                                   -- COD_CIDADE
     , 0                                      -- COD_CLIENTE
     , 0                                      -- DIG_CLIENTE
     , 0                                      -- SUB_REGIAO
@@ -555,7 +563,7 @@ sql:
     , 0                                      -- MAIOR_ACUMULO
     , 0                                      -- MAIOR_ATRASO
     , 0                                      -- ATRASO_MEDIO
-    , TIMESTAMP '2015-01-01 00:00:00.000000' -- DATA_FUNDACAO
+    , NULL                                   -- DATA_FUNDACAO
     , 0                                      -- NUMERO_FILIAIS
     , 0                                      -- FATURAMENTO_ANO
     , 0                                      -- ANO_FATURAMENTO
@@ -574,31 +582,31 @@ sql:
     , 0                                      -- COD_RAMO_ATIV
     , 0                                      -- CONCEITO_CLIENTE
     , 0                                      -- TIPO_CLIENTE
-    , 1                                      -- PORTE_CLIENTE
+    , 0                                      -- PORTE_CLIENTE
     , 0                                      -- SEGMENTO_MERCADO
     , 0                                      -- PARTICIP_EMPRESA
-    , TIMESTAMP '2016-04-25 00:00:00.000000' -- DATA_ULT_COMPRA
-    , 2                                      -- FISICA_JURIDICA
-    , 2                                      -- ENVIA_MALA
-    , 6                                      -- FAIXA_ETARIA
+    , NULL                                   -- DATA_ULT_COMPRA
+    , 2 -- juridica                          -- FISICA_JURIDICA
+    , 1                                      -- ENVIA_MALA
+    , 0                                      -- FAIXA_ETARIA
     , NULL                                   -- TIPO_PRODUTO
     , 0                                      -- CLIENTE_PECA
-    , 3                                      -- LOCAL_COMPRA
+    , 0                                      -- LOCAL_COMPRA
     , 0                                      -- VALOR_ULT_COMPRA
-    , ' '                                    -- NR_SUFRAMA_CLI
+    , NULL                                   -- NR_SUFRAMA_CLI
     , 0                                      -- TRAN_CLI_FORNE9
     , 0                                      -- TRAN_CLI_FORNE4
     , 0                                      -- TRAN_CLI_FORNE2
-    , 350                                    -- VL_MAIOR_PEDIDO
+    , 0                                      -- VL_MAIOR_PEDIDO
     , NULL                                   -- DT_MAIOR_PEDIDO
     , NULL                                   -- TIPO_PRODUTO1
     , NULL                                   -- TIPO_PRODUTO2
     , NULL                                   -- TIPO_PRODUTO3
-    , 1000000                                -- LIMITE_MAX_PED1
-    , 1000000                                -- LIMITE_MAX_PED2
-    , 1000000                                -- LIMITE_MAX_PED4
-    , 1000000                                -- LIMITE_MAX_PED7
-    , 2                                      -- UNIDADE_LIM_PED
+    , 0                                      -- LIMITE_MAX_PED1
+    , 0                                      -- LIMITE_MAX_PED2
+    , 0                                      -- LIMITE_MAX_PED4
+    , 0                                      -- LIMITE_MAX_PED7
+    , 0                                      -- UNIDADE_LIM_PED
     , NULL                                   -- CONTA_CONTABIL
     , 0                                      -- PRAZO_MEDIO
     , NULL                                   -- DATA_ULT_FATUR
@@ -607,7 +615,7 @@ sql:
     , 0                                      -- VAL_MAIOR_FATUR
     , 9                                      -- FORMA_PAGAMENTO
     , 0                                      -- ACUMULADO_VENDAS
-    , 'gisela@systextil.com.br'              -- E_MAIL
+    , NULL                                   -- E_MAIL
     , 0                                      -- CODIGO_CONTABIL
     , 0                                      -- INSTRUCAO_INT
     , 0                                      -- DIAS_INSTR_1
@@ -615,18 +623,18 @@ sql:
     , 0                                      -- INSTRUCAO_INT_2
     , 0                                      -- DIAS_INSTR_2
     , 0                                      -- PERC_DESC_DUPLIC
-    , ' '                                    -- MENSAGEM_COBR
-    , '123456'                               -- CODIGO_CLIENTE
+    , NULL                                   -- MENSAGEM_COBR
+    , NULL                                   -- CODIGO_CLIENTE
     , 0                                      -- TIPO_CLI_EXTERIOR
     , 0                                      -- PERC_ENCARGOS
-    , 1                                      -- CLIENTE_ISENTO
+    , 0                                      -- CLIENTE_ISENTO
     , 0                                      -- PERC_VERBA_PROP
     , 0                                      -- CAPITAL_INTERIOR
-    , TIMESTAMP '1950-02-17 00:00:00.000000' -- VAL_LIM_CREDITO
+    , TIMESTAMP '2017-02-07 00:00:00.000000' -- VAL_LIM_CREDITO
     , NULL                                   -- DATA_VENCTO
-    , 1                                      -- SITUACAO_CADASTRO
-    , TIMESTAMP '2016-02-17 00:00:00.000000' -- DATA_COMPL_CADASTRO
-    , 2                                      -- CRITERIO_ATENDIMENTO
+    , 4                                      -- SITUACAO_CADASTRO
+    , TIMESTAMP '2017-02-07 00:00:00.000000' -- DATA_COMPL_CADASTRO
+    , 0                                      -- CRITERIO_ATENDIMENTO
     , 0                                      -- ATIV_CONFECCAO
     , 0                                      -- ATIV_ATAC_CONF
     , 0                                      -- ATIV_VAR_CONF
@@ -685,15 +693,15 @@ sql:
     , NULL                                   -- DATA_ULT_ATU_MERC
     , ' '                                    -- OBS_MALA_DIRETA
     , NULL                                   -- OBS_COMERCIAL
-    , 0                                      -- SIT_CARTELA
-    , NULL                                   -- DT_CARTELA
+    , 1                                      -- SIT_CARTELA
+    , TIMESTAMP '2017-02-07 00:00:00.000000' -- DT_CARTELA
     , ' '                                    -- OBS_CARTELA
     , 0                                      -- VIP
     , 0                                      -- COD_SIT_COBRANCA
     , NULL                                   -- DATA_SIT_COBRANCA
     , NULL                                   -- DATA_PROX_COBRANCA
     , 2                                      -- SIT_ZONEAMENTO
-    , ' '                                    -- OBS_ZONEAMENTO
+    , NULL                                   -- OBS_ZONEAMENTO
     , 0                                      -- COD_SIT_COMERCIAL
     , NULL                                   -- DATA_SIT_COMERCIAL
     , NULL                                   -- DATA_REATIVACAO
@@ -703,7 +711,7 @@ sql:
     , 0                                      -- ISENTO_SERASA
     , NULL                                   -- DATA_VALID_SUFRAMA
     , 0                                      -- DIGITACAO_PEDIDO
-    , TIMESTAMP '2016-02-17 00:00:00.000000' -- DT_ALT_LIM_CREDITO
+    , NULL                                   -- DT_ALT_LIM_CREDITO
     , NULL                                   -- LANCA_COLECAO
     , 0                                      -- MARCAS_PROPRIAS
     , 0                                      -- FORNE_PROD
@@ -728,7 +736,7 @@ sql:
     , 0                                      -- VAL_MAIOR_FATUR_ANT
     , NULL                                   -- DATA_MAIOR_TIT_ANT
     , 0                                      -- MAIOR_TITULO_ANT
-    , TIMESTAMP '2016-04-25 00:00:00.000000' -- DATA_ULT_COMPRA_ANT
+    , NULL                                   -- DATA_ULT_COMPRA_ANT
     , 0                                      -- VALOR_ULT_COMPRA_ANT
     , NULL                                   -- DATA_ULT_FATUR_ANT
     , 0                                      -- VALOR_ULT_FATUR_ANT
@@ -737,7 +745,7 @@ sql:
     , NULL                                   -- DT_MAIOR_ACUMULO_ANT
     , 0                                      -- MAIOR_ACUMULO_ANT
     , NULL                                   -- DT_MAIOR_PEDIDO_ANT
-    , 350                                    -- VL_MAIOR_PEDIDO_ANT
+    , 0                                      -- VL_MAIOR_PEDIDO_ANT
     , 0                                      -- CODIGO_EMPRESA
     , 0                                      -- TIPO_FRETE
     , 0                                      -- CLI_QUEBRA_PECA
@@ -746,15 +754,15 @@ sql:
     , 0                                      -- CLI_QUEBRA_FIOS
     , 2                                      -- ACEITA_DESP_COBR
     , 0                                      -- CELULAR_CLIENTE
-    , ' '                                    -- CALL_FREE_CLIENTE
-    , ' '                                    -- CLIENTE_INTEGRACAO
-    , '20'                                   -- NUMERO_IMOVEL
-    , ' '                                    -- COMPLEMENTO
+    , NULL                                   -- CALL_FREE_CLIENTE
+    , NULL                                   -- CLIENTE_INTEGRACAO
+    , '123'                                  -- NUMERO_IMOVEL
+    , '1'                                    -- COMPLEMENTO
     , 0                                      -- COD_CIDADE_ZONA_FRANCA
-    , ' '                                    -- DES_ABREVIATURA
+    , '0'                                    -- DES_ABREVIATURA
     , 'S'                                    -- IND_ENVIA_INFOTINT
     , 0                                      -- COD_RELACION_SPED_CTB
-    , 'gisela@systextil.com.br'              -- NFE_E_MAIL
+    , NULL                                   -- NFE_E_MAIL
     , 9                                      -- PRIORIDADE_SUGESTAO
     , 'N'                                    -- IND_DESC_PIS_COFINS
     , NULL                                   -- SENHA_WEB
@@ -781,6 +789,7 @@ sql:
     , c.CGC_4
     , c.CGC_2
     from PEDI_010 c
+    where c.CGC_9 = '62774319'
 
   delete: |
     DELETE FROM PEDI_010 x
