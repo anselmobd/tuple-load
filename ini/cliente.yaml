@@ -1,0 +1,72 @@
+read:
+  db: f1
+  sql:
+    SELECT
+      c_cgc CGC
+    , c_cgc
+    , strtrim(coalesce(c_RSOC, '')) NOME_CLIENTE_t
+    , strtrim(coalesce(c_END, '')) ENDERECO_CLIENTE_t
+    , strtrim(coalesce(c_BAIRRO, '')) BAIRRO_t
+    FROM DIS_CLI c
+    where strlen( strtrim(coalesce(c.C_CGC, '') ) ) = 14
+    ORDER BY
+      c_cgc
+
+functions:
+  CGC_9:
+    str:
+      field: cgc
+      method: slice
+      args:
+        - ''
+        - '8'
+  CGC_4:
+    str:
+      field: cgc
+      method: slice
+      args:
+        - '8'
+        - '12'
+  CGC_2:
+    str:
+      field: cgc
+      method: slice
+      args:
+        - '12'
+        - '14'
+  NOME_CLIENTE_t:
+    str:
+      method: re.sub
+      args:
+        - '[^a-zA-Z0-9_\\.\\-\\/\\(\\)& ]'
+        - '_'
+  NOME_CLIENTE:
+    str:
+      field: nome_cliente_t
+      method: slice
+      args:
+        - ''
+        - '40'
+  ENDERECO_CLIENTE:
+    str:
+      field: endereco_cliente_t
+      method: slice
+      args:
+        - ''
+        - '60'
+  BAIRRO:
+    str:
+      field: bairro_t
+      method: slice
+      args:
+        - ''
+        - '20'
+
+columns:
+  c_cgc: t
+  CGC_9: t
+  CGC_4: t
+  CGC_2: t
+  NOME_CLIENTE: t
+  ENDERECO_CLIENTE: t
+  BAIRRO: t
