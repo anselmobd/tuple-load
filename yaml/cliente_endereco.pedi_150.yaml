@@ -1,0 +1,80 @@
+csv:
+
+  columns:
+    - CGC_9
+    - CGC_4
+    - CGC_2
+    - NOME_CLIENTE
+    - ENDERECO_CLIENTE
+    - BAIRRO
+
+  fields:
+
+    CGC_9:
+      type: integer
+
+    CGC_4:
+      type: integer
+
+    CGC_2:
+      type: integer
+
+  keys:
+    - CGC_9
+    - CGC_4
+    - CGC_2
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(c.NOME_CLIENTE)
+    FROM pedi_150 c
+    WHERE c.CGC_9 = :CGC_9
+      AND c.CGC_4 = :CGC_4
+      AND c.CGC_2 = :CGC_2
+
+  update: |
+    UPDATE pedi_150 c
+    set
+      c.NOME_CLIENTE               = :NOME_CLIENTE
+    WHERE c.CGC_9 = :CGC_9
+      AND c.CGC_4 = :CGC_4
+      AND c.CGC_2 = :CGC_2
+
+  insert: |
+    insert into pedi_150 (
+      CD_CLI_CGC_CLI9,
+      CD_CLI_CGC_CLI4,
+      CD_CLI_CGC_CLI2,
+      SEQ_ENDERECO,
+      TIPO_ENDERECO,
+      END_ENTR_COBR,
+      CGC_ENTR_COBR9,
+      CGC_ENTR_COBR4,
+      CGC_ENTR_COBR2,
+      IE_ENTR_COBR,
+      CEP_ENTR_COBR,
+      BAIRRO_ENTR_COBR,
+      CID_ENTR_COBR,
+      NUMERO_IMOVEL,
+      COMPLEMENTO_ENDERECO,
+      FONE_ENTR_COBR,
+      GERA_NOTA_ENTREG
+    ) VALUES (
+
+  key_list: |
+    SELECT
+      c.CGC_9
+    , c.CGC_4
+    , c.CGC_2
+    from pedi_150 c
+    where c.CGC_9 = '62774319'
+
+  delete: |
+    DELETE FROM pedi_150 x
+    WHERE c.CGC_9 = :CGC_9
+      AND c.CGC_4 = :CGC_4
+      AND c.CGC_2 = :CGC_2
