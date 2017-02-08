@@ -13,6 +13,7 @@ import hashlib
 
 import configparser
 import json
+import yaml
 import csv
 
 import gettext
@@ -149,6 +150,10 @@ def str_field(methodDict, variable):
                 reResult = re.search(regex, dictRow[field])
                 if reResult:
                     result = reResult.group(1)
+            elif method['method'] == 're.sub':
+                pattern = method['args'][0]
+                repl = method['args'][1]
+                result = re.sub(pattern, repl, dictRow[field])
             elif method['method'] == 'format':
                 args = [field] + method['other_fields']
                 values = [dictRow[a] for a in args]
@@ -189,8 +194,22 @@ class Main:
                 description, fileName))
             sys.exit(exitError)
 
+    def iniIn(self, detail, master=None):
+        if self.args.iniyaml:
+            if master:
+                result = detail in self.iniConfig[master]
+            else:
+                result = detail in self.iniConfig
+        else:
+            if master:
+                result = detail in list(self.iniConfig[master])
+            else:
+                result = detail in self.iniConfig.sections()
+        return result
+
     def connectDataBase(self):
-        dbfrom = 'db.from.{}'.format(self.iniConfig.get('read', 'db'))
+        self.vOut.prnt('->connectDataBase', 4)
+        dbfrom = 'db.from.{}'.format(self.iniConfig['read']['db'])
         dbms = self.config.get(dbfrom, 'dbms')
 
         if dbms == 'mssql':
@@ -229,7 +248,7 @@ class Main:
         parser.add_argument(
             "iniFile",
             help='data group INI file name, in the format '
-            '[dir/]data_group_name[.version][.ini]')
+            '[dir/]data_group_name[.version][.ini|.yaml]')
         parser.add_argument(
             "csvFile",
             nargs='?',
@@ -238,6 +257,10 @@ class Main:
             'in the format [dir/]_file_name[.csv] '
             'By default the data group name is underscored and used: '
             '_data_group_name')
+        parser.add_argument(
+            "--iniyaml",
+            action="store_true",
+            help='INI file is in YAML format')
         parser.add_argument(
             "--cfg", "--cfgfile",
             type=str,
@@ -263,8 +286,12 @@ class Main:
             help="increase output verbosity")
         self.args = parser.parse_args()
 
-        self.args.iniFile = \
-            oxyu.fileWithRequiredExtension(self.args.iniFile, 'ini')
+        if self.args.iniyaml:
+            self.args.iniFile = \
+                oxyu.fileWithRequiredExtension(self.args.iniFile, 'yaml')
+        else:
+            self.args.iniFile = \
+                oxyu.fileWithRequiredExtension(self.args.iniFile, 'ini')
 
         self.args.iniFile = \
             oxyu.fileWithDefaultDir(self.args.ini, self.args.iniFile)
@@ -286,10 +313,14 @@ class Main:
 
         self.checkFile(self.args.cfg, 'Config', 12)
 
-        self.iniConfig = configparser.RawConfigParser()
-        self.iniConfig.read(self.args.iniFile)
+        if self.args.iniyaml:
+            with open(self.args.iniFile) as yaml_data:
+                self.iniConfig = yaml.load(yaml_data)
+        else:
+            self.iniConfig = configparser.RawConfigParser()
+            self.iniConfig.read(self.args.iniFile)
 
-        if 'inactive' in self.iniConfig.sections():
+        if self.iniIn('inactive'):
             self.vOut.prnt('Inactive INI file')
             sys.exit(21)
 
@@ -326,11 +357,20 @@ class Main:
         self.vOut.prnt('->loadFunctionVariables', 3)
 
         dictRowFunctions = []
-        if 'functions' in self.iniConfig.sections():
-            self.vOut.pprnt(self.iniConfig.items("functions"), 4)
-            for variable, value in self.iniConfig.items('functions'):
+        if self.iniIn('functions'):
+            self.vOut.pprnt(self.iniConfig['functions'], 4)
+            # self.vOut.pprnt(self.iniConfig.items("functions"), 4)
+            # for variable, value in self.iniConfig.items('functions'):
+            pprint(self.iniConfig['functions'])
+            for variable in self.iniConfig['functions']:
+                pprint(variable)
+                value = self.iniConfig['functions'][variable]
+                pprint(value)
                 self.vOut.prnt('function variable: {}'.format(variable), 4)
-                varParams = json.loads(value)
+                if self.args.iniyaml:
+                    varParams = value
+                else:
+                    varParams = json.loads(value)
                 if 'count' in varParams:
                     funcParams = varParams['count']
                     dictRowFunctions.append([variable, count_field(
@@ -363,7 +403,7 @@ class Main:
         return dictRowFunctions
 
     def addVariablesToRow(self, dictRow):
-        if 'variables' in self.iniConfig.sections():
+        if self.iniIn('variables'):
             for variable, value in self.iniConfig.items('variables'):
                 varParams = json.loads(value)
                 if 'value' in varParams.keys():
@@ -389,7 +429,7 @@ class Main:
 
     def executeMaster(self):
         self.doHeader = True
-        if 'master.db' not in list(self.iniConfig['read']):
+        if not self.iniIn('master.db', 'read'):
             self.queryParam = None
             self.executeQueries()
         else:
@@ -409,10 +449,10 @@ class Main:
                 columns = next(reader)
                 countRows = 0
                 firstRows = -1
-                if 'master.first' in list(self.iniConfig['read']):
+                if self.iniIn('master.first', 'read'):
                     firstRows = int(self.iniConfig['read']['master.first'])
                 skipRows = 0
-                if 'master.skip' in list(self.iniConfig['read']):
+                if self.iniIn('master.skip', 'read'):
                     skipRows = int(self.iniConfig['read']['master.skip'])
                 for row in reader:
                     if skipRows > 0:
@@ -438,9 +478,9 @@ class Main:
                 sqlVar = 'sql'
             else:
                 sqlVar = 'sql{}'.format(i)
-            if sqlVar in list(self.iniConfig['read']):
+            if self.iniIn(sqlVar, 'read'):
                 self.vOut.prnt('sql = {}'.format(sqlVar), 3)
-                sqlF = self.iniConfig.get('read', sqlVar)
+                sqlF = self.iniConfig['read'][sqlVar]
                 self.executeQuery(sqlF)
 
     def executeQuery(self, sqlF):
@@ -585,7 +625,7 @@ class Main:
     def doPostProcess(self):
         self.vOut.prnt('->doPostProcess', 3)
 
-        if 'post_process' in self.iniConfig.sections():
+        if self.iniIn('post_process'):
             self.vOut.pprnt(self.iniConfig.items('post_process'), 4)
             for variable, value in self.iniConfig.items('post_process'):
                 self.vOut.pprnt(variable, 4)
