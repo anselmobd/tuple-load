@@ -195,6 +195,12 @@ class Main:
             sys.exit(exitError)
 
     def iniIn(self, detail, master=None):
+        # self.vOut.prnt('debug2')
+        # self.vOut.ppr(detail)
+        if detail not in ('inactive', 'master.db', 'sql', 'functions'):
+            pass
+            # sys.exit(99)
+
         if self.args.iniyaml:
             if master:
                 result = detail in self.iniConfig[master]
@@ -206,6 +212,37 @@ class Main:
             else:
                 result = detail in self.iniConfig.sections()
         return result
+
+    def iniGet(self, *levels):
+        self.vOut.prnt('->iniGet', 4)
+        self.vOut.ppr(levels)
+        self.vOut.ppr(levels[0])
+        if self.args.iniyaml:
+            self.vOut.prnt('- YAML', 4)
+            result = self.iniConfig[levels[0]]
+        else:
+            self.vOut.prnt('- INI', 4)
+            result = self.iniConfig.items(levels[0])
+        self.vOut.ppr(4, ('- result = ', result))
+        for i in range(1, len(levels)-1):
+            result = result[i]
+        return result
+
+    def iniIter(self, *levels):
+        self.vOut.prnt('->iniIter stru=', 4)
+        stru = self.iniGet(*levels)
+        self.vOut.pprnt(stru, 4)
+        if self.args.iniyaml:
+            for variable in stru:
+                print('vvvvvvvvv')
+                self.vOut.ppr(list(variable.keys())[0])
+                self.vOut.ppr(variable[list(variable.keys())[0]])
+                print('^^^^^^^^^')
+                yield list(variable.keys())[0], \
+                    variable[list(variable.keys())[0]]
+        else:
+            for variable, value in stru:
+                yield variable, value
 
     def connectDataBase(self):
         self.vOut.prnt('->connectDataBase', 4)
@@ -319,6 +356,8 @@ class Main:
         else:
             self.iniConfig = configparser.RawConfigParser()
             self.iniConfig.read(self.args.iniFile)
+            self.vOut.ppr(self.iniConfig)
+            print('-=-=-=-=-=-=-=-=-=-=-=-=-')
 
         if self.iniIn('inactive'):
             self.vOut.prnt('Inactive INI file')
@@ -358,14 +397,17 @@ class Main:
 
         dictRowFunctions = []
         if self.iniIn('functions'):
-            self.vOut.pprnt(self.iniConfig['functions'], 4)
-            for variable in self.iniConfig['functions']:
-                value = self.iniConfig['functions'][variable]
+            self.vOut.pprnt(self.iniGet('functions'), 4)
+            print('====== for ======')
+            for variable, value in self.iniIter('functions'):
+                variable = variable.lower()
                 self.vOut.prnt('function variable: {}'.format(variable), 4)
                 if self.args.iniyaml:
                     varParams = value
                 else:
                     varParams = json.loads(value)
+                self.vOut.ppr('- varParams = ', varParams)
+                self.vOut.ppr('- varParams.keys() = ', varParams.keys())
                 if 'count' in varParams:
                     funcParams = varParams['count']
                     dictRowFunctions.append([variable, count_field(
@@ -388,6 +430,8 @@ class Main:
                     dictRowFunctions.append(
                         [variable, trim_field(funcParams['field'])])
                 elif 'str' in varParams:
+                    self.vOut.prnt("'str' in varParams")
+                    # sys.exit(99)
                     funcParams = varParams['str']
                     dictRowFunctions.append(
                         [variable, str_field(funcParams, variable)])
@@ -497,13 +541,19 @@ class Main:
 
             dictRow = dict(zip(columns, row))
 
+            self.vOut.prnt('debug1')
+            self.vOut.pprnt(dictRow)
+            # sys.exit(99)
+
             self.addVariablesToRow(dictRow)
 
             self.execFunctionsToRow(dictRowFunctions, dictRow)
 
             dataLine = ''
             separator = ''
-            for column, spec in self.iniConfig.items("columns"):
+            # for column, spec in self.iniConfig.items("columns"):
+            for column, spec in self.iniIter('columns'):
+                column = column.lower()
                 # print(column, spec)
                 colType = spec[0]
                 colParams = {}
