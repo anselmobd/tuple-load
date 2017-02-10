@@ -202,23 +202,17 @@ class Main:
 
     def iniGet(self, *levels):
         self.vOut.prnt('->iniGet', 4)
-        self.vOut.ppr(levels)
-        self.vOut.ppr(levels[0])
         if self.args.iniyaml:
-            self.vOut.prnt('- YAML', 4)
             result = self.iniConfig[levels[0]]
         else:
-            self.vOut.prnt('- INI', 4)
             result = self.iniConfig.items(levels[0])
-        self.vOut.ppr(4, ('- result = ', result))
         for i in range(1, len(levels)-1):
             result = result[i]
         return result
 
     def iniIter(self, *levels):
-        self.vOut.prnt('->iniIter stru=', 4)
+        self.vOut.prnt('->iniIter', 4)
         stru = self.iniGet(*levels)
-        self.vOut.pprnt(stru, 4)
         if self.args.iniyaml:
             for variable in stru:
                 yield list(variable.keys())[0], \
@@ -339,7 +333,7 @@ class Main:
         else:
             self.iniConfig = configparser.RawConfigParser()
             self.iniConfig.read(self.args.iniFile)
-            self.vOut.ppr(self.iniConfig)
+        self.vOut.ppr(4, self.iniConfig)
 
         if self.iniIn('inactive'):
             self.vOut.prnt('Inactive INI file')
@@ -379,7 +373,6 @@ class Main:
 
         dictRowFunctions = []
         if self.iniIn('functions'):
-            self.vOut.pprnt(self.iniGet('functions'), 4)
             for variable, value in self.iniIter('functions'):
                 variable = variable.lower()
                 self.vOut.prnt('function variable: {}'.format(variable), 4)
@@ -387,8 +380,6 @@ class Main:
                     varParams = value
                 else:
                     varParams = json.loads(value)
-                self.vOut.ppr('- varParams = ', varParams)
-                self.vOut.ppr('- varParams.keys() = ', varParams.keys())
                 if 'count' in varParams:
                     funcParams = varParams['count']
                     dictRowFunctions.append([variable, count_field(
@@ -411,7 +402,6 @@ class Main:
                     dictRowFunctions.append(
                         [variable, trim_field(funcParams['field'])])
                 elif 'str' in varParams:
-                    self.vOut.prnt("'str' in varParams")
                     funcParams = varParams['str']
                     dictRowFunctions.append(
                         [variable, str_field(funcParams, variable)])
