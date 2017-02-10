@@ -43,7 +43,8 @@ class VerboseOutput:
     def ppr(self, verbosity, *obj):
         ''' PPrint 1 or more objects if verbosity >= x '''
         if not isinstance(verbosity, int):
-            verbosity, *obj = 1, verbosity
+            obj = (verbosity,) + obj
+            verbosity = 1
         for o in obj:
             self.pprnt(o, verbosity)
 
