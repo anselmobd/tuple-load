@@ -184,7 +184,7 @@ class Main:
         self.vOut.prnt(description + ' file: {}'.format(fileName))
         if not os.path.exists(fileName):
             print('"{}" file "{}" does not exist'.format(
-                description, fileName))
+                description, fileName), file=sys.stderr)
             sys.exit(exitError)
 
     def iniIn(self, detail, master=None):
@@ -300,6 +300,9 @@ class Main:
             help="increase output verbosity")
         self.args = parser.parse_args()
 
+    def configProcess(self):
+        self.vOut.prnt('->configProcess', 2)
+
         if self.args.iniyaml:
             self.args.iniFile = \
                 oxyu.fileWithRequiredExtension(self.args.iniFile, 'yaml')
@@ -321,8 +324,6 @@ class Main:
         self.args.csvFile = \
             oxyu.fileWithDefaultDir(self.args.csv, self.args.csvFile)
 
-    def configProcess(self):
-        self.vOut.prnt('->configProcess', 2)
         self.checkFile(self.args.iniFile, 'INI', 11)
 
         self.checkFile(self.args.cfg, 'Config', 12)
@@ -336,7 +337,7 @@ class Main:
         self.vOut.ppr(4, self.iniConfig)
 
         if self.iniIn('inactive'):
-            self.vOut.prnt('Inactive INI file')
+            print('Inactive INI file', file=sys.stderr)
             sys.exit(21)
 
         self.config = configparser.RawConfigParser()
