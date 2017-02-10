@@ -132,19 +132,12 @@ def str_field(methodDict, variable):
                 pos = int(method['args'][0])
                 result = dictRow[field][pos]
             elif method['method'] == 'slice':
-                if method['args'][0] != '':
-                    ini = int(method['args'][0])
-                else:
-                    ini = None
-                if len(method['args']) > 1 and method['args'][1] != '':
-                    end = int(method['args'][1])
-                else:
-                    end = None
-                if len(method['args']) > 2 and method['args'][2] != '':
-                    step = int(method['args'][2])
-                else:
-                    step = None
-                result = dictRow[field][ini:end:step]
+                args = [None] * 3
+                for iArg in range(3):
+                    if len(method['args']) > iArg \
+                                and method['args'][iArg] != '':
+                        args[iArg] = int(method['args'][iArg])
+                result = dictRow[field][args[0]:args[1]:args[2]]
             elif method['method'] == 're.group':
                 regex = method['args'][0]
                 reResult = re.search(regex, dictRow[field])
@@ -195,12 +188,6 @@ class Main:
             sys.exit(exitError)
 
     def iniIn(self, detail, master=None):
-        # self.vOut.prnt('debug2')
-        # self.vOut.ppr(detail)
-        if detail not in ('inactive', 'master.db', 'sql', 'functions'):
-            pass
-            # sys.exit(99)
-
         if self.args.iniyaml:
             if master:
                 result = detail in self.iniConfig[master]
@@ -234,10 +221,6 @@ class Main:
         self.vOut.pprnt(stru, 4)
         if self.args.iniyaml:
             for variable in stru:
-                print('vvvvvvvvv')
-                self.vOut.ppr(list(variable.keys())[0])
-                self.vOut.ppr(variable[list(variable.keys())[0]])
-                print('^^^^^^^^^')
                 yield list(variable.keys())[0], \
                     variable[list(variable.keys())[0]]
         else:
@@ -357,7 +340,6 @@ class Main:
             self.iniConfig = configparser.RawConfigParser()
             self.iniConfig.read(self.args.iniFile)
             self.vOut.ppr(self.iniConfig)
-            print('-=-=-=-=-=-=-=-=-=-=-=-=-')
 
         if self.iniIn('inactive'):
             self.vOut.prnt('Inactive INI file')
@@ -398,7 +380,6 @@ class Main:
         dictRowFunctions = []
         if self.iniIn('functions'):
             self.vOut.pprnt(self.iniGet('functions'), 4)
-            print('====== for ======')
             for variable, value in self.iniIter('functions'):
                 variable = variable.lower()
                 self.vOut.prnt('function variable: {}'.format(variable), 4)
@@ -431,7 +412,6 @@ class Main:
                         [variable, trim_field(funcParams['field'])])
                 elif 'str' in varParams:
                     self.vOut.prnt("'str' in varParams")
-                    # sys.exit(99)
                     funcParams = varParams['str']
                     dictRowFunctions.append(
                         [variable, str_field(funcParams, variable)])
@@ -526,7 +506,6 @@ class Main:
         self.vOut.prnt('->executeQuery', 3)
 
         curF = self.db.cursorExecute(sqlF, self.queryParam)
-        # curF = self.db.cursorExecute(sqlF, data=[('302')])
 
         columns = [column[0].lower() for column in curF.description]
 
@@ -541,10 +520,6 @@ class Main:
 
             dictRow = dict(zip(columns, row))
 
-            self.vOut.prnt('debug1')
-            self.vOut.pprnt(dictRow)
-            # sys.exit(99)
-
             self.addVariablesToRow(dictRow)
 
             self.execFunctionsToRow(dictRowFunctions, dictRow)
@@ -554,7 +529,6 @@ class Main:
             # for column, spec in self.iniConfig.items("columns"):
             for column, spec in self.iniIter('columns'):
                 column = column.lower()
-                # print(column, spec)
                 colType = spec[0]
                 colParams = {}
                 if len(spec) > 2:
@@ -599,7 +573,6 @@ class Main:
                     if not colValue:
                         colValue = ''
                     else:
-                        # print(type(dictRow[column]))
                         colValue = colValue.strftime(colParams['format'])
 
                 dataLine += '{}{}'.format(separator, colValue)
@@ -610,14 +583,10 @@ class Main:
                 separator = ';'
 
             if self.doHeader:
-                # print(headerLine)
                 self.csvNew.write('{}\n'.format(headerLine))
                 self.doHeader = False
 
-            # print(dataLine)
             self.csvNew.write('{}\n'.format(dataLine))
-
-            # sys.exit(2)
 
     def sortCsv(self, varParams, fromCsv, toCsv):
         self.vOut.prnt('->sortCsv', 3)
