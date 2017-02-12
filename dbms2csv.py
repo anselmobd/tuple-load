@@ -328,12 +328,14 @@ class Main:
 
         self.checkFile(self.args.cfg, 'Config', 12)
 
-        if self.args.iniyaml:
-            with open(self.args.iniFile) as yaml_data:
-                self.iniConfig = yaml.load(yaml_data)
-        else:
-            self.iniConfig = configparser.RawConfigParser()
-            self.iniConfig.read(self.args.iniFile)
+        # if self.args.iniyaml:
+        #     with open(self.args.iniFile) as yaml_data:
+        #         self.iniConfig = yaml.load(yaml_data)
+        # else:
+        #     self.iniConfig = configparser.RawConfigParser()
+        #     self.iniConfig.read(self.args.iniFile)
+        self.iniConfig = oxyu.IniParser(self.args.iniFile)
+
         self.vOut.ppr(4, self.iniConfig)
 
         if self.iniIn('inactive'):
