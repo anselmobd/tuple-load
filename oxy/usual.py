@@ -4,6 +4,7 @@
 import os
 import re
 import configparser
+import yaml
 
 from pprint import pprint
 
@@ -23,27 +24,61 @@ def fileWithDefaultDir(dire, fileName):
     return os.path.join(path, name)
 
 
+INIPARSER_AUTO = 0
+INIPARSER_INI = 1
+INIPARSER_YAML = 2
+
+
 class IniParser:
 
-    _AUTO = 0
-    _INI = 1
-    _YAML = 2
-
-    def __init__(self, fileName, type=_AUTO):
-        if type == _AUTO:
+    def __init__(self, fileName, type=INIPARSER_AUTO):
+        if type == INIPARSER_AUTO:
             name, extention = os.path.splitext(fileName)
             if extention.lower() == 'ini':
-                type = _INI
+                type = INIPARSER_INI
             else:
-                type = _YAML
-        if type == _INI:
+                type = INIPARSER_YAML
+        if type == INIPARSER_INI:
             self.iniCfg = configparser.RawConfigParser()
             self.iniCfg.read(fileName)
-        elif type == _INI:
+        elif type == INIPARSER_YAML:
             with open(fileName) as yaml_data:
                 self.iniCfg = yaml.load(yaml_data)
         return self.iniCfg
 
+    def iniIn(self, detail, master=None):
+        if self.args.iniyaml:
+            if master:
+                result = detail in self.iniConfig[master]
+            else:
+                result = detail in self.iniConfig
+        else:
+            if master:
+                result = detail in list(self.iniConfig[master])
+            else:
+                result = detail in self.iniConfig.sections()
+        return result
+
+    def iniGet(self, *levels):
+        self.vOut.prnt('->iniGet', 4)
+        if self.args.iniyaml:
+            result = self.iniConfig[levels[0]]
+        else:
+            result = self.iniConfig.items(levels[0])
+        for i in range(1, len(levels)-1):
+            result = result[i]
+        return result
+
+    def iniIter(self, *levels):
+        self.vOut.prnt('->iniIter', 4)
+        stru = self.iniGet(*levels)
+        if self.args.iniyaml:
+            for variable in stru:
+                yield list(variable.keys())[0], \
+                    variable[list(variable.keys())[0]]
+        else:
+            for variable, value in stru:
+                yield variable, value
 
 class VerboseOutput:
 
