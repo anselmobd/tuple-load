@@ -24,61 +24,76 @@ def fileWithDefaultDir(dire, fileName):
     return os.path.join(path, name)
 
 
-INIPARSER_AUTO = 0
-INIPARSER_INI = 1
-INIPARSER_YAML = 2
-
-
 class IniParser:
 
-    def __init__(self, fileName, type=INIPARSER_AUTO):
-        if type == INIPARSER_AUTO:
+    AUTO = 0
+    INI = 1
+    YAML = 2
+
+    type = None
+    self.iniCfg = None
+
+    def __init__(self, fileName, type=self.AUTO):
+        self.type == type
+        if self.type == self.AUTO:
             name, extention = os.path.splitext(fileName)
             if extention.lower() == 'ini':
-                type = INIPARSER_INI
+                self.type = self.INI
             else:
-                type = INIPARSER_YAML
-        if type == INIPARSER_INI:
+                self.type = self.YAML
+
+        if self.type == self.INI:
             self.iniCfg = configparser.RawConfigParser()
             self.iniCfg.read(fileName)
-        elif type == INIPARSER_YAML:
+        elif self.type == self.YAML:
             with open(fileName) as yaml_data:
                 self.iniCfg = yaml.load(yaml_data)
-        return self.iniCfg
 
-    def iniIn(self, detail, master=None):
-        if self.args.iniyaml:
+    def has(self, detail, master=None):
+        '''
+        Test if has [key] or [key1][key2]
+        Only 1 or 2 levels
+        '''
+        if self.type == self.YAML:
             if master:
-                result = detail in self.iniConfig[master]
+                result = detail in self.iniCfg[master]
             else:
-                result = detail in self.iniConfig
+                result = detail in self.iniCfg
         else:
             if master:
-                result = detail in list(self.iniConfig[master])
+                result = detail in list(self.iniCfg[master])
             else:
-                result = detail in self.iniConfig.sections()
+                result = detail in self.iniCfg.sections()
         return result
 
-    def iniGet(self, *levels):
-        self.vOut.prnt('->iniGet', 4)
-        if self.args.iniyaml:
-            result = self.iniConfig[levels[0]]
+    def get(self, *levels):
+        '''
+        Get value of N levels of keys
+        [key1][key...][keyN]
+        '''
+        if self.type == self.YAML:
+            result = self.iniCfg[levels[0]]
         else:
-            result = self.iniConfig.items(levels[0])
+            result = self.iniCfg.items(levels[0])
         for i in range(1, len(levels)-1):
             result = result[i]
         return result
 
-    def iniIter(self, *levels):
-        self.vOut.prnt('->iniIter', 4)
-        stru = self.iniGet(*levels)
-        if self.args.iniyaml:
+    def iter(self, *levels):
+        '''
+        Iter through the value of N levels of keys
+        [key1][key...][keyN]
+        returning tuple (key, value)
+        '''
+        stru = self.get(*levels)
+        if self.type == self.YAML:
             for variable in stru:
                 yield list(variable.keys())[0], \
                     variable[list(variable.keys())[0]]
         else:
             for variable, value in stru:
                 yield variable, value
+
 
 class VerboseOutput:
 
