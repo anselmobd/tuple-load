@@ -3,6 +3,8 @@
 
 import os
 import re
+import configparser
+
 from pprint import pprint
 
 
@@ -19,6 +21,28 @@ def fileWithDefaultDir(dire, fileName):
     if not path:
         path = dire
     return os.path.join(path, name)
+
+
+class IniParser:
+
+    _AUTO = 0
+    _INI = 1
+    _YAML = 2
+
+    def __init__(self, fileName, type=_AUTO):
+        if type == _AUTO:
+            name, extention = os.path.splitext(fileName)
+            if extention.lower() == 'ini':
+                type = _INI
+            else:
+                type = _YAML
+        if type == _INI:
+            self.iniCfg = configparser.RawConfigParser()
+            self.iniCfg.read(fileName)
+        elif type == _INI:
+            with open(fileName) as yaml_data:
+                self.iniCfg = yaml.load(yaml_data)
+        return self.iniCfg
 
 
 class VerboseOutput:
