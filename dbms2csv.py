@@ -187,43 +187,9 @@ class Main:
                 description, fileName), file=sys.stderr)
             sys.exit(exitError)
 
-    def iniIn(self, detail, master=None):
-        if self.args.iniyaml:
-            if master:
-                result = detail in self.iniConfig[master]
-            else:
-                result = detail in self.iniConfig
-        else:
-            if master:
-                result = detail in list(self.iniConfig[master])
-            else:
-                result = detail in self.iniConfig.sections()
-        return result
-
-    def iniGet(self, *levels):
-        self.vOut.prnt('->iniGet', 4)
-        if self.args.iniyaml:
-            result = self.iniConfig[levels[0]]
-        else:
-            result = self.iniConfig.items(levels[0])
-        for i in range(1, len(levels)-1):
-            result = result[i]
-        return result
-
-    def iniIter(self, *levels):
-        self.vOut.prnt('->iniIter', 4)
-        stru = self.iniGet(*levels)
-        if self.args.iniyaml:
-            for variable in stru:
-                yield list(variable.keys())[0], \
-                    variable[list(variable.keys())[0]]
-        else:
-            for variable, value in stru:
-                yield variable, value
-
     def connectDataBase(self):
         self.vOut.prnt('->connectDataBase', 4)
-        dbfrom = 'db.from.{}'.format(self.iniConfig['read']['db'])
+        dbfrom = 'db.from.{}'.format(self.ini.get('read', 'db'))
         dbms = self.config.get(dbfrom, 'dbms')
 
         if dbms == 'mssql':
@@ -334,9 +300,10 @@ class Main:
         # else:
         #     self.iniConfig = configparser.RawConfigParser()
         #     self.iniConfig.read(self.args.iniFile)
-        self.iniConfig = oxyu.IniParser(self.args.iniFile)
+        self.ini = oxyu.IniParser(self.args.iniFile)
 
-        self.vOut.ppr(4, self.iniConfig)
+        # self.vOut.ppr(4, self.iniConfig)
+        self.vOut.ppr(4, self.ini)
 
         if self.iniIn('inactive'):
             print('Inactive INI file', file=sys.stderr)
@@ -416,7 +383,7 @@ class Main:
 
     def addVariablesToRow(self, dictRow):
         if self.iniIn('variables'):
-            for variable, value in self.iniConfig.items('variables'):
+            for variable, value in self.ini.iter('variables'):
                 varParams = json.loads(value)
                 if 'value' in varParams.keys():
                     if 'type' in varParams.keys():
@@ -445,15 +412,15 @@ class Main:
             self.queryParam = None
             self.executeQueries()
         else:
-            if self.iniConfig['read']['master.db'] == 'csv':
-                paramsFile = self.iniConfig['read']['master.filename']
+            if self.ini.get('read', 'master.db') == 'csv':
+                paramsFile = self.ini.get('read', 'master.filename')
                 paramsFile = oxyu.fileWithDefaultDir(self.args.csv, paramsFile)
                 self.vOut.prnt('paramsFile: {}'.format(paramsFile), 3)
                 self.vOut.prnt(
                     'master.select: {}'.format(
-                        self.iniConfig['read']['master.select']), 3)
+                        self.ini.get('read', 'master.select')), 3)
                 masterSelect = json.loads(
-                    self.iniConfig['read']['master.select'])
+                    self.ini.get('read', 'master.select'))
                 self.vOut.prnt('masterSelect: {}'.format(masterSelect, 3))
                 keys = masterSelect['keys']
                 self.vOut.prnt('keys: {}'.format(keys, 3))
@@ -462,10 +429,10 @@ class Main:
                 countRows = 0
                 firstRows = -1
                 if self.iniIn('master.first', 'read'):
-                    firstRows = int(self.iniConfig['read']['master.first'])
+                    firstRows = int(self.ini.get('read', 'master.first'))
                 skipRows = 0
                 if self.iniIn('master.skip', 'read'):
-                    skipRows = int(self.iniConfig['read']['master.skip'])
+                    skipRows = int(self.ini.get('read', 'master.skip'))
                 for row in reader:
                     if skipRows > 0:
                         skipRows -= 1
@@ -492,7 +459,7 @@ class Main:
                 sqlVar = 'sql{}'.format(i)
             if self.iniIn(sqlVar, 'read'):
                 self.vOut.prnt('sql = {}'.format(sqlVar), 3)
-                sqlF = self.iniConfig['read'][sqlVar]
+                sqlF = self.ini.get('read', sqlVar)
                 self.executeQuery(sqlF)
 
     def executeQuery(self, sqlF):
@@ -520,7 +487,7 @@ class Main:
             dataLine = ''
             separator = ''
             # for column, spec in self.iniConfig.items("columns"):
-            for column, spec in self.iniIter('columns'):
+            for column, spec in self.ini.iter('columns'):
                 column = column.lower()
                 colType = spec[0]
                 colParams = {}
@@ -633,8 +600,8 @@ class Main:
         self.vOut.prnt('->doPostProcess', 3)
 
         if self.iniIn('post_process'):
-            self.vOut.pprnt(self.iniConfig.items('post_process'), 4)
-            for variable, value in self.iniConfig.items('post_process'):
+            self.vOut.pprnt(self.ini.get('post_process'), 4)
+            for variable, value in self.ini.iter('post_process'):
                 self.vOut.pprnt(variable, 4)
                 varParams = json.loads(value)
                 if 'id' in varParams:
