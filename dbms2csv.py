@@ -23,159 +23,7 @@ from oxy.mssql import Mssql
 from oxy.firebird import Firebird
 import oxy.usual as oxyu
 from oxy.usual import VerboseOutput
-
-
-def count_field(valIni, valStep, fieldBreak):
-    ''' Closure to "count" function variable '''
-    ini = int(valIni)
-    step = int(valStep)
-    breakVal = None
-
-    def inner_func(dictRow):
-        nonlocal ini, breakVal, step
-        if fieldBreak:
-            if (not breakVal) or breakVal != dictRow[fieldBreak]:
-                breakVal = dictRow[fieldBreak]
-                ini = int(valIni)
-        result = ini
-        ini += step
-        return result
-    return inner_func
-
-
-def translate_field(queryDict):
-    ''' Closure to "translate" function variable '''
-    query = queryDict
-
-    with open(query['from']) as transFile:
-        readCsv = csv.reader(transFile, delimiter=';')
-        columns = None
-        rows = []
-        for row in readCsv:
-            if columns:
-                rows.append(row)
-            else:
-                columns = row
-
-    def inner_func(dictRow):
-        nonlocal query, columns, rows
-        result = None
-        for row in rows:
-            csvRow = dict(zip(columns, row))
-            bOk = True
-            for cond in query['where']:
-                if len(cond) > 2:
-                    # "#" meeans "=" only if dictRow[cond[-1]] is not
-                    # empty or null
-                    if cond[1] == '#':
-                        if dictRow[cond[-1]]:
-                            bOk = bOk and csvRow[cond[0]] == \
-                                dictRow[cond[-1]]
-                else:
-                    bOk = bOk and csvRow[cond[0]] == dictRow[cond[-1]]
-                if not bOk:
-                    break
-            if bOk:
-                result = csvRow[query['select']]
-                if 'other_fields' in query:
-                    result = [result]
-                    for other_field in query['other_fields']:
-                        result.append(csvRow[other_field[1]])
-                break
-        if (not result):
-            if ('default' in query):
-                result = query['default']
-            elif ('field_default' in query):
-                result = dictRow[query['field_default']]
-        if ('type' in query) and (query['type'] == 'n'):
-            result = float(result)
-        return result
-    return inner_func
-
-
-def trim_field(fieldName):
-    ''' Closure to "trim" function variable '''
-    field = fieldName
-
-    def inner_func(dictRow):
-        nonlocal field
-        if isinstance(dictRow[field], str):
-            result = dictRow[field].strip()
-        else:
-            result = ''
-        return result
-    return inner_func
-
-
-def str_field(methodDict, variable):
-    ''' Closure to str methods variable '''
-    method = methodDict
-    fieldName = variable
-
-    def inner_func(dictRow):
-        nonlocal method
-        result = ''
-
-        if 'field' in method:
-            field = method['field']
-        else:
-            field = fieldName
-
-        if isinstance(dictRow[field], str):
-            if method['method'] == 'rjust':
-                size = int(method['args'][0])
-                fill = method['args'][1]
-                result = dictRow[field].rjust(size, fill)
-            elif method['method'] == 'strip':
-                result = dictRow[field].strip()
-            elif method['method'] == 'char':
-                pos = int(method['args'][0])
-                result = dictRow[field][pos]
-            elif method['method'] == 'slice':
-                args = [None] * 3
-                for iArg in range(3):
-                    if len(method['args']) > iArg \
-                                and method['args'][iArg] != '':
-                        args[iArg] = int(method['args'][iArg])
-                result = dictRow[field][args[0]:args[1]:args[2]]
-            elif method['method'] == 're.group':
-                regex = method['args'][0]
-                reResult = re.search(regex, dictRow[field])
-                if reResult:
-                    result = reResult.group(1)
-            elif method['method'] == 're.sub':
-                pattern = method['args'][0]
-                repl = method['args'][1]
-                result = re.sub(pattern, repl, dictRow[field])
-            elif method['method'] == 'format':
-                args = [field] + method['other_fields']
-                values = [dictRow[a] for a in args]
-                result = method['format'].format(*values)
-            elif method['method'] == 'cnpj_digits':
-                result = oxyu.Cnpj().digits(dictRow[field])
-            elif method['method'] == 'only_digits':
-                result = re.sub("[^0-9]", "", dictRow[field])
-            elif method['method'] == 'int':
-                try:
-                    result = int(dictRow[field])
-                except Exception as e:
-                    result = 0
-        return result
-    return inner_func
-
-
-def if_not_null_field(methodDict):
-    ''' Closure to if_not_null variable '''
-    method = methodDict
-
-    def inner_func(dictRow):
-        nonlocal method
-        if dictRow[method['test_field']] is None:
-            result = method['else_value']
-        else:
-            result = dictRow[method['field']]
-        return result
-    return inner_func
+import oxy.inner_functions as oxyin
 
 
 class Main:
@@ -305,7 +153,7 @@ class Main:
         # self.vOut.ppr(4, self.iniConfig)
         self.vOut.ppr(4, self.ini)
 
-        if self.iniIn('inactive'):
+        if self.ini.has('inactive'):
             print('Inactive INI file', file=sys.stderr)
             sys.exit(21)
 
@@ -342,7 +190,7 @@ class Main:
         self.vOut.prnt('->loadFunctionVariables', 3)
 
         dictRowFunctions = []
-        if self.iniIn('functions'):
+        if self.ini.has('functions'):
             for variable, value in self.iniIter('functions'):
                 variable = variable.lower()
                 self.vOut.prnt('function variable: {}'.format(variable), 4)
@@ -352,7 +200,7 @@ class Main:
                     varParams = json.loads(value)
                 if 'count' in varParams:
                     funcParams = varParams['count']
-                    dictRowFunctions.append([variable, count_field(
+                    dictRowFunctions.append([variable, oxyin.count_field(
                         self.getElementDef(funcParams, 'start', '1'),
                         self.getElementDef(funcParams, 'step', '1'),
                         self.getElementDef(funcParams, 'break', None))
@@ -366,23 +214,23 @@ class Main:
                         for other_field in funcParams['other_fields']:
                             variable.append(other_field[0])
                     dictRowFunctions.append(
-                        [variable, translate_field(funcParams)])
+                        [variable, oxyin.translate_field(funcParams)])
                 elif 'trim' in varParams:
                     funcParams = varParams['trim']
                     dictRowFunctions.append(
-                        [variable, trim_field(funcParams['field'])])
+                        [variable, oxyin.trim_field(funcParams['field'])])
                 elif 'str' in varParams:
                     funcParams = varParams['str']
                     dictRowFunctions.append(
-                        [variable, str_field(funcParams, variable)])
+                        [variable, oxyin.str_field(funcParams, variable)])
                 elif 'if_not_null' in varParams:
                     funcParams = varParams['if_not_null']
                     dictRowFunctions.append(
-                        [variable, if_not_null_field(funcParams)])
+                        [variable, oxyin.if_not_null_field(funcParams)])
         return dictRowFunctions
 
     def addVariablesToRow(self, dictRow):
-        if self.iniIn('variables'):
+        if self.ini.has('variables'):
             for variable, value in self.ini.iter('variables'):
                 varParams = json.loads(value)
                 if 'value' in varParams.keys():
@@ -408,7 +256,7 @@ class Main:
 
     def executeMaster(self):
         self.doHeader = True
-        if not self.iniIn('master.db', 'read'):
+        if not self.ini.has('master.db', 'read'):
             self.queryParam = None
             self.executeQueries()
         else:
@@ -428,10 +276,10 @@ class Main:
                 columns = next(reader)
                 countRows = 0
                 firstRows = -1
-                if self.iniIn('master.first', 'read'):
+                if self.ini.has('master.first', 'read'):
                     firstRows = int(self.ini.get('read', 'master.first'))
                 skipRows = 0
-                if self.iniIn('master.skip', 'read'):
+                if self.ini.has('master.skip', 'read'):
                     skipRows = int(self.ini.get('read', 'master.skip'))
                 for row in reader:
                     if skipRows > 0:
@@ -457,7 +305,7 @@ class Main:
                 sqlVar = 'sql'
             else:
                 sqlVar = 'sql{}'.format(i)
-            if self.iniIn(sqlVar, 'read'):
+            if self.ini.has(sqlVar, 'read'):
                 self.vOut.prnt('sql = {}'.format(sqlVar), 3)
                 sqlF = self.ini.get('read', sqlVar)
                 self.executeQuery(sqlF)
@@ -599,7 +447,7 @@ class Main:
     def doPostProcess(self):
         self.vOut.prnt('->doPostProcess', 3)
 
-        if self.iniIn('post_process'):
+        if self.ini.has('post_process'):
             self.vOut.pprnt(self.ini.get('post_process'), 4)
             for variable, value in self.ini.iter('post_process'):
                 self.vOut.pprnt(variable, 4)
