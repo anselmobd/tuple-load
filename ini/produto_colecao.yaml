@@ -6,11 +6,13 @@ read:
     FROM TAB_Colecao
 
 functions:
-  - CGC_9:
+  - sequence:
       count:
         start: 11
 
 columns:
-  - sequence: n
-      format: '%d'
+  - sequence:
+      type: n
+      args:
+        format: '%d'
   - CodColecao: t
