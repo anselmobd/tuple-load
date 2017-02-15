@@ -31,39 +31,43 @@ class IniParser:
     YAML = 2
 
     type = None
-    self.iniCfg = None
+    iniCfg = None
 
-    def __init__(self, fileName, type=self.AUTO):
-        self.type == type
-        if self.type == self.AUTO:
+    def __init__(self, fileName, type=AUTO):
+        self.type = type
+        if self.type == IniParser.AUTO:
             name, extention = os.path.splitext(fileName)
-            if extention.lower() == 'ini':
-                self.type = self.INI
+            if extention.lower() == '.ini':
+                self.type = IniParser.INI
             else:
-                self.type = self.YAML
+                self.type = IniParser.YAML
 
-        if self.type == self.INI:
+        if self.type == IniParser.INI:
             self.iniCfg = configparser.RawConfigParser()
             self.iniCfg.read(fileName)
-        elif self.type == self.YAML:
+        elif self.type == IniParser.YAML:
             with open(fileName) as yaml_data:
                 self.iniCfg = yaml.load(yaml_data)
 
-    def has(self, detail, master=None):
+    def has(self, *levels):
         '''
-        Test if has [key] or [key1][key2]
-        Only 1 or 2 levels
+        Test if has N levels of keys
+        [key1][key...][keyN]
         '''
-        if self.type == self.YAML:
-            if master:
-                result = detail in self.iniCfg[master]
+        if len(levels) == 1:
+            if self.type == self.YAML:
+                result = levels[0] in self.iniCfg
             else:
-                result = detail in self.iniCfg
+                result = levels[0] in self.iniCfg.sections()
         else:
-            if master:
-                result = detail in list(self.iniCfg[master])
-            else:
-                result = detail in self.iniCfg.sections()
+            try:
+                stru = self.get(*levels[:-1])
+                if self.type == self.YAML:
+                    result = levels[-1] in stru
+                else:
+                    result = levels[-1] in [pair[0] for pair in stru]
+            except:
+                result = False
         return result
 
     def get(self, *levels):
@@ -75,8 +79,13 @@ class IniParser:
             result = self.iniCfg[levels[0]]
         else:
             result = self.iniCfg.items(levels[0])
-        for i in range(1, len(levels)-1):
-            result = result[i]
+        for i in range(1, len(levels)):
+            if self.type == self.YAML:
+                result = result[levels[i]]
+            else:
+                keys = [pair[0] for pair in result]
+                result = result[keys.index(levels[i])][1]
+
         return result
 
     def iter(self, *levels):
