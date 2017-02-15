@@ -13,7 +13,6 @@ import hashlib
 
 import configparser
 import json
-import yaml
 import csv
 
 import gettext
@@ -142,15 +141,8 @@ class Main:
 
         self.checkFile(self.args.cfg, 'Config', 12)
 
-        # if self.args.iniyaml:
-        #     with open(self.args.iniFile) as yaml_data:
-        #         self.iniConfig = yaml.load(yaml_data)
-        # else:
-        #     self.iniConfig = configparser.RawConfigParser()
-        #     self.iniConfig.read(self.args.iniFile)
         self.ini = oxyu.IniParser(self.args.iniFile)
 
-        # self.vOut.ppr(4, self.iniConfig)
         self.vOut.ppr(4, self.ini)
 
         if self.ini.has('inactive'):
@@ -335,7 +327,6 @@ class Main:
 
             dataLine = ''
             separator = ''
-            # for column, spec in self.iniConfig.items("columns"):
             for column, spec in self.ini.iter('columns'):
                 column = column.lower()
                 if self.args.iniyaml:
