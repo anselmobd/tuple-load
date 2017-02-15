@@ -39,26 +39,26 @@ sql:
   update: |
     UPDATE PEDI_010 c
     set
-      c.NOME_CLIENTE               = :NOME_CLIENTE
-    , FANTASIA_CLIENTE             = 'FISICO'
+      NOME_CLIENTE                 = :NOME_CLIENTE
+    , FANTASIA_CLIENTE             = :NOME_CLIENTE
     , SITUACAO_CLIENTE             = 1
-    , TELEFONE_CLIENTE             = 12332165
+    , TELEFONE_CLIENTE             = 30282299
     , TELEX_CLIENTE                = 0
     , FAX_CLIENTE                  = 1
     , ENDERECO_CLIENTE             = :ENDERECO_CLIENTE
-    , CEP_CLIENTE                  = 12345678
+    , CEP_CLIENTE                  = 646010
     , CXPOSTAL_CLIENTE             = NULL
-    , INSC_EST_CLIENTE             = 'ISENTO'
-    , PORTADOR_CLIENTE             = 0
+    , INSC_EST_CLIENTE             = '206257690116'
+    , PORTADOR_CLIENTE             = 237
     , DATA_CAD_CLIENTE             = TIMESTAMP '2017-02-07 00:00:00.000000'
     , DATA_EXC_CLIENTE             = NULL
     , MOT_EXC_CLIENTE              = 0
-    , CDREPRES_CLIENTE             = 0
+    , CDREPRES_CLIENTE             = 4
     , BAIRRO                       = :BAIRRO
-    , COD_CIDADE                   = 1234
+    , COD_CIDADE                   = 1025
     , COD_CLIENTE                  = 0
     , DIG_CLIENTE                  = 0
-    , SUB_REGIAO                   = 0
+    , SUB_REGIAO                   = 1002
     , COD_SIT_CREDITO              = 1
     , MAIOR_TITULO                 = 0
     , MAIOR_ACUMULO                = 0
@@ -107,7 +107,7 @@ sql:
     , LIMITE_MAX_PED2              = 0
     , LIMITE_MAX_PED4              = 0
     , LIMITE_MAX_PED7              = 0
-    , UNIDADE_LIM_PED              = 0
+    , UNIDADE_LIM_PED              = 2
     , CONTA_CONTABIL               = NULL
     , PRAZO_MEDIO                  = 0
     , DATA_ULT_FATUR               = NULL
@@ -116,7 +116,7 @@ sql:
     , VAL_MAIOR_FATUR              = 0
     , FORMA_PAGAMENTO              = 9
     , ACUMULADO_VENDAS             = 0
-    , E_MAIL                       = NULL
+    , E_MAIL                       = 'agendabarueri@netshoes.com'
     , CODIGO_CONTABIL              = 0
     , INSTRUCAO_INT                = 0
     , DIAS_INSTR_1                 = 0
@@ -134,7 +134,7 @@ sql:
     , VAL_LIM_CREDITO              = TIMESTAMP '2017-02-07 00:00:00.000000'
     , DATA_VENCTO                  = NULL
     , SITUACAO_CADASTRO            = 4
-    , DATA_COMPL_CADASTRO          = TIMESTAMP '2017-02-07 00:00:00.000000'
+    , DATA_COMPL_CADASTRO          = TIMESTAMP '2017-02-13 00:00:00.000000'
     , CRITERIO_ATENDIMENTO         = 0
     , ATIV_CONFECCAO               = 0
     , ATIV_ATAC_CONF               = 0
@@ -257,20 +257,20 @@ sql:
     , CELULAR_CLIENTE              = 0
     , CALL_FREE_CLIENTE            = NULL
     , CLIENTE_INTEGRACAO           = NULL
-    , NUMERO_IMOVEL                = '123'
-    , COMPLEMENTO                  = '1'
+    , NUMERO_IMOVEL                = '854'
+    , COMPLEMENTO                  = 'AREA 3'
     , COD_CIDADE_ZONA_FRANCA       = 0
     , DES_ABREVIATURA              = '0'
     , IND_ENVIA_INFOTINT           = 'S'
     , COD_RELACION_SPED_CTB        = 0
-    , NFE_E_MAIL                   = NULL
+    , NFE_E_MAIL                   = 'fiscal@netshoes.com'
     , PRIORIDADE_SUGESTAO          = 9
     , IND_DESC_PIS_COFINS          = 'N'
     , SENHA_WEB                    = NULL
     , CADASTRO_DDA                 = 'N'
     , FLAG_EXPORTACAO_LOJA         = 0
-    , IND_DESC_ICMS_IPI            = 'S'
-    , IND_DESC_PIS_COFINS_SUFRAMA  = 'S'
+    , IND_DESC_ICMS_IPI            = 'N'
+    , IND_DESC_PIS_COFINS_SUFRAMA  = 'N'
     , BAIRRO_E_COMMERCE            = ' '
     , COMPLEMENTO_E_COMMERCE       = ' '
     , DDD_CELULAR_E_COMMERCE       = 0
@@ -282,6 +282,7 @@ sql:
     , MICRO_EMPREENDEDOR_INDIV     = 0
     , DATA_LIMITE_VENDA_TIT_ATRASO = NULL
     , CREDITO_TROCA                = 0
+    , SOLICITACAO_EMERGENCIAL      = 0
     WHERE c.CGC_9 = :CGC_9
       AND c.CGC_4 = :CGC_4
       AND c.CGC_2 = :CGC_2
@@ -538,26 +539,26 @@ sql:
       :CGC_9                                 -- CGC_9
     , :CGC_4                                 -- CGC_4
     , :CGC_2                                 -- CGC_2
-    , :NOME_CLIENTE                          -- NOME_CLIENTE
-    , 'FISICO'                               -- FANTASIA_CLIENTE
+    , :NOME_CLIENTE
+    , :NOME_CLIENTE                          -- FANTASIA_CLIENTE
     , 1                                      -- SITUACAO_CLIENTE
-    , 12332165                               -- TELEFONE_CLIENTE
+    , 30282299                               -- TELEFONE_CLIENTE
     , 0                                      -- TELEX_CLIENTE
     , 1                                      -- FAX_CLIENTE
-    , :ENDERECO_CLIENTE                      -- ENDERECO_CLIENTE
-    , 12345678                               -- CEP_CLIENTE
+    , :ENDERECO_CLIENTE
+    , 646010                                 -- CEP_CLIENTE
     , NULL                                   -- CXPOSTAL_CLIENTE
-    , 'ISENTO'                               -- INSC_EST_CLIENTE
-    , 0                                      -- PORTADOR_CLIENTE
+    , '206257690116'                         -- INSC_EST_CLIENTE
+    , 237                                    -- PORTADOR_CLIENTE
     , TIMESTAMP '2017-02-07 00:00:00.000000' -- DATA_CAD_CLIENTE
     , NULL                                   -- DATA_EXC_CLIENTE
     , 0                                      -- MOT_EXC_CLIENTE
-    , 0                                      -- CDREPRES_CLIENTE
-    , :BAIRRO                                -- BAIRRO
-    , 1234                                   -- COD_CIDADE
+    , 4                                      -- CDREPRES_CLIENTE
+    , :BAIRRO
+    , 1025                                   -- COD_CIDADE
     , 0                                      -- COD_CLIENTE
     , 0                                      -- DIG_CLIENTE
-    , 0                                      -- SUB_REGIAO
+    , 1002                                   -- SUB_REGIAO
     , 1                                      -- COD_SIT_CREDITO
     , 0                                      -- MAIOR_TITULO
     , 0                                      -- MAIOR_ACUMULO
@@ -606,7 +607,7 @@ sql:
     , 0                                      -- LIMITE_MAX_PED2
     , 0                                      -- LIMITE_MAX_PED4
     , 0                                      -- LIMITE_MAX_PED7
-    , 0                                      -- UNIDADE_LIM_PED
+    , 2                                      -- UNIDADE_LIM_PED
     , NULL                                   -- CONTA_CONTABIL
     , 0                                      -- PRAZO_MEDIO
     , NULL                                   -- DATA_ULT_FATUR
@@ -615,7 +616,7 @@ sql:
     , 0                                      -- VAL_MAIOR_FATUR
     , 9                                      -- FORMA_PAGAMENTO
     , 0                                      -- ACUMULADO_VENDAS
-    , NULL                                   -- E_MAIL
+    , 'agendabarueri@netshoes.com'           -- E_MAIL
     , 0                                      -- CODIGO_CONTABIL
     , 0                                      -- INSTRUCAO_INT
     , 0                                      -- DIAS_INSTR_1
@@ -633,7 +634,7 @@ sql:
     , TIMESTAMP '2017-02-07 00:00:00.000000' -- VAL_LIM_CREDITO
     , NULL                                   -- DATA_VENCTO
     , 4                                      -- SITUACAO_CADASTRO
-    , TIMESTAMP '2017-02-07 00:00:00.000000' -- DATA_COMPL_CADASTRO
+    , TIMESTAMP '2017-02-13 00:00:00.000000' -- DATA_COMPL_CADASTRO
     , 0                                      -- CRITERIO_ATENDIMENTO
     , 0                                      -- ATIV_CONFECCAO
     , 0                                      -- ATIV_ATAC_CONF
@@ -756,20 +757,20 @@ sql:
     , 0                                      -- CELULAR_CLIENTE
     , NULL                                   -- CALL_FREE_CLIENTE
     , NULL                                   -- CLIENTE_INTEGRACAO
-    , '123'                                  -- NUMERO_IMOVEL
-    , '1'                                    -- COMPLEMENTO
+    , '854'                                  -- NUMERO_IMOVEL
+    , 'AREA 3'                               -- COMPLEMENTO
     , 0                                      -- COD_CIDADE_ZONA_FRANCA
     , '0'                                    -- DES_ABREVIATURA
     , 'S'                                    -- IND_ENVIA_INFOTINT
     , 0                                      -- COD_RELACION_SPED_CTB
-    , NULL                                   -- NFE_E_MAIL
+    , 'fiscal@netshoes.com'                  -- NFE_E_MAIL
     , 9                                      -- PRIORIDADE_SUGESTAO
     , 'N'                                    -- IND_DESC_PIS_COFINS
     , NULL                                   -- SENHA_WEB
     , 'N'                                    -- CADASTRO_DDA
     , 0                                      -- FLAG_EXPORTACAO_LOJA
-    , 'S'                                    -- IND_DESC_ICMS_IPI
-    , 'S'                                    -- IND_DESC_PIS_COFINS_SUFRAMA
+    , 'N'                                    -- IND_DESC_ICMS_IPI
+    , 'N'                                    -- IND_DESC_PIS_COFINS_SUFRAMA
     , ' '                                    -- BAIRRO_E_COMMERCE
     , ' '                                    -- COMPLEMENTO_E_COMMERCE
     , 0                                      -- DDD_CELULAR_E_COMMERCE
@@ -781,6 +782,7 @@ sql:
     , 0                                      -- MICRO_EMPREENDEDOR_INDIV
     , NULL                                   -- DATA_LIMITE_VENDA_TIT_ATRASO
     , 0                                      -- CREDITO_TROCA
+    , 0                                      -- SOLICITACAO_EMERGENCIAL
     )
 
   key_list: |
