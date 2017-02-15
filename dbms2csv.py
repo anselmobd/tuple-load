@@ -191,7 +191,7 @@ class Main:
 
         dictRowFunctions = []
         if self.ini.has('functions'):
-            for variable, value in self.iniIter('functions'):
+            for variable, value in self.ini.iter('functions'):
                 variable = variable.lower()
                 self.vOut.prnt('function variable: {}'.format(variable), 4)
                 if self.args.iniyaml:
@@ -255,8 +255,9 @@ class Main:
                     dictRow[val] = result[idx]
 
     def executeMaster(self):
+        self.vOut.prnt('->executeMaster', 4)
         self.doHeader = True
-        if not self.ini.has('master.db', 'read'):
+        if not self.ini.has('read', 'master.db'):
             self.queryParam = None
             self.executeQueries()
         else:
@@ -276,10 +277,10 @@ class Main:
                 columns = next(reader)
                 countRows = 0
                 firstRows = -1
-                if self.ini.has('master.first', 'read'):
+                if self.ini.has('read', 'master.first'):
                     firstRows = int(self.ini.get('read', 'master.first'))
                 skipRows = 0
-                if self.ini.has('master.skip', 'read'):
+                if self.ini.has('read', 'master.skip'):
                     skipRows = int(self.ini.get('read', 'master.skip'))
                 for row in reader:
                     if skipRows > 0:
@@ -305,7 +306,7 @@ class Main:
                 sqlVar = 'sql'
             else:
                 sqlVar = 'sql{}'.format(i)
-            if self.ini.has(sqlVar, 'read'):
+            if self.ini.has('read', sqlVar):
                 self.vOut.prnt('sql = {}'.format(sqlVar), 3)
                 sqlF = self.ini.get('read', sqlVar)
                 self.executeQuery(sqlF)
@@ -337,14 +338,22 @@ class Main:
             # for column, spec in self.iniConfig.items("columns"):
             for column, spec in self.ini.iter('columns'):
                 column = column.lower()
-                colType = spec[0]
-                colParams = {}
-                if len(spec) > 2:
-                    colParams = json.loads(spec[2:])
+                if self.args.iniyaml:
+                    if isinstance(spec, str):
+                        colType = spec[0]
+                        colParams = {}
+                    else:
+                        colType = spec['type']
+                        colParams = spec['args']
+                else:
+                    colType = spec[0]
+                    colParams = {}
+                    if len(spec) > 2:
+                        colParams = json.loads(spec[2:])
 
                 colValue = None
 
-                # A column can be made by processing others, so it can not
+                # A column can be made by processing others; if so it can not
                 # exist in dictRow
                 if column in dictRow.keys():
                     colValue = dictRow[column]
