@@ -1,0 +1,16 @@
+read:
+  db: pccon
+  sql:
+    SELECT
+      CodColecao
+    FROM TAB_Colecao
+
+functions:
+  - CGC_9:
+      count:
+        start: 11
+
+columns:
+  - sequence: n
+      format: '%d'
+  - CodColecao: t
