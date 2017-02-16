@@ -1,0 +1,109 @@
+csv:
+
+  keys:
+    - MATRICULA
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(f.NOME)
+    from EFIC_050 f
+    where f.COD_EMPRESA = 1
+      and f.COD_FUNCIONARIO = :MATRICULA
+
+  update: |
+    UPDATE EFIC_050 f
+    set
+      f.NOME = : NOME
+    , f.TURNO = 1
+    , f.LANCA_PARADA = 0
+    , f.LANCA_REJEICAO = 0
+    , f.CODIGO_CARGO = :CODIGO_CARGO
+    , f.CENTRO_CUSTO = 0
+    , f.DATA_NASCIMENTO = NULL
+    , f.DATA_ADMISSAO = NULL
+    , f.SEXO = 0
+    , f.ESTADO_CIVIL = 0
+    , f.GRAU_INSTRUCAO = 0
+    , f.PLANO_SAUDE = 0
+    , f.CPF_FUNC = NULL
+    , f.CUSTO_HORA = 0
+    , f.RESPONSAVEL_DADOS = 0
+    , f.E_MAIL = ' '
+    , f.RAMAL = 0
+    , f.OBSERVACAO = NULL
+    , f.CRACHA_FUNCIONARIO = :MATRICULA
+    , f.SETOR_RESPONSAVEL = :SETOR_RESPONSAVEL
+    , f.SIT_FUNCIONARIO = 1
+    , f.LANCA_HRS_MANU = 0
+    , f.RESPONSAVEL_DESENV_PRODUTO = 0
+    where f.COD_EMPRESA = 1
+      and f.COD_FUNCIONARIO = :MATRICULA
+
+  insert: |
+    INSERT INTO SYSTEXTIL.EFIC_050 (
+      COD_EMPRESA
+    , COD_FUNCIONARIO
+    , NOME
+    , TURNO
+    , LANCA_PARADA
+    , LANCA_REJEICAO
+    , CODIGO_CARGO
+    , CENTRO_CUSTO
+    , DATA_NASCIMENTO
+    , DATA_ADMISSAO
+    , SEXO
+    , ESTADO_CIVIL
+    , GRAU_INSTRUCAO
+    , PLANO_SAUDE
+    , CPF_FUNC
+    , CUSTO_HORA
+    , RESPONSAVEL_DADOS
+    , E_MAIL
+    , RAMAL
+    , OBSERVACAO
+    , CRACHA_FUNCIONARIO
+    , SETOR_RESPONSAVEL
+    , SIT_FUNCIONARIO
+    , LANCA_HRS_MANU
+    , RESPONSAVEL_DESENV_PRODUTO
+    ) VALUES (
+      1          -- COD_EMPRESA
+    , :MATRICULA -- COD_FUNCIONARIO
+    , :NOME
+    , 1          -- TURNO
+    , 0          -- LANCA_PARADA
+    , 0          -- LANCA_REJEICAO
+    , :CODIGO_CARGO
+    , 0          -- CENTRO_CUSTO
+    , NULL       -- DATA_NASCIMENTO
+    , NULL       -- DATA_ADMISSAO
+    , 0          -- SEXO
+    , 0          -- ESTADO_CIVIL
+    , 0          -- GRAU_INSTRUCAO
+    , 0          -- PLANO_SAUDE
+    , NULL       -- CPF_FUNC
+    , 0          -- CUSTO_HORA
+    , 0          -- RESPONSAVEL_DADOS
+    , ' '        -- E_MAIL
+    , 0          -- RAMAL
+    , NULL       -- OBSERVACAO
+    , :MATRICULA -- CRACHA_FUNCIONARIO
+    , :SETOR_RESPONSAVEL
+    , 1          -- SIT_FUNCIONARIO
+    , 0          -- LANCA_HRS_MANU
+    , 0          -- RESPONSAVEL_DESENV_PRODUTO
+    )
+
+  key_list: |
+    SELECT
+      f.COD_FUNCIONARIO
+    from EFIC_050 f
+
+  delete: |
+    DELETE FROM EFIC_050 f
+    where f.COD_EMPRESA = 1
+      and f.COD_FUNCIONARIO = :MATRICULA
