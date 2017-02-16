@@ -1,0 +1,41 @@
+csv:
+
+  keys:
+    - SUB_REGIAO
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(sr.DESCRICAO)
+    from PEDI_043 sr
+    where sr.SUB_REGIAO = :SUB_REGIAO
+
+  update: |
+    UPDATE PEDI_043 sr
+    set
+      sr.DESCRICAO = :DESCRICAO
+    , sr.CODIGO_REGIAO = :CODIGO_REGIAO
+    where sr.SUB_REGIAO = :SUB_REGIAO
+
+  insert: |
+    INSERT INTO PEDI_043 (
+      SUB_REGIAO
+    , DESCRICAO
+    , CODIGO_REGIAO
+    ) VALUES (
+      :SUB_REGIAO
+    , :DESCRICAO
+    , :CODIGO_REGIAO
+    )
+
+  key_list: |
+    SELECT
+      sr.SUB_REGIAO
+    from PEDI_043 sr
+
+  delete: |
+    DELETE FROM PEDI_043 sr
+    where sr.SUB_REGIAO = :SUB_REGIAO
