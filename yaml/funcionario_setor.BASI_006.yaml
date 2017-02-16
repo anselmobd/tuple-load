@@ -1,0 +1,39 @@
+csv:
+
+  keys:
+    - SETOR_RESPONSAVEL
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(s.DESCRICAO_SETOR)
+    from BASI_006 s
+    where s.SETOR_RESPONSAVEL = :SETOR_RESPONSAVEL
+
+  update: |
+    UPDATE BASI_006 s
+    set
+      s.DESCRICAO_SETOR = :DESCRICAO_SETOR
+    where s.SETOR_RESPONSAVEL = :SETOR_RESPONSAVEL
+
+  insert: |
+    INSERT INTO BASI_006 (
+      SETOR_RESPONSAVEL
+    , DESCRICAO_SETOR
+    )
+    VALUES (
+      :SETOR_RESPONSAVEL
+    , :DESCRICAO_SETOR
+    )
+
+  key_list: |
+    SELECT
+      s.SETOR_RESPONSAVEL
+    from BASI_006 s
+
+  delete: |
+    DELETE FROM BASI_006 s
+    where s.SETOR_RESPONSAVEL = :SETOR_RESPONSAVEL
