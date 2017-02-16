@@ -3,3 +3,6 @@ _*.csv
 
 # local files
 leia.txt
+
+# files with private data
+funcionario.csv
