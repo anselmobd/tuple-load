@@ -1,0 +1,39 @@
+csv:
+
+  keys:
+    - CODIGO_CARGO
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(c.DESCRICAO)
+    from MQOP_120 c
+    where c.CODIGO_CARGO = :CODIGO_CARGO
+
+  update: |
+    UPDATE MQOP_120 c
+    set
+      c.DESCRICAO = :DESCRICAO
+    where c.CODIGO_CARGO = :CODIGO_CARGO
+
+  insert: |
+    INSERT INTO MQOP_120 (
+      CODIGO_CARGO
+    , DESCRICAO
+    )
+    VALUES (
+      :CODIGO_CARGO
+    , :DESCRICAO
+    )
+
+  key_list: |
+    SELECT
+      c.CODIGO_CARGO
+    from MQOP_120 c
+
+  delete: |
+    DELETE FROM MQOP_120 c
+    where c.CODIGO_CARGO = :CODIGO_CARGO
