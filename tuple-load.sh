@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# rascunho
+#./csv2oracle.py csv/regiao.csv yaml/regiao.PEDI_040.yaml -vvvvv
+
 if [ $1 ] ; then
   VERBOSE=$1
 else
@@ -93,6 +96,11 @@ fi
 
 # Order matters - Criation order
 dataGroupFiles=(
+  "regiao"
+  "subregiao"
+  "funcionario_cargo"
+  "funcionario_setor"
+  "funcionario"
   "faixa_etaria.fixo"
   "unidades_de_medida.fixo"
   "tamanho.fixo"
