@@ -1,0 +1,45 @@
+csv:
+
+  keys:
+    - CODIGO_REGIAO
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(r.NOME_REGIAO)
+    from PEDI_040 r
+    where r.CODIGO_REGIAO = :CODIGO_REGIAO
+
+  update: |
+    UPDATE PEDI_040 r
+    set
+      r.NOME_REGIAO = :NOME_REGIAO
+    where r.CODIGO_REGIAO = :CODIGO_REGIAO
+
+  insert: |
+    INSERT INTO PEDI_040 (
+      CODIGO_REGIAO
+    , NOME_REGIAO
+    , MARGEM_COTAS
+    , COD_REG_MER_EX
+    , CONTROLA_COTAS_REGIAO
+    )
+    VALUES (
+      :CODIGO_REGIAO
+    , :NOME_REGIAO
+    , 0
+    , 0
+    , 0
+    )
+
+  key_list: |
+    SELECT
+      r.CODIGO_REGIAO
+    from PEDI_040 r
+
+  delete: |
+    DELETE FROM PEDI_040 r
+    where r.CODIGO_REGIAO = :CODIGO_REGIAO
