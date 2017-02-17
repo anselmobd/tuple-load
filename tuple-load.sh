@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # rascunho
-#./csv2oracle.py csv/regiao.csv yaml/regiao.PEDI_040.yaml -vvvvv
+#./csv2oracle.py -b csv/regiao.csv yaml/regiao.PEDI_040.yaml -vvvvv
 
 if [ $1 ] ; then
   VERBOSE=$1
@@ -101,6 +101,7 @@ dataGroupFiles=(
   "funcionario_cargo"
   "funcionario_setor"
   "funcionario"
+  "usuario"
   "faixa_etaria.fixo"
   "unidades_de_medida.fixo"
   "tamanho.fixo"
