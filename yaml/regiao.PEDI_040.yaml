@@ -1,5 +1,10 @@
 csv:
 
+  fields:
+
+    CODIGO_REGIAO:
+      type: integer
+
   keys:
     - CODIGO_REGIAO
 
@@ -42,4 +47,10 @@ sql:
 
   delete: |
     DELETE FROM PEDI_040 r
+    where r.CODIGO_REGIAO = :CODIGO_REGIAO
+
+  fault_delete: |
+    UPDATE PEDI_040 r
+    set
+      r.NOME_REGIAO = '--TREINAMENTO--'
     where r.CODIGO_REGIAO = :CODIGO_REGIAO
