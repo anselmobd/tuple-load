@@ -322,6 +322,12 @@ class Main:
                 cursor = self.oracle.cursorExecute(
                     sql, deleteKey, self.oracle.CONTINUE_ON_ERROR)
                 self.vOut.prnt(_('deleted: %s') % (cursor.rowcount), 2)
+                if cursor.rowcount == 0:
+                    if 'fault_delete' in self.rules['sql']:
+                        sql = self.getRule('sql', 'fault_delete')
+                        cursor = self.oracle.cursorExecute(sql, deleteKey)
+                        self.vOut.prnt(
+                            _('fault deleted: %s') % (cursor.rowcount), 2)
 
     def main(self):
         self.parseArgs()
