@@ -8,7 +8,6 @@ import contextlib
 from pprint import pprint
 import operator
 import subprocess
-import re
 import hashlib
 
 import configparser
