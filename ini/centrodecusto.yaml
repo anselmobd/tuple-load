@@ -1,0 +1,28 @@
+read:
+  db: f1
+  sql:
+    SELECT
+      r.ESTRUTURA CENTRO_CUSTO
+    , r.DESCRICAO
+    , case
+        when r.NIVEL4 is not null then
+          case when r.ESTRUTURA = r.NIVEL4 then r.NIVEL3 else r.NIVEL4 end
+        when r.NIVEL3 is not null then
+          case when r.ESTRUTURA = r.NIVEL3 then r.NIVEL2 else r.NIVEL3 end
+        else
+          case when r.ESTRUTURA = r.NIVEL2 then null else r.NIVEL2 end
+      end CENTRO_CUSTO_PAI
+    FROM SCC_CENTROCUSTO r
+    where r.NIVEL2 is not null
+    order by estrutura
+
+functions:
+  - CENTRO_CUSTO:
+      str:
+        method: re.sub
+        args:
+          - '.'
+          - ''
+
+columns:
+  - CENTRO_CUSTO: t
