@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # rascunho
+#./dbms2csv.py --iniyaml ini/centrodecusto.yaml -vvvv
 #./csv2oracle.py -b csv/regiao.csv yaml/regiao.PEDI_040.yaml -vvvvv
+
 
 if [ $1 ] ; then
   VERBOSE=$1
@@ -11,6 +13,7 @@ fi
 
 # Order matters - Criation order
 iniFiles=(
+  "centrodecusto"
   "fornecedor"
   "produto_loteexpedicao_referencias"
   "insumo_nao_tecido_codigo_antigo"
@@ -96,6 +99,7 @@ fi
 
 # Order matters - Criation order
 dataGroupFiles=(
+  "_centrodecusto"
   "regiao"
   "subregiao"
   "funcionario_cargo"
