@@ -1,0 +1,38 @@
+read:
+  db: f1
+  sql:
+    SELECT
+      r.CONTA CODIGO_CONTABIL
+    , r.DESCRICAO DESCRICAO_ORI
+    FROM SCC_PLANOCONTASNOVO r
+    where r.NIVEL2 is not null
+    order by r.CONTA
+
+functions:
+  - CODIGO_CONTABIL:
+      str:
+        method: re.sub
+        args:
+          - '\.'
+          - ''
+  - DESCRICAO_ORI:
+      str:
+        method: unaccent
+  - DESCRICAO_LIMPO:
+      str:
+        field: descricao_ori
+        method: re.sub
+        args:
+          - 'º'
+          - ''
+  - DESCRICAO:
+      str:
+        field: descricao_limpo
+        method: slice
+        args:
+          - ''
+          - '45'
+
+columns:
+  - CODIGO_CONTABIL: t
+  - DESCRICAO: t
