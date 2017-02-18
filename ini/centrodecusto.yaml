@@ -3,7 +3,7 @@ read:
   sql:
     SELECT
       r.ESTRUTURA CENTRO_CUSTO
-    , r.DESCRICAO
+    , r.DESCRICAO DESCRICAO_ori
     , case
         when r.NIVEL4 is not null then
           case when r.ESTRUTURA = r.NIVEL4 then r.NIVEL3 else r.NIVEL4 end
@@ -21,8 +21,26 @@ functions:
       str:
         method: re.sub
         args:
-          - '.'
+          - '\.'
+          - ''
+  - DESCRICAO_ORI:
+      str:
+        method: unaccent
+  - DESCRICAO:
+      str:
+        field: descricao_ori
+        method: slice
+        args:
+          - ''
+          - '20'
+  - CENTRO_CUSTO_PAI:
+      str:
+        method: re.sub
+        args:
+          - '\.'
           - ''
 
 columns:
   - CENTRO_CUSTO: t
+  - DESCRICAO: t
+  - CENTRO_CUSTO_PAI: t
