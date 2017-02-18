@@ -14,6 +14,7 @@ fi
 # Order matters - Criation order
 iniFiles=(
   "centrodecusto"
+  "planodecontas"
   "fornecedor"
   "produto_loteexpedicao_referencias"
   "insumo_nao_tecido_codigo_antigo"
