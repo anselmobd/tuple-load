@@ -1,6 +1,9 @@
 #!/usr/bin/env python3.4
 # -*- coding: utf8 -*-
 
+import re
+import unicodedata
+
 
 def count_field(valIni, valStep, fieldBreak):
     ''' Closure to "count" function variable '''
@@ -137,6 +140,11 @@ def str_field(methodDict, variable):
                     result = int(dictRow[field])
                 except Exception as e:
                     result = 0
+            elif method['method'] == 'unaccent':
+                result = ''.join(
+                    (c for c
+                     in unicodedata.normalize('NFD', dictRow[field])
+                     if unicodedata.category(c) != 'Mn'))
         return result
     return inner_func
 
