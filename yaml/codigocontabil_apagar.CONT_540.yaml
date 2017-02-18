@@ -1,0 +1,61 @@
+csv:
+
+  fields:
+
+    CODIGO_CONTABIL:
+      type: integer
+
+  keys:
+    - CODIGO_CONTABIL
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(cc.DESCRICAO)
+    from CONT_540 cc
+    where cc.TIPO_CONTABIL = 4
+      and cc.CODIGO_CONTABIL = :CODIGO_CONTABIL
+
+  update: |
+    UPDATE CONT_540 cc
+    set
+      cc.DESCRICAO = :DESCRICAO
+    where cc.TIPO_CONTABIL = 4
+      and cc.CODIGO_CONTABIL = :CODIGO_CONTABIL
+
+  insert: |
+    INSERT INTO CONT_540 (
+      TIPO_CONTABIL
+    , CODIGO_CONTABIL
+    , COD_SUBCONTA
+    , DESCRICAO
+    , DESCR_CRITERIO_RATEIO
+    ) VALUES (
+      4 -- TIPO_CONTABIL
+    , :CODIGO_CONTABIL
+    , 0 -- COD_SUBCONTA
+    , :DESCRICAO
+    , 0 -- DESCR_CRITERIO_RATEIO
+    )
+
+  key_list: |
+    SELECT
+      cc.CODIGO_CONTABIL
+    from CONT_540 cc
+    where cc.TIPO_CONTABIL = 4
+      and cc.CODIGO_CONTABIL <> 0
+
+  delete: |
+    DELETE FROM CONT_540 cc
+    where cc.TIPO_CONTABIL = 4
+      and cc.CODIGO_CONTABIL = :CODIGO_CONTABIL
+
+  fault_delete: |
+    UPDATE CONT_540 cc
+    set
+      cc.DESCRICAO = '--TREINAMENTO--'
+    where cc.TIPO_CONTABIL = 4
+      and cc.CODIGO_CONTABIL = :CODIGO_CONTABIL
