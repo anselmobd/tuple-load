@@ -54,6 +54,14 @@ class Main:
                                self.config.get(dbfrom, 'database'),
                                self.config.get(dbfrom, 'charset'))
 
+        elif dbms == 'oracle':
+            self.oracle = Oracle(
+                self.config.get(dbTo, 'username'),
+                self.config.get(dbTo, 'password'),
+                self.config.get(dbTo, 'hostname'),
+                self.config.get(dbTo, 'port'),
+                self.config.get(dbTo, 'servicename'),
+                self.config.get(dbTo, 'schema'))
         else:
             raise NameError(
                 'For now, script is not prepared for "'+dbms+'".')
