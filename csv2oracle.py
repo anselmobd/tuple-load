@@ -39,27 +39,32 @@ class Main:
         return rule
 
     def connectDataBase(self):
+        self.vOut.prnt('->connectDataBase', 4)
         dbTo = 'db.to.{}'.format(self.getRule('sql', 'db'))
-        if self.config.get(dbTo, 'dbms') != 'oracle':
-            raise NameError(_('For now, script prepared only for Oracle.'))
+        dbms = self.config.get(dbfrom, 'dbms')
 
-        self.oracle = Oracle(
-            self.config.get(dbTo, 'username'),
-            self.config.get(dbTo, 'password'),
-            self.config.get(dbTo, 'hostname'),
-            self.config.get(dbTo, 'port'),
-            self.config.get(dbTo, 'servicename'),
-            self.config.get(dbTo, 'schema'))
-        self.oracle.verbosity = self.args.verbosity
+        if dbms == 'oracle':
+            self.db = Oracle(
+                self.config.get(dbTo, 'username'),
+                self.config.get(dbTo, 'password'),
+                self.config.get(dbTo, 'hostname'),
+                self.config.get(dbTo, 'port'),
+                self.config.get(dbTo, 'servicename'),
+                self.config.get(dbTo, 'schema'))
+        else:
+            raise NameError(
+                'For now, script is not prepared for "'+dbms+'".')
 
-        self.oracle.connect()
+        self.db.verbosity = self.args.verbosity
+
+        self.db.connect()
         self.vOut.prnt(
             _('Database connected. (Oracle version: {})').format(
-                self.oracle.con.version))
+                self.db.con.version))
 
     def closeDataBase(self):
-        self.oracle.commit()
-        self.oracle.disconnect()
+        self.db.commit()
+        self.db.disconnect()
 
     def __init__(self):
         self.main()
@@ -216,7 +221,7 @@ class Main:
                 self.readCsvKeys()
                 self.deleteRows()
         finally:
-            if self.oracle.connected:
+            if self.db.connected:
                 self.closeDataBase()
 
     def readJson(self):
@@ -266,17 +271,17 @@ class Main:
         # counting rows
 
         sql = self.getStrRule('sql', 'key_count')
-        cursor = self.oracle.cursorExecute(sql, keyRow)
+        cursor = self.db.cursorExecute(sql, keyRow)
         countRows = cursor.fetchall()[0][0]
         self.vOut.prnt(_('count = %s') % (countRows), 2)
 
         if countRows == 1:
             sql = self.getStrRule('sql', 'update')
-            cursor = self.oracle.cursorExecute(sql, dictRow)
+            cursor = self.db.cursorExecute(sql, dictRow)
             self.vOut.prnt(_('updated: %s') % (cursor.rowcount), 2)
         else:
             sql = self.getStrRule('sql', 'insert')
-            cursor = self.oracle.cursorExecute(sql, dictRow)
+            cursor = self.db.cursorExecute(sql, dictRow)
             self.vOut.prnt(_('inserted: %s') % (cursor.rowcount), 2)
 
     def readCsvKeys(self):
@@ -300,7 +305,7 @@ class Main:
         self.vOut.prnt('->deleteRows', 2)
 
         sql = self.getStrRule('sql', 'key_list')
-        cursor = self.oracle.cursorExecute(sql)
+        cursor = self.db.cursorExecute(sql)
 
         toDelete = []
         for row in cursor:
@@ -319,13 +324,13 @@ class Main:
             sql = self.getStrRule('sql', 'delete')
             for deleteKey in toDelete:
                 self.vOut.pprnt(deleteKey, 3)
-                cursor = self.oracle.cursorExecute(
-                    sql, deleteKey, self.oracle.CONTINUE_ON_ERROR)
+                cursor = self.db.cursorExecute(
+                    sql, deleteKey)  # , self.oracle.CONTINUE_ON_ERROR)
                 self.vOut.prnt(_('deleted: %s') % (cursor.rowcount), 2)
                 if cursor.rowcount == 0:
                     if 'fault_delete' in self.rules['sql']:
                         sql = self.getRule('sql', 'fault_delete')
-                        cursor = self.oracle.cursorExecute(sql, deleteKey)
+                        cursor = self.db.cursorExecute(sql, deleteKey)
                         self.vOut.prnt(
                             _('fault deleted: %s') % (cursor.rowcount), 2)
 
