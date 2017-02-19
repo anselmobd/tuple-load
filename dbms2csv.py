@@ -39,20 +39,22 @@ class Main:
         dbms = self.config.get(dbfrom, 'dbms')
 
         if dbms == 'mssql':
-            self.db = Mssql(self.config.get(dbfrom, 'username'),
-                            self.config.get(dbfrom, 'password'),
-                            self.config.get(dbfrom, 'hostname'),
-                            self.config.get(dbfrom, 'port'),
-                            self.config.get(dbfrom, 'database'),
-                            self.config.get(dbfrom, 'schema'))
+            self.db = Mssql(
+                self.config.get(dbfrom, 'username'),
+                self.config.get(dbfrom, 'password'),
+                self.config.get(dbfrom, 'hostname'),
+                self.config.get(dbfrom, 'port'),
+                self.config.get(dbfrom, 'database'),
+                self.config.get(dbfrom, 'schema'))
 
         elif dbms == 'firebird':
-            self.db = Firebird(self.config.get(dbfrom, 'username'),
-                               self.config.get(dbfrom, 'password'),
-                               self.config.get(dbfrom, 'hostname'),
-                               self.config.get(dbfrom, 'port'),
-                               self.config.get(dbfrom, 'database'),
-                               self.config.get(dbfrom, 'charset'))
+            self.db = Firebird(
+                self.config.get(dbfrom, 'username'),
+                self.config.get(dbfrom, 'password'),
+                self.config.get(dbfrom, 'hostname'),
+                self.config.get(dbfrom, 'port'),
+                self.config.get(dbfrom, 'database'),
+                self.config.get(dbfrom, 'charset'))
 
         elif dbms == 'oracle':
             self.oracle = Oracle(
