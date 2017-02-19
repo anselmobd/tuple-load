@@ -28,7 +28,8 @@ class Firebird:
     def connect(self):
         """ Connect to the database. if this fails, raise. """
         if self.verbosity >= self._VERBOSITY:
-            print('Firebird->connect start')
+            print(self.__class__.__name__, '-> connect start')
+
         try:
             self.con = fdb.connect(
                 dsn='{}/{}:{}'.format(self.hostname, self.port, self.database),
@@ -41,12 +42,9 @@ class Firebird:
         except fdb.DatabaseError as e:
             error, *args = e.args
             reraise = False
+
             msgPrefix = 'Database connection error:'
-            # if error.code == 1017:
-            #     msg = 'Please check your credentials.'
-            # elif error.code == 12541:
-            #     msg = 'Can''t connect.'
-            # else:
+            # raise "unknown" errors
             reraise = True
             msg = '(Code={}) {}'.format(error.code, e)
 
@@ -68,23 +66,23 @@ class Firebird:
                 print('Not connected!')
 
         if self.verbosity >= self._VERBOSITY:
-            print('Firebird->connect end')
+            print(self.__class__.__name__, '-> connect end')
 
     def commit(self):
         """ Commit data to the database. If this fails, don't care. """
         if self.verbosity >= self._VERBOSITY:
-            print('Firebird->commit start')
+            print(self.__class__.__name__, '-> commit start')
         try:
             self.con.commit()
         except fdb.DatabaseError:
             pass
         if self.verbosity >= self._VERBOSITY:
-            print('Firebird->commit end')
+            print(self.__class__.__name__, '-> commit end')
 
     def disconnect(self):
         """ Disconnect from the database. If this fails, don't care. """
         if self.verbosity >= self._VERBOSITY:
-            print('Firebird->disconnect start')
+            print(self.__class__.__name__, '-> disconnect start')
         try:
             self.cursor.close()
             self.con.close()
@@ -92,12 +90,12 @@ class Firebird:
         except fdb.DatabaseError:
             pass
         if self.verbosity >= self._VERBOSITY:
-            print('Firebird->disconnect end')
+            print(self.__class__.__name__, '-> disconnect end')
 
     def cursorExecute(self, statement, data=None, halt=True):
         """ Execute statement using data and return cursor. """
         if self.verbosity >= self._VERBOSITY:
-            print('Firebird->cursorExecute start')
+            print(self.__class__.__name__, '-> cursorExecute start')
         try:
             if data:
                 self.cursor.execute(statement, data)
@@ -110,7 +108,7 @@ class Firebird:
             if halt:
                 raise
         if self.verbosity >= self._VERBOSITY:
-            print('Firebird->cursorExecute end')
+            print(self.__class__.__name__, '-> cursorExecute end')
         return self.cursor
 
 
