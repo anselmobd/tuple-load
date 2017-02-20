@@ -5,18 +5,15 @@ import sys
 
 import fdb
 
+from oxy.db import Db
 
-class Firebird:
+
+class Firebird(Db):
 
     def __init__(self, username, password,
                  hostname, port, database, charset):
 
-        # Vebosity to show all
-        self._VERBOSITY = 4
-
-        self.CONTINUE_ON_ERROR = False
-        self.connected = False
-        self.verbosity = 0
+        super(Firebird, self).__init__()
 
         self.className = self.__class__.__name__
 
@@ -37,89 +34,6 @@ class Firebird:
             password=self.password,
             charset=self.charset
             )
-
-    def connect(self):
-        """ Connect to the database. if this fails, raise. """
-        if self.verbosity >= self._VERBOSITY:
-            print(self.__class__.__name__, '-> connect start')
-
-        try:
-            self.custonConnect()
-            self.connected = True
-
-        except self.dbModule.DatabaseError as e:
-            error, *args = e.args
-            msgPrefix = 'Database connection error:'
-            if error.code in nonRaiserErrors.keys():
-                reraise = False
-                msg = nonRaiserErrors[error.code]
-            else:
-                # raise "unknown" errors
-                reraise = True
-                msg = '(Code={}) {}'.format(error.code, e)
-
-            if self.verbosity >= 1:
-                print('{} {}'.format(msgPrefix, msg))
-            if reraise:
-                raise
-            else:
-                if self.verbosity >= self._VERBOSITY:
-                    print('Exiting.')
-                sys.exit(10)
-
-        if self.connected:
-            if self.verbosity >= self._VERBOSITY:
-                print('Connected!')
-            self.cursor = self.con.cursor()
-        else:
-            if self.verbosity >= self._VERBOSITY:
-                print('Not connected!')
-
-        if self.verbosity >= self._VERBOSITY:
-            print(self.__class__.__name__, '-> connect end')
-
-    def commit(self):
-        """ Commit data to the database. If this fails, don't care. """
-        if self.verbosity >= self._VERBOSITY:
-            print(self.__class__.__name__, '-> commit start')
-        try:
-            self.con.commit()
-        except fdb.DatabaseError:
-            pass
-        if self.verbosity >= self._VERBOSITY:
-            print(self.__class__.__name__, '-> commit end')
-
-    def disconnect(self):
-        """ Disconnect from the database. If this fails, don't care. """
-        if self.verbosity >= self._VERBOSITY:
-            print(self.__class__.__name__, '-> disconnect start')
-        try:
-            self.cursor.close()
-            self.con.close()
-            self.connected = False
-        except fdb.DatabaseError:
-            pass
-        if self.verbosity >= self._VERBOSITY:
-            print(self.__class__.__name__, '-> disconnect end')
-
-    def cursorExecute(self, statement, data=None, halt=True):
-        """ Execute statement using data and return cursor. """
-        if self.verbosity >= self._VERBOSITY:
-            print(self.__class__.__name__, '-> cursorExecute start')
-        try:
-            if data:
-                self.cursor.execute(statement, data)
-            else:
-                self.cursor.execute(statement)
-        except fdb.DatabaseError as e:
-            error, = e.args
-            if self.verbosity >= 1:
-                print('Error: {}'.format(e))
-            if halt:
-                raise
-        if self.verbosity >= self._VERBOSITY:
-            print(self.__class__.__name__, '-> cursorExecute end')
-        return self.cursor
 
 
 if __name__ == '__main__':
