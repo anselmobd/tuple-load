@@ -8,8 +8,7 @@ import cx_Oracle
 
 class Db:
 
-    def __init__(
-            self):
+    def __init__(self):
 
         # Vebosity level to show all
         self._VERBOSITY = 4
