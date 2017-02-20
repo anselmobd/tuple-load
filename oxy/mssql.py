@@ -11,13 +11,6 @@ class Mssql:
     def __init__(self, username, password,
                  hostname, port, database, schema):
 
-        self.username = username
-        self.password = password
-        self.hostname = hostname
-        self.port = port
-        self.database = database
-        self.schema = schema
-
         # Vebosity to show all
         self._VERBOSITY = 4
 
@@ -25,32 +18,49 @@ class Mssql:
         self.connected = False
         self.verbosity = 0
 
+        self.className = self.__class__.__name__
+
+        self.dbModule = pyodbc
+        self.nonRaiserErrors = {}
+
+        self.username = username
+        self.password = password
+        self.hostname = hostname
+        self.port = port
+        self.database = database
+        self.schema = schema
+
+    def custonConnect(self):
+        self.con = pyodbc.connect(
+            'DRIVER={FreeTDS};'
+            'SERVER='+self.hostname+';'
+            'PORT='+self.port+';'
+            'DATABASE='+self.database+';'
+            'SCHEMA='+self.schema+';'
+            'UID='+self.username+';'
+            'PWD='+self.password+';'
+            'TDS_Version=7.0;'
+            )
+
     def connect(self):
         """ Connect to the database. if this fails, raise. """
         if self.verbosity >= self._VERBOSITY:
             print(self.__class__.__name__, '-> connect start')
 
         try:
-            self.con = pyodbc.connect(
-                'DRIVER={FreeTDS};'
-                'SERVER='+self.hostname+';'
-                'PORT='+self.port+';'
-                'DATABASE='+self.database+';'
-                'SCHEMA='+self.schema+';'
-                'UID='+self.username+';'
-                'PWD='+self.password+';'
-                'TDS_Version=7.0;'
-                )
+            self.custonConnect()
             self.connected = True
 
-        except pyodbc.DatabaseError as e:
+        except self.dbModule.DatabaseError as e:
             error, *args = e.args
-            reraise = False
-
             msgPrefix = 'Database connection error:'
-            # raise "unknown" errors
-            reraise = True
-            msg = '(Code={}) {}'.format(error.code, e)
+            if error.code in nonRaiserErrors.keys():
+                reraise = False
+                msg = nonRaiserErrors[error.code]
+            else:
+                # raise "unknown" errors
+                reraise = True
+                msg = '(Code={}) {}'.format(error.code, e)
 
             if self.verbosity >= 1:
                 print('{} {}'.format(msgPrefix, msg))

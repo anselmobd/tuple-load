@@ -11,13 +11,6 @@ class Oracle:
     def __init__(self, username, password,
                  hostname, port, servicename, schema):
 
-        self.username = username
-        self.password = password
-        self.hostname = hostname
-        self.port = port
-        self.servicename = servicename
-        self.schema = schema
-
         # Vebosity to show all
         self._VERBOSITY = 4
 
@@ -25,27 +18,42 @@ class Oracle:
         self.connected = False
         self.verbosity = 0
 
+        self.className = self.__class__.__name__
+
+        self.dbModule = cx_Oracle
+        self.nonRaiserErrors = {
+            1017: 'Please check your credentials.',
+            12541: 'Can''t connect.'
+            }
+
+        self.username = username
+        self.password = password
+        self.hostname = hostname
+        self.port = port
+        self.servicename = servicename
+        self.schema = schema
+
+    def custonConnect(self):
+        self.con = cx_Oracle.connect(
+            self.username, self.password,
+            '{}:{}/{}'.format(self.hostname, self.port, self.servicename))
+        self.con.current_schema = self.schema
+
     def connect(self):
         """ Connect to the database. if this fails, raise. """
         if self.verbosity >= self._VERBOSITY:
             print(self.__class__.__name__, '-> connect start')
 
         try:
-            self.con = cx_Oracle.connect(
-                self.username, self.password,
-                '{}:{}/{}'.format(self.hostname, self.port, self.servicename))
+            self.custonConnect()
             self.connected = True
-            self.con.current_schema = self.schema
 
-        except cx_Oracle.DatabaseError as e:
-            error, = e.args
-            reraise = False
-
+        except self.dbModule.DatabaseError as e:
+            error, *args = e.args
             msgPrefix = 'Database connection error:'
-            if error.code == 1017:
-                msg = 'Please check your credentials.'
-            elif error.code == 12541:
-                msg = 'Can''t connect.'
+            if error.code in nonRaiserErrors.keys():
+                reraise = False
+                msg = nonRaiserErrors[error.code]
             else:
                 # raise "unknown" errors
                 reraise = True

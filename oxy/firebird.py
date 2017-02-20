@@ -11,13 +11,6 @@ class Firebird:
     def __init__(self, username, password,
                  hostname, port, database, charset):
 
-        self.username = username
-        self.password = password
-        self.hostname = hostname
-        self.port = port
-        self.database = database
-        self.charset = charset
-
         # Vebosity to show all
         self._VERBOSITY = 4
 
@@ -25,28 +18,45 @@ class Firebird:
         self.connected = False
         self.verbosity = 0
 
+        self.className = self.__class__.__name__
+
+        self.dbModule = fdb
+        self.nonRaiserErrors = {}
+
+        self.username = username
+        self.password = password
+        self.hostname = hostname
+        self.port = port
+        self.database = database
+        self.charset = charset
+
+    def custonConnect(self):
+        self.con = fdb.connect(
+            dsn='{}/{}:{}'.format(self.hostname, self.port, self.database),
+            user=self.username,
+            password=self.password,
+            charset=self.charset
+            )
+
     def connect(self):
         """ Connect to the database. if this fails, raise. """
         if self.verbosity >= self._VERBOSITY:
             print(self.__class__.__name__, '-> connect start')
 
         try:
-            self.con = fdb.connect(
-                dsn='{}/{}:{}'.format(self.hostname, self.port, self.database),
-                user=self.username,
-                password=self.password,
-                charset=self.charset
-                )
+            self.custonConnect()
             self.connected = True
 
-        except fdb.DatabaseError as e:
+        except self.dbModule.DatabaseError as e:
             error, *args = e.args
-            reraise = False
-
             msgPrefix = 'Database connection error:'
-            # raise "unknown" errors
-            reraise = True
-            msg = '(Code={}) {}'.format(error.code, e)
+            if error.code in nonRaiserErrors.keys():
+                reraise = False
+                msg = nonRaiserErrors[error.code]
+            else:
+                # raise "unknown" errors
+                reraise = True
+                msg = '(Code={}) {}'.format(error.code, e)
 
             if self.verbosity >= 1:
                 print('{} {}'.format(msgPrefix, msg))
