@@ -4,6 +4,8 @@
 import re
 import unicodedata
 
+import csv
+
 
 def count_field(valIni, valStep, fieldBreak):
     ''' Closure to "count" function variable '''
