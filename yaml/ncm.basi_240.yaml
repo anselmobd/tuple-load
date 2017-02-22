@@ -17,9 +17,9 @@ sql:
     UPDATE BASI_240 n
     set
       n.DESCR_CLASS_FISC = :DESCRICAO
-    , n.CVF_IPI_SAIDA = 52
-    , n.CVF_IPI_ENTRADA = 2
-    , n.CVF_IPI_SAIDA_EXP = 52
+    , n.CVF_IPI_SAIDA = 51
+    , n.CVF_IPI_ENTRADA = 1
+    , n.CVF_IPI_SAIDA_EXP = 99
     , n.DESC_DETALHA_CLASS_FISC = :DETALHE
     where n.CLASSIFIC_FISCAL = :NCM
 
