@@ -23,6 +23,7 @@ iniFiles=(
   "insumo_nao_tecido_loteexpedicao_capa"
   "insumo_nao_tecido_loteexpedicao_tamanho"
   "insumo_nao_tecido_loteexpedicao_tamanho_cor"
+  "insumo_nao_tecido_loteexpedicao_almox"
   "insumo_tecido_codigo_antigo"
   "insumo_tecido_loteexpedicao_codigo_antigo"
   "insumo_tecido_loteexpedicao_md_codigo_antigo"
