@@ -41,7 +41,7 @@ class Main:
     def connectDataBase(self):
         self.vOut.prnt('->connectDataBase', 4)
         dbTo = 'db.to.{}'.format(self.getRule('sql', 'db'))
-        dbms = self.config.get(dbfrom, 'dbms')
+        dbms = self.config.get(dbTo, 'dbms')
 
         if dbms == 'oracle':
             self.db = Oracle(
