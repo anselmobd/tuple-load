@@ -21,6 +21,7 @@ sql:
   update: |
     UPDATE SYSTEXTIL.BASI_150 SET
       DESCR_CT_ESTOQUE=:DESCRICAO
+    , TIPO_PRODUTO_SPED=:TIPO_PRODUTO_SPED
     WHERE CONTA_ESTOQUE=:CODIGO
 
   insert: |
@@ -42,13 +43,13 @@ sql:
     ( :CODIGO --  CONTA_ESTOQUE
     , :DESCRICAO --  DESCR_CT_ESTOQUE
     , 0 --  ITENS_ESTOQUE
-    , 0 --  TIPO_CONSUMO
+    , 1 --  TIPO_CONSUMO
     , 0 --  PERC_ICMS_PCUSTO
     , 3 --  IPI_PCUSTO - (3) Nao considera IPI no calculo
     , 0 --  ANALISA_COTACAO
     , 0 --  REPLICA_SUB_MAT_COMP
     , 0 --  GENERO_PRODUTO_SPED
-    , 0 --  TIPO_PRODUTO_SPED
+    , :TIPO_PRODUTO_SPED
     , 0 --  TIPO_CONTA_ESTOQUE
     , 1 --  CONS_BLOQ_ITEM_REQ - (1) Exige requisicao para comprar
     )
