@@ -1,0 +1,114 @@
+csv:
+
+  columns:
+    - NIVEL_ESTRUTURA
+    - REFERENCIA
+    - TAM
+    - COR
+    - ESTOQUESEGURANCA
+
+  keys:
+    - NIVEL_ESTRUTURA
+    - REFERENCIA
+    - TAM
+    - COR
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(ESTOQUESEGURANCA)
+    FROM BASI_015
+    WHERE NIVEL_ESTRUTURA = :NIVEL_ESTRUTURA
+      AND GRUPO_ESTRUTURA = :REFERENCIA
+      AND SUBGRU_ESTRUTURA = :TAM
+      AND ITEM_ESTRUTURA = :COR
+
+  update: |
+    UPDATE BASI_015 SET
+      ESTOQUE_MINIMO = :ESTOQUESEGURANCA
+    WHERE NIVEL_ESTRUTURA = :NIVEL_ESTRUTURA
+      AND GRUPO_ESTRUTURA = :REFERENCIA
+      AND SUBGRU_ESTRUTURA = :TAM
+      AND ITEM_ESTRUTURA = :COR
+
+  insert: |
+    INSERT INTO BASI_015 (
+      CODIGO_EMPRESA
+    , NIVEL_ESTRUTURA
+    , GRUPO_ESTRUTURA
+    , SUBGRU_ESTRUTURA
+    , ITEM_ESTRUTURA
+    , PRECO_MEDIO
+    , PRECO_CUSTO
+    , ESTOQUE_MINIMO
+    , TEMPO_REPOSICAO
+    , LOTE_MULTIPLO
+    , CONSUMO_MEDIO
+    , ESTOQUE_MAXIMO
+    , PRECO_MEDIO_ANT
+    , PRECO_CUSTO_ANT
+    , PM_ANTERIOR
+    , TIPO_PRODUTO
+    , CODIGO_DEPOSITO
+    , CONSIDERA_SUGESTAO
+    , BLOQUEIA_COMPRA
+    , PERC_DIV_MAIOR
+    , PERC_DIV_MENOR
+    , REQ_ALMOX_AUTO
+    , REQ_COMPRA_AUTO
+    , CONTROLA_DRAW_BACK
+    , COD_FAMILIA
+    , APLICACAO
+    , COMPRADO_FABRIC
+    , PERC_DIV_MAIOR_VALOR
+    , PERC_DIV_MENOR_VALOR
+    ) VALUES (
+      1        -- CODIGO_EMPRESA
+    , :NIVEL_ESTRUTURA
+    , :REFERENCIA -- GRUPO_ESTRUTURA
+    , :TAM -- SUBGRU_ESTRUTURA
+    , :COR -- ITEM_ESTRUTURA
+    , 0        -- PRECO_MEDIO
+    , 0        -- PRECO_CUSTO
+    , :ESTOQUESEGURANCA -- ESTOQUE_MINIMO
+    , 0        -- TEMPO_REPOSICAO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    , 0        -- LOTE_MULTIPLO
+    , 0        -- CONSUMO_MEDIO
+    , 0        -- ESTOQUE_MAXIMO
+    , 0        -- PRECO_MEDIO_ANT
+    , 0        -- PRECO_CUSTO_ANT
+    , 0        -- PM_ANTERIOR
+    , 1        -- TIPO_PRODUTO
+    , 901      -- CODIGO_DEPOSITO
+    , 0        -- CONSIDERA_SUGESTAO
+    , 2        -- BLOQUEIA_COMPRA
+    , 0        -- PERC_DIV_MAIOR
+    , 0        -- PERC_DIV_MENOR
+    , 'S'      -- REQ_ALMOX_AUTO
+    , 'S'      -- REQ_COMPRA_AUTO
+    , 0        -- CONTROLA_DRAW_BACK
+    , 0        -- COD_FAMILIA
+    , 3        -- APLICACAO
+    , 1        -- COMPRADO_FABRIC
+    , 0        -- PERC_DIV_MAIOR_VALOR
+    , 0        -- PERC_DIV_MENOR_VALOR
+    )
+
+  key_list: |
+    SELECT
+      rtc.NIVEL_ESTRUTURA
+    , rtc.GRUPO_ESTRUTURA
+    , rtc.SUBGRU_ESTRUTURA
+    , rtc.ITEM_ESTRUTURA
+    FROM BASI_015 rtc
+    WHERE rtc.NIVEL_ESTRUTURA = '9'
+
+  delete: |
+    DELETE FROM BASI_015
+    WHERE NIVEL_ESTRUTURA = :NIVEL_ESTRUTURA
+      AND GRUPO_ESTRUTURA = :REFERENCIA
+      AND SUBGRU_ESTRUTURA = :TAM
+      AND ITEM_ESTRUTURA = :COR
