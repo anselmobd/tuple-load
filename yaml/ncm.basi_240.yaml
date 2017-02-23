@@ -35,9 +35,9 @@ sql:
     VALUES(
       :NCM       -- CLASSIFIC_FISCAL
     , :DESCRICAO -- DESCR_CLASS_FISC
-    , 52         -- CVF_IPI_SAIDA
-    , 2          -- CVF_IPI_ENTRADA
-    , 52         -- CVF_IPI_SAIDA_EXP
+    , 51         -- CVF_IPI_SAIDA
+    , 1          -- CVF_IPI_ENTRADA
+    , 99         -- CVF_IPI_SAIDA_EXP
     , :DETALHE   -- DESC_DETALHA_CLASS_FISC
     )
 
