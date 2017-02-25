@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 
-import sys
-
 import cx_Oracle
 
 from oxy.db import Db

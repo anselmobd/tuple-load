@@ -1,8 +1,6 @@
 #!/usr/bin/env python3.4
 # -*- coding: utf8 -*-
 
-import sys
-
 import fdb
 
 from oxy.db import Db
