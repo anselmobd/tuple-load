@@ -56,7 +56,6 @@ sql:
     FROM BASI_020 rt
     WHERE rt.BASI030_NIVEL030=1
       AND substr(rt.BASI030_REFERENC, 1, 1) in ('M', 'N', 'P', 'Q', 'W', 'Y')
-      AND rt.BASI030_REFERENC not like '%00%'
 
   delete: |
     DELETE FROM BASI_020
