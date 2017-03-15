@@ -40,8 +40,9 @@ class Main:
 
     def connectDataBase(self):
         self.vOut.prnt('->connectDataBase', 4)
-        dbTo = 'db.to.{}'.format(self.getRule('sql', 'db'))
+        dbTo = 'db.to.{}{}'.format(self.getRule('sql', 'db'), self.args.dbvar)
         dbms = self.config.get(dbTo, 'dbms')
+        self.vOut.prnt('dbTo = {}'.format(dbTo), 3)
 
         if dbms == 'oracle':
             self.db = Oracle(
@@ -137,6 +138,14 @@ class Main:
         parser.add_argument(
             "-v", "--verbosity", action="count", default=0,
             help=_("increase output verbosity"))
+        parser.add_argument(
+            "--dbvar",
+            type=str,
+            default='',
+            help=_('Variation of the database. '
+                   'Suffix of the database identifier. '
+                   '(".variation" is added to the identifier used in table '
+                   'access definitions)'))
         self.args = parser.parse_args()
 
         self.args.insert = self.args.insert \
@@ -146,6 +155,9 @@ class Main:
             self.args.yamltad = False
         if self.args.insert == self.args.delete:
             self.args.insert = True
+
+        if self.args.dbvar:
+             self.args.dbvar = '.'+self.args.dbvar
 
         self.args.csvFile = \
             oxyu.fileWithRequiredExtension(self.args.csvFile, 'csv')
