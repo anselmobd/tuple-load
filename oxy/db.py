@@ -37,9 +37,9 @@ class Db:
         except self.dbModule.DatabaseError as e:
             error, *args = e.args
             msgPrefix = 'Database connection error:'
-            if error.code in nonRaiserErrors.keys():
+            if error.code in self.nonRaiserErrors.keys():
                 reraise = False
-                msg = nonRaiserErrors[error.code]
+                msg = self.nonRaiserErrors[error.code]
             else:
                 # raise "unknown" errors
                 reraise = True
