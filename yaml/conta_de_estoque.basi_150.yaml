@@ -62,3 +62,10 @@ sql:
   delete: |
     DELETE FROM BASI_150
     WHERE CONTA_ESTOQUE=:CODIGO
+
+  fault_delete: |
+    UPDATE BASI_150
+    set
+      DESCR_CT_ESTOQUE = substr('--' || DESCR_CT_ESTOQUE, 1, 40)
+    WHERE CONTA_ESTOQUE=:CODIGO
+      and DESCR_CT_ESTOQUE not like '--%'
