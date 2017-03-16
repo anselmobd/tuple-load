@@ -1,0 +1,47 @@
+csv:
+
+  keys:
+    - CONTA_CONTABIL
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(DESCRICAO)
+    FROM CONT_536
+    WHERE CONTA_CONTABIL=:CONTA_CONTABIL
+
+  update: |
+    UPDATE SYSTEXTIL.CONT_536 SET
+      DESCRICAO=:DESCRICAO
+    , ORIENTACOES=:ORIENTACOES
+    WHERE CONTA_CONTABIL=:CONTA_CONTABIL
+
+  insert: |
+    INSERT INTO CONT_536 (
+      CONTA_CONTABIL
+    , DESCRICAO
+    , ORIENTACOES
+    ) VALUES (
+      :CONTA_CONTABIL
+    , :DESCRICAO
+    , :ORIENTACOES
+    )
+
+  key_list: |
+    SELECT
+      CONTA_CONTABIL
+    FROM CONT_536
+
+  delete: |
+    DELETE FROM CONT_536
+    WHERE CONTA_CONTABIL=:CONTA_CONTABIL
+
+  fault_delete: |
+    UPDATE CONT_536
+    set
+      DESCRICAO = substr('--' || DESCRICAO, 1, 100)
+    WHERE CONTA_CONTABIL=:CONTA_CONTABIL
+      and DESCRICAO not like '--%'
