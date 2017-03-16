@@ -12,6 +12,7 @@ fi
 
 # Order matters - Criation order
 dataGroupFiles=(
+  "_centrodecusto"
   "conta_de_estoque"
 )
 
