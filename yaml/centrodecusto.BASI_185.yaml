@@ -119,6 +119,7 @@ sql:
       cc.CENTRO_CUSTO
     from BASI_185 cc
     where cc.CENTRO_CUSTO <> 100
+      and cc.CENTRO_CUSTO <> 0
 
   delete: |
     DELETE FROM BASI_185 cc
@@ -127,5 +128,6 @@ sql:
   fault_delete: |
     UPDATE BASI_185 cc
     set
-      cc.DESCRICAO = '--TREINAMENTO--'
+      cc.DESCRICAO = substr('--' || cc.DESCRICAO, 1, 20)
     where cc.CENTRO_CUSTO = :CENTRO_CUSTO
+      and cc.DESCRICAO not like '--%'
