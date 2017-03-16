@@ -157,7 +157,7 @@ class Main:
             self.args.insert = True
 
         if self.args.dbvar:
-             self.args.dbvar = '.'+self.args.dbvar
+            self.args.dbvar = '.'+self.args.dbvar
 
         self.args.csvFile = \
             oxyu.fileWithRequiredExtension(self.args.csvFile, 'csv')
