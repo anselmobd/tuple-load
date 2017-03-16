@@ -337,7 +337,7 @@ class Main:
             for deleteKey in toDelete:
                 self.vOut.pprnt(deleteKey, 3)
                 cursor = self.db.cursorExecute(
-                    sql, deleteKey)  # , self.oracle.CONTINUE_ON_ERROR)
+                    sql, deleteKey, self.db.CONTINUE_ON_ERROR)
                 self.vOut.prnt(_('deleted: %s') % (cursor.rowcount), 2)
                 if cursor.rowcount == 0:
                     if 'fault_delete' in self.rules['sql']:
