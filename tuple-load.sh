@@ -13,7 +13,7 @@ fi
 
 # Order matters - Criation order
 iniFiles=(
-  "centrodecusto"
+  "centrodecusto --iniyaml"
   "planodecontas"
   "fornecedor"
   "produto_loteexpedicao_referencias"
@@ -82,7 +82,7 @@ if [ $exec = 'c' -o $exec = 'a' -o $exec = 'g' ]; then
     fi
     echo
     if [ $exec = 'y' -o $exec = 'a' -o $exec = 'g' ]; then
-      ./dbms2csv.py "${iniFile}" $VERBOSE
+      ./dbms2csv.py ${iniFile} $VERBOSE
       if [ $? -eq 0 ]; then
         echo
         echo "Generated data group ${iniFile} - OK !!!"
@@ -102,6 +102,7 @@ fi
 # Order matters - Criation order
 dataGroupFiles=(
   "_centrodecusto"
+  "plano_referencial"
   "regiao"
   "subregiao"
   "funcionario_cargo"
@@ -120,7 +121,7 @@ dataGroupFiles=(
   "ncm.fixo"
   "produto-linha_de_produto"
   "produto-artigo_de_produto"
-#  "fornecedor"
+  "fornecedor"
 #  "_produto_colecao"
   "produto_colecao"
   "_insumo_nao_tecido_loteexpedicao_capa"

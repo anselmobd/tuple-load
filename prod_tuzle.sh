@@ -14,6 +14,7 @@ fi
 dataGroupFiles=(
   "_centrodecusto"
   "conta_de_estoque"
+  "plano_referencial"
 )
 
 # delete
