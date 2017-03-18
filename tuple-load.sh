@@ -14,7 +14,7 @@ fi
 # Order matters - Criation order
 iniFiles=(
   "centrodecusto --iniyaml"
-  "planodecontas"
+  "planodecontas --iniyaml"
   "fornecedor"
   "produto_loteexpedicao_referencias"
   "insumo_nao_tecido_codigo_antigo"
