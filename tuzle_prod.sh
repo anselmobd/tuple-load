@@ -15,6 +15,13 @@ dataGroupFiles=(
   "_centrodecusto"
   "conta_de_estoque"
   "plano_referencial"
+  "periodo_de_comissao"
+  "regiao"
+  "subregiao"
+  "funcionario_cargo"
+  "funcionario_setor"
+  "funcionario"
+  "usuario"
 )
 
 # delete
