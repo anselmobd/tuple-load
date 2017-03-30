@@ -102,20 +102,22 @@ fi
 # Order matters - Criation order
 dataGroupFiles=(
   "_centrodecusto"
+  "conta_de_estoque"
   "plano_referencial"
+  "periodo_de_comissao"
   "regiao"
   "subregiao"
   "funcionario_cargo"
   "funcionario_setor"
   "funcionario"
   "usuario"
+
   "faixa_etaria.fixo"
   "unidades_de_medida.fixo"
   "tamanho.fixo"
   "serie_tamanho.fixo"
   "serie_tamanho_tamanho.fixo"
   "cor.fixo"
-  "conta_de_estoque"
   "tecido-linha_de_produto"
   "tecido-artigo_de_produto"
   "ncm.fixo"
