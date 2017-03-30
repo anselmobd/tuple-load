@@ -1,0 +1,54 @@
+csv:
+
+  fields:
+
+    CODIGO_DEPOSITO:
+      type: integer
+
+  keys:
+    - CODIGO_DEPOSITO
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(dep.DESCRICAO)
+    from BASI_205 dep
+    where dep.CODIGO_DEPOSITO = :CODIGO_DEPOSITO
+
+  update: |
+    UPDATE BASI_205 dep
+    set
+      dep.DESCRICAO = :DESCRICAO
+    where dep.CODIGO_DEPOSITO = :CODIGO_DEPOSITO
+
+  insert: |
+    INSERT INTO BASI_205 (
+      CODIGO_DEPOSITO
+    , DESCRICAO
+    , LOCAL_DEPOSITO
+    ) VALUES (
+      :CODIGO_DEPOSITO
+    , :DESCRICAO
+    , 1
+    )
+
+  key_list: |
+    SELECT
+      dep.CODIGO_DEPOSITO
+    from BASI_205 dep
+    where dep.CODIGO_DEPOSITO <> 1
+      and dep.CODIGO_DEPOSITO <> 0
+
+  delete: |
+    DELETE FROM BASI_205 dep
+    where dep.CODIGO_DEPOSITO = :CODIGO_DEPOSITO
+
+  fault_delete: |
+    UPDATE BASI_205 dep
+    set
+      dep.DESCRICAO = substr('X!' || dep.DESCRICAO, 1, 30)
+    where dep.CODIGO_DEPOSITO = :CODIGO_DEPOSITO
+      and dep.DESCRICAO not like 'X!%'
