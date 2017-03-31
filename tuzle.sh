@@ -117,8 +117,6 @@ if [ ${#dataGroupFiles[@]} -ne 0 ] ; then
     for (( idx=${#dataGroupFiles[@]}-2 ; idx>=1 ; idx-- )) ; do
       echo
       echo "====="
-      echo "idx = $idx"
-      echo "{dataGroupFiles[idx]} = ${dataGroupFiles[$idx]}"
       echo "./csv2oracle.py ${dataGroupFiles[idx]} -d $VERBOSE $DBVAR"
       echo
       if [ $exec != 'a' -a $exec != 'g' ] ; then
