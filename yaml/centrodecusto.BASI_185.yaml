@@ -128,6 +128,6 @@ sql:
   fault_delete: |
     UPDATE BASI_185 cc
     set
-      cc.DESCRICAO = substr('--' || cc.DESCRICAO, 1, 20)
+      cc.DESCRICAO = substr('##' || cc.DESCRICAO, 1, 20)
     where cc.CENTRO_CUSTO = :CENTRO_CUSTO
-      and cc.DESCRICAO not like '--%'
+      and cc.DESCRICAO not like '##%'
