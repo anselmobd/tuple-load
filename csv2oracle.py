@@ -324,7 +324,7 @@ class Main:
             self.vOut.prnt('row', 4)
             self.vOut.pprnt(row, 4)
             if row in self.keys:
-                self.vOut.prnt('remove', 4)
+                self.vOut.prnt('remove from key list to delete', 4)
                 self.keys.remove(row)
             else:
                 self.vOut.prnt('append', 4)
