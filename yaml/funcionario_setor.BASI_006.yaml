@@ -1,5 +1,10 @@
 csv:
 
+  fields:
+
+    SETOR_RESPONSAVEL:
+      type: integer
+
   keys:
     - SETOR_RESPONSAVEL
 
@@ -37,3 +42,10 @@ sql:
   delete: |
     DELETE FROM BASI_006 s
     where s.SETOR_RESPONSAVEL = :SETOR_RESPONSAVEL
+
+  fault_delete: |
+    UPDATE BASI_006 s
+    set
+      s.DESCRICAO_SETOR = substr('##' || c.DESCRICAO_SETOR, 1, 60)
+    where s.SETOR_RESPONSAVEL = :SETOR_RESPONSAVEL
+      and c.DESCRICAO_SETOR not like '##%'

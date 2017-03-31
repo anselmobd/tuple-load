@@ -1,5 +1,10 @@
 csv:
 
+  fields:
+
+    MATRICULA:
+      type: integer
+
   keys:
     - MATRICULA
 
@@ -17,7 +22,7 @@ sql:
   update: |
     UPDATE EFIC_050 f
     set
-      f.NOME = : NOME
+      f.NOME = :NOME
     , f.TURNO = 1
     , f.LANCA_PARADA = 0
     , f.LANCA_REJEICAO = 0
@@ -107,3 +112,11 @@ sql:
     DELETE FROM EFIC_050 f
     where f.COD_EMPRESA = 1
       and f.COD_FUNCIONARIO = :MATRICULA
+
+  fault_delete: |
+    UPDATE EFIC_050 f
+    set
+      f.NOME = substr('##' || c.NOME, 1, 40)
+    where f.COD_EMPRESA = 1
+      and f.COD_FUNCIONARIO = :MATRICULA
+      and c.NOME not like '##%'

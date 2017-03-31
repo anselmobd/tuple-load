@@ -1,5 +1,10 @@
 csv:
 
+  fields:
+
+    CODIGO_CARGO:
+      type: integer
+
   keys:
     - CODIGO_CARGO
 
@@ -37,3 +42,10 @@ sql:
   delete: |
     DELETE FROM MQOP_120 c
     where c.CODIGO_CARGO = :CODIGO_CARGO
+
+  fault_delete: |
+    UPDATE MQOP_120 c
+    set
+      c.DESCRICAO = substr('##' || c.DESCRICAO, 1, 30)
+    where c.CODIGO_CARGO = :CODIGO_CARGO
+      and c.DESCRICAO not like '##%'

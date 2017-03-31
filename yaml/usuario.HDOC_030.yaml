@@ -12,7 +12,7 @@ sql:
       count(u.EMPRESA)
     from HDOC_030 u
     where u.USUARIO = :USUARIO
-      and u.USUARIO not in ('INTERSYS', 'INTERSYS1', 'TREINAMENTO', 'INTERSYS',
+      and u.USUARIO not in ('INTERSYS', 'INTERSYS1', 'TREINAMENTO',
                'MENUS', 'CONVERTIDOS', 'TREINAMENTO', 'MASTER', 'DUOMO')
 
   update: |
@@ -240,11 +240,19 @@ sql:
     SELECT
       u.USUARIO
     from HDOC_030 u
-    where u.USUARIO not in ('INTERSYS', 'INTERSYS1', 'TREINAMENTO', 'INTERSYS',
+    where u.USUARIO not in ('INTERSYS', 'INTERSYS1', 'TREINAMENTO',
                'MENUS', 'CONVERTIDOS', 'TREINAMENTO', 'MASTER', 'DUOMO')
 
   delete: |
     DELETE FROM HDOC_030 u
     where u.USUARIO = :USUARIO
-      and u.USUARIO not in ('INTERSYS', 'INTERSYS1', 'TREINAMENTO', 'INTERSYS',
+      and u.USUARIO not in ('INTERSYS', 'INTERSYS1', 'TREINAMENTO',
+               'MENUS', 'CONVERTIDOS', 'TREINAMENTO', 'MASTER', 'DUOMO')
+
+  fault_delete: |
+    UPDATE HDOC_030 u
+    set
+      u.ATIVO_INATIVO = 2
+    where u.USUARIO = :USUARIO
+      and u.USUARIO not in ('INTERSYS', 'INTERSYS1', 'TREINAMENTO',
                'MENUS', 'CONVERTIDOS', 'TREINAMENTO', 'MASTER', 'DUOMO')
