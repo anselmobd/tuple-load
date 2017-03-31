@@ -48,5 +48,6 @@ sql:
   fault_delete: |
     UPDATE PEDI_043 sr
     set
-      sr.DESCRICAO = '--TREINAMENTO--'
+      sr.DESCRICAO = substr('##' || sr.DESCRICAO, 1, 20)
     where sr.SUB_REGIAO = :SUB_REGIAO
+      and sr.DESCRICAO not like '##%'

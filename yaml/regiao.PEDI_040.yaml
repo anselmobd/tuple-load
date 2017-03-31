@@ -52,5 +52,6 @@ sql:
   fault_delete: |
     UPDATE PEDI_040 r
     set
-      r.NOME_REGIAO = '--TREINAMENTO--'
+      r.NOME_REGIAO = substr('##' || r.NOME_REGIAO, 1, 20)
     where r.CODIGO_REGIAO = :CODIGO_REGIAO
+      and r.NOME_REGIAO not like '##%'
