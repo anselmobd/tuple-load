@@ -16,26 +16,23 @@ if [ -z ${DBVAR+x} ] ; then
   exit 65
 fi
 
-EMPTY='s'
-echo '-- tuzle creation'
-for iniFile in "${iniFiles[@]}"
-do
+echo '-- tuzle creation --'
+for iniFile in "${iniFiles[@]}" ; do
   echo "dbms2csv.py - ${iniFile}"
-  EMPTY=''
 done
 
-echo '-- tuzle mantain'
-for dataGroupFiles in "${dataGroupFiles[@]}"
-do
+echo '-- tuzle mantain --'
+for dataGroupFiles in "${dataGroupFiles[@]}" ; do
   echo "dbms2csv.py - ${dataGroupFiles}"
-  EMPTY=''
 done
 
-echo '-- tuzle'
+echo '-- --'
 
-if [ $EMPTY ] ; then
-   echo 'Nothing to do'
-   exit 0
+if [ ${#iniFiles[@]} -eq 0 ] ; then
+  if [ ${#dataGroupFiles[@]} -eq 0 ] ; then
+     echo 'Nothing to do'
+     exit 0
+  fi
 fi
 
 if [ $2 ] ; then
@@ -44,7 +41,7 @@ else
   VERBOSE=""
 fi
 
-if [ ${#iniFile[@]} -ne 0 ]; then
+if [ ${#iniFile[@]} -ne 0 ] ; then
 
   # generate
 
@@ -55,11 +52,11 @@ if [ ${#iniFile[@]} -ne 0 ]; then
   read -p "Confirm executing 'Generate'? (c/n/a/g) " -n1 -s exec
   echo
 
-  if [ $exec = 'g' ]; then
+  if [ $exec = 'g' ] ; then
     INI=$(date)
   fi
 
-  if [ $exec = 'c' -o $exec = 'a' -o $exec = 'g' ]; then
+  if [ $exec = 'c' -o $exec = 'a' -o $exec = 'g' ] ; then
 
     echo
     for iniFile in "${iniFiles[@]}"
@@ -68,14 +65,14 @@ if [ ${#iniFile[@]} -ne 0 ]; then
       echo "====="
       echo "./dbms2csv.py ${iniFile} $VERBOSE"
       echo
-      if [ $exec != 'a' -a $exec != 'g' ]; then
+      if [ $exec != 'a' -a $exec != 'g' ] ; then
         read -p "Execute this command? (y/n) " -n1 -s exec
         echo
       fi
       echo
-      if [ $exec = 'y' -o $exec = 'a' -o $exec = 'g' ]; then
+      if [ $exec = 'y' -o $exec = 'a' -o $exec = 'g' ] ; then
         ./dbms2csv.py ${iniFile} $VERBOSE
-        if [ $? -eq 0 ]; then
+        if [ $? -eq 0 ] ; then
           echo
           echo "Generated data group ${iniFile} - OK !!!"
         else
@@ -93,7 +90,7 @@ if [ ${#iniFile[@]} -ne 0 ]; then
 
 fi
 
-if [ ${#dataGroupFiles[@]} -ne 0 ]; then
+if [ ${#dataGroupFiles[@]} -ne 0 ] ; then
 
   if [ -z ${exec+x} ] ; then
     exec='#'
@@ -105,27 +102,34 @@ if [ ${#dataGroupFiles[@]} -ne 0 ]; then
   echo "====="
   echo "Delete tuples no longer useful"
   echo
-  if [ $exec != 'g' ]; then
-    read -p "Confirm executing 'Delete'? (c/n/a) " -n1 -s exec
+  if [ $exec != 'g' ] ; then
+    read -p "Confirm executing 'Delete'? (c/n/a/g) " -n1 -s exec
     echo
+
+    if [ $exec = 'g' ] ; then
+      INI=$(date)
+    fi
+
   fi
 
-  if [ $exec = 'c' -o $exec = 'a' -o $exec = 'g' ]; then
+  if [ $exec = 'c' -o $exec = 'a' -o $exec = 'g' ] ; then
 
     echo
-    for (( idx=${#dataGroupFiles[@]}-1 ; idx>=0 ; idx-- )) ; do
+    for (( idx=${#dataGroupFiles[@]}-2 ; idx>=1 ; idx-- )) ; do
       echo
       echo "====="
+      echo "idx = $idx"
+      echo "{dataGroupFiles[idx]} = ${dataGroupFiles[$idx]}"
       echo "./csv2oracle.py ${dataGroupFiles[idx]} -d $VERBOSE $DBVAR"
       echo
-      if [ $exec != 'a' -a $exec != 'g' ]; then
+      if [ $exec != 'a' -a $exec != 'g' ] ; then
         read -p "Execute this command? (y/n) " -n1 -s exec
         echo
       fi
       echo
-      if [ $exec = 'y' -o $exec = 'a' -o $exec = 'g' ]; then
+      if [ $exec = 'y' -o $exec = 'a' -o $exec = 'g' ] ; then
         ./csv2oracle.py ${dataGroupFiles[idx]} -d $VERBOSE $DBVAR
-        if [ $? -eq 0 ]; then
+        if [ $? -eq 0 ] ; then
           echo
           echo "Deleted data group ${dataGroupFiles[idx]} - OK !!!"
         else
@@ -147,37 +151,41 @@ if [ ${#dataGroupFiles[@]} -ne 0 ]; then
   echo "====="
   echo "Insert/Update tuples"
   echo
-  if [ $exec != 'g' ]; then
-    read -p "Confirm executing 'Insert/Update'? (c/n/a) " -n1 -s exec
+  if [ $exec != 'g' ] ; then
+    read -p "Confirm executing 'Insert/Update'? (c/n/a/g) " -n1 -s exec
     echo
+
+    if [ $exec = 'g' ] ; then
+      INI=$(date)
+    fi
+
   fi
 
-  if [ $exec = 'c' -o $exec = 'a' -o $exec = 'g' ]; then
+  if [ $exec = 'c' -o $exec = 'a' -o $exec = 'g' ] ; then
 
     echo
-    for dataGroupFile in "${dataGroupFiles[@]}"
-    do
+    for (( idx=1 ; idx<=${#dataGroupFiles[@]}-2 ; idx++ )) ; do
       echo
       echo "====="
-      echo "./csv2oracle.py ${dataGroupFile} -i $VERBOSE $DBVAR"
+      echo "./csv2oracle.py ${dataGroupFiles[idx]} -i $VERBOSE $DBVAR"
       echo
-      if [ $exec != 'a' -a $exec != 'g' ]; then
+      if [ $exec != 'a' -a $exec != 'g' ] ; then
         read -p "Execute this command? (y/n) " -n1 -s exec
         echo
       fi
       echo
-      if [ $exec = 'y' -o $exec = 'a' -o $exec = 'g' ]; then
-        ./csv2oracle.py ${dataGroupFile} -i $VERBOSE $DBVAR
-        if [ $? -eq 0 ]; then
+      if [ $exec = 'y' -o $exec = 'a' -o $exec = 'g' ] ; then
+        ./csv2oracle.py ${dataGroupFiles[idx]} -i $VERBOSE $DBVAR
+        if [ $? -eq 0 ] ; then
           echo
-          echo "Inserted/Updated data group ${dataGroupFile} - OK !!!"
+          echo "Inserted/Updated data group ${dataGroupFiles[idx]} - OK !!!"
         else
           echo
-          echo "ERROR Inserting/Updating data group ${dataGroupFile} !!!"
+          echo "ERROR Inserting/Updating data group ${dataGroupFiles[idx]} !!!"
           exit
         fi
       else
-        echo "Jump ${dataGroupFile}"
+        echo "Jump ${dataGroupFiles[idx]}"
       fi
     done
     echo
@@ -188,7 +196,11 @@ fi
 
 echo
 
-if [ $exec = 'g' ]; then
+if [ -z ${exec+x} ] ; then
+  exec='#'
+fi
+
+if [ $exec = 'g' ] ; then
   echo "Start at:"
   echo $INI
   echo
