@@ -1,19 +1,59 @@
 #!/bin/bash
-# tuzle.sh subject_destination{.sh} [-verbose]
 
 # rascunho
 #./csv2oracle.py -b csv/regiao.csv yaml/regiao.PEDI_040.yaml -vvvvv --dbvar prod
 
+getopt --test > /dev/null
+if [[ $? -ne 4 ]]; then
+    echo "I’m sorry, `getopt --test` failed in this environment."
+    exit 1
+fi
+SHORT=gv
+LONG=global,verbose
+PARSED=$(getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@")
+if [[ $? -ne 0 ]]; then
+    exit 2
+fi
+eval set -- "$PARSED"
+while true; do
+    case "$1" in
+        -g|--global)
+            exec=g
+            shift
+            ;;
+        -v|--verbose)
+            VERBOSE="-${VERBOSE#-}v"
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Programming error"
+            exit 3
+            ;;
+    esac
+done
+
+if [[ $# -ne 1 ]]; then
+  echo 'Sintax: tuzle.sh subject_destination{.sh} [-g][-v{1,4}]'
+  exit 64
+fi
+
 if [ $1 ] ; then
   . $1
-else
-  echo 'Sintax: tuzle.sh _subject_destination.sh [-verbose]'
-  exit 64
 fi
 
 if [ -z ${DBVAR+x} ] ; then
   echo "No var DBVAR in $1"
   exit 65
+fi
+
+if [ $exec = 'g' ] ; then
+  if [ -z ${INI+x} ] ; then
+    INI=$(date)
+  fi
 fi
 
 echo '-- tuzle creation --'
@@ -35,12 +75,6 @@ if [ ${#iniFiles[@]} -eq 0 ] ; then
   fi
 fi
 
-if [ $2 ] ; then
-  VERBOSE=$2
-else
-  VERBOSE=""
-fi
-
 if [ ${#iniFile[@]} -ne 0 ] ; then
 
   # generate
@@ -49,11 +83,16 @@ if [ ${#iniFile[@]} -ne 0 ] ; then
   echo "====="
   echo "Generate CSVs"
   echo
-  read -p "Confirm executing 'Generate'? (c/n/a/g) " -n1 -s exec
-  echo
 
-  if [ $exec = 'g' ] ; then
-    INI=$(date)
+  if [ $exec != 'g' ] ; then
+    read -p "Confirm executing 'Generate'? (c/n/a/g) " -n1 -s exec
+    echo
+
+    if [ $exec = 'g' ] ; then
+      if [ -z ${INI+x} ] ; then
+        INI=$(date)
+      fi
+    fi
   fi
 
   if [ $exec = 'c' -o $exec = 'a' -o $exec = 'g' ] ; then
@@ -106,7 +145,9 @@ if [ ${#dataGroupFiles[@]} -ne 0 ] ; then
     echo
 
     if [ $exec = 'g' ] ; then
-      INI=$(date)
+      if [ -z ${INI+x} ] ; then
+        INI=$(date)
+      fi
     fi
 
   fi
@@ -153,7 +194,9 @@ if [ ${#dataGroupFiles[@]} -ne 0 ] ; then
     echo
 
     if [ $exec = 'g' ] ; then
-      INI=$(date)
+      if [ -z ${INI+x} ] ; then
+        INI=$(date)
+      fi
     fi
 
   fi
