@@ -59,11 +59,10 @@ if [ ${#iniFile[@]} -ne 0 ] ; then
   if [ $exec = 'c' -o $exec = 'a' -o $exec = 'g' ] ; then
 
     echo
-    for iniFile in "${iniFiles[@]}"
-    do
+    for (( idx=1 ; idx<=${#iniFiles[@]}-2 ; idx++ )) ; do
       echo
       echo "====="
-      echo "./dbms2csv.py ${iniFile} $VERBOSE"
+      echo "./dbms2csv.py ${iniFiles[idx]} $VERBOSE"
       echo
       if [ $exec != 'a' -a $exec != 'g' ] ; then
         read -p "Execute this command? (y/n) " -n1 -s exec
@@ -71,17 +70,17 @@ if [ ${#iniFile[@]} -ne 0 ] ; then
       fi
       echo
       if [ $exec = 'y' -o $exec = 'a' -o $exec = 'g' ] ; then
-        ./dbms2csv.py ${iniFile} $VERBOSE
+        ./dbms2csv.py ${iniFiles[idx]} $VERBOSE
         if [ $? -eq 0 ] ; then
           echo
-          echo "Generated data group ${iniFile} - OK !!!"
+          echo "Generated data group ${iniFiles[idx]} - OK !!!"
         else
           echo
-          echo "ERROR generating data group ${iniFile} !!!"
+          echo "ERROR generating data group ${iniFiles[idx]} !!!"
           exit
         fi
       else
-        echo "Jump ${iniFile}"
+        echo "Jump ${iniFiles[idx]}"
       fi
     done
     echo
