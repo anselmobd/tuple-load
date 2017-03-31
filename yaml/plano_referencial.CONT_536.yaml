@@ -42,6 +42,6 @@ sql:
   fault_delete: |
     UPDATE CONT_536
     set
-      DESCRICAO = substr('--' || DESCRICAO, 1, 100)
+      DESCRICAO = substr('##' || DESCRICAO, 1, 100)
     WHERE CONTA_CONTABIL=:CONTA_CONTABIL
-      and DESCRICAO not like '--%'
+      and DESCRICAO not like '##%'

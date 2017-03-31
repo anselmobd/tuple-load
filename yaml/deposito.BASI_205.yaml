@@ -49,6 +49,6 @@ sql:
   fault_delete: |
     UPDATE BASI_205 dep
     set
-      dep.DESCRICAO = substr('X!' || dep.DESCRICAO, 1, 30)
+      dep.DESCRICAO = substr('##' || dep.DESCRICAO, 1, 30)
     where dep.CODIGO_DEPOSITO = :CODIGO_DEPOSITO
-      and dep.DESCRICAO not like 'X!%'
+      and dep.DESCRICAO not like '##%'
