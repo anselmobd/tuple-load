@@ -50,6 +50,10 @@ if [ -z ${DBVAR+x} ] ; then
   exit 65
 fi
 
+if [ -z ${exec+x} ] ; then
+  exec='#'
+fi
+
 if [ $exec = 'g' ] ; then
   if [ -z ${INI+x} ] ; then
     INI=$(date)
@@ -129,10 +133,6 @@ if [ ${#iniFile[@]} -ne 0 ] ; then
 fi
 
 if [ ${#dataGroupFiles[@]} -ne 0 ] ; then
-
-  if [ -z ${exec+x} ] ; then
-    exec='#'
-  fi
 
   # delete
 
