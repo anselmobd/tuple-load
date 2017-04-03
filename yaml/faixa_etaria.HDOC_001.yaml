@@ -47,3 +47,11 @@ sql:
     DELETE FROM HDOC_001 c
     where c.TIPO = 516
       and c.CODIGO = :CODIGO
+
+  fault_delete: |
+    UPDATE HDOC_001 c
+    set
+      c.DESCRICAO = substr('##' || c.DESCRICAO, 1, 60)
+    where c.TIPO = 516
+      and c.CODIGO = :CODIGO
+      and c.DESCRICAO not like '##%'
