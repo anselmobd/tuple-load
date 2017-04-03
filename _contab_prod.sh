@@ -7,6 +7,7 @@ DBVAR='--dbvar prod'
 iniFiles=(
   "--inicio"
   "centrodecusto --iniyaml"
+  "planodecontas --iniyaml"
   "--fim"
 )
 
