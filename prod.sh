@@ -23,6 +23,10 @@ while true; do
             VERBOSE="-${VERBOSE#-}v"
             shift
             ;;
+        # -o|--output)
+        #     outFile="$2"
+        #     shift 2
+        #     ;;
         --)
             shift
             break
