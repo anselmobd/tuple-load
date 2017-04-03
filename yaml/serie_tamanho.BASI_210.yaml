@@ -45,6 +45,6 @@ sql:
   fault_delete: |
     UPDATE BASI_210 c
     set
-      c.DESCR_SERIE = substr('##' || c.DESCR_SERIE, 1, 20)
+      c.DESCR_SERIE = substr('##' || c.DESCR_SERIE, 1, 10)
     where c.SERIE_TAMANHO = :SERIE_TAMANHO
       and c.DESCR_SERIE not like '##%'

@@ -53,3 +53,10 @@ sql:
   delete: |
     DELETE FROM BASI_100 c
     where c.COR_SORTIMENTO = :COR_SORTIMENTO
+
+  fault_delete: |
+    UPDATE BASI_100 c
+    set
+      c.DESCRICAO = substr('##' || c.DESCRICAO, 1, 20)
+    where c.COR_SORTIMENTO = :COR_SORTIMENTO
+    and c.DESCRICAO not like '##%'

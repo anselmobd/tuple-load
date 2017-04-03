@@ -50,3 +50,10 @@ sql:
   delete: |
     DELETE FROM BASI_240 n
     where n.CLASSIFIC_FISCAL = :NCM
+
+  fault_delete: |
+    UPDATE BASI_240 n
+    set
+      n.DESCR_CLASS_FISC = substr('##' || n.DESCR_CLASS_FISC, 1, 40)
+    where n.CLASSIFIC_FISCAL = :NCM
+      and n.DESCR_CLASS_FISC not like '##%'
