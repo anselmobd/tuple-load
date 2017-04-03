@@ -37,3 +37,10 @@ sql:
   delete: |
     DELETE FROM basi_200 um
     WHERE um.unidade_medida=:CODIGO
+
+  fault_delete: |
+    UPDATE basi_200 um
+    set
+      um.DESCR_UNIDADE = substr('##' || um.DESCR_UNIDADE, 1, 20)
+    where um.unidade_medida = :CODIGO
+      and um.DESCR_UNIDADE not like '##%'

@@ -43,3 +43,10 @@ sql:
   delete: |
     DELETE FROM basi_220 t
     WHERE t.TAMANHO_REF=:TAMANHO_REF
+
+  fault_delete: |
+    UPDATE basi_220 t
+    set
+      t.DESCR_TAMANHO = substr('##' || t.DESCR_TAMANHO, 1, 20)
+    where t.TAMANHO_REF = :TAMANHO_REF
+      and t.DESCR_TAMANHO not like '##%'
