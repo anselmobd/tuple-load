@@ -312,9 +312,11 @@ class Main:
 
         path = ('sql', 'after_insert_update')
         if cursor.rowcount != 0 and self.hasRule(*path):
+            hasSubSql = False
             for sqlOrderInt in range(10):
                 sqlOrder = 'sql{}'.format(sqlOrderInt).strip('0')
                 if self.hasRule(*path, sqlOrder):
+                    hasSubSql = True
                     sql = self.getStrRule(*path, sqlOrder)
 
                     columnsPath = None
@@ -330,6 +332,11 @@ class Main:
                     cursor = self.db.cursorExecute(sql, dictRow)
                     self.vOut.prnt(_('after_insert_update: %s sql: %s') % (
                         cursor.rowcount, sqlOrderInt), 2)
+            if not hasSubSql:
+                sql = self.getStrRule(*path)
+                cursor = self.db.cursorExecute(sql, dictRow)
+                self.vOut.prnt(
+                    _('after_insert_update: %s') % (cursor.rowcount), 2)
 
     def readCsvKeys(self):
         self.vOut.prnt('->readCsvKeys', 2)
