@@ -19,7 +19,6 @@ sql:
     UPDATE HDOC_030 u
     set
       u.EMPRESA = :EMPRESA
-    , u.SENHA = :SENHA
     , u.NOME_EDITOR = :NOME_EDITOR
     , u.OBSERVACAO = :OBSERVACAO
     , u.REQUISITA_ESTOQUE = :REQUISITA_ESTOQUE
@@ -28,7 +27,6 @@ sql:
     , u.TIPO_IMPRESSAO = :TIPO_IMPRESSAO
     , u.BALANCA = :BALANCA
     , u.COD_BALANCA = :COD_BALANCA
-    , u.SENHA__OLD = :SENHA__OLD
     , u.LIBERA_PV_N1 = :LIBERA_PV_N1
     , u.LIBERA_PV_N2 = :LIBERA_PV_N2
     , u.LIBERA_PV_N4 = :LIBERA_PV_N4
@@ -52,7 +50,6 @@ sql:
     , u.E_MAIL = :E_MAIL
     , u.USER_ID_E_MAIL = :USER_ID_E_MAIL
     , u.CORPO_E_MAIL = :CORPO_E_MAIL
-    , u.SENHA_E_MAIL = :SENHA_E_MAIL
     , u.COD_TIPO_IF = :COD_TIPO_IF
     , u.REJ_TEC_ACAB = :REJ_TEC_ACAB
     , u.ATENDE_SIA = :ATENDE_SIA
@@ -95,7 +92,6 @@ sql:
     INSERT INTO HDOC_030 (
       USUARIO
     , EMPRESA
-    , SENHA
     , NOME_EDITOR
     , OBSERVACAO
     , REQUISITA_ESTOQUE
@@ -104,7 +100,6 @@ sql:
     , TIPO_IMPRESSAO
     , BALANCA
     , COD_BALANCA
-    , SENHA__OLD
     , LIBERA_PV_N1
     , LIBERA_PV_N2
     , LIBERA_PV_N4
@@ -128,7 +123,6 @@ sql:
     , E_MAIL
     , USER_ID_E_MAIL
     , CORPO_E_MAIL
-    , SENHA_E_MAIL
     , COD_TIPO_IF
     , REJ_TEC_ACAB
     , ATENDE_SIA
@@ -166,7 +160,6 @@ sql:
     ) VALUES (
       :USUARIO
     , :EMPRESA
-    , :SENHA
     , :NOME_EDITOR
     , :OBSERVACAO
     , :REQUISITA_ESTOQUE
@@ -175,7 +168,6 @@ sql:
     , :TIPO_IMPRESSAO
     , :BALANCA
     , :COD_BALANCA
-    , :SENHA__OLD
     , :LIBERA_PV_N1
     , :LIBERA_PV_N2
     , :LIBERA_PV_N4
@@ -199,7 +191,6 @@ sql:
     , :E_MAIL
     , :USER_ID_E_MAIL
     , :CORPO_E_MAIL
-    , :SENHA_E_MAIL
     , :COD_TIPO_IF
     , :REJ_TEC_ACAB
     , :ATENDE_SIA
@@ -235,6 +226,36 @@ sql:
     , :DEPOSITO_QUIMICOS
     , :CODIGO_COMPRADOR
     )
+
+  after_insert_update:
+
+    columns:
+      - USUARIO
+
+    command1: |
+      DELETE FROM HDOC_033 u
+      where u.usu_prg_cdusu = :USUARIO
+
+    command2: |
+      INSERT INTO HDOC_033 y
+      ( y.USU_PRG_CDUSU, y.USU_PRG_EMPR_USU, y.PROGRAMA, y.NOME_MENU, y.ITEM_MENU, y.ORDEM_MENU
+      , y.INCLUIR, y.MODIFICAR, y.EXCLUIR, y.PROCURAR, y.COORDENADA_X, y.COORDENADA_Y, y.MARGEM_ESQ_RELATORIOS)
+      SELECT
+        :USUARIO USU_PRG_CDUSU
+      , x.USU_PRG_EMPR_USU
+      , x.PROGRAMA
+      , x.NOME_MENU
+      , x.ITEM_MENU
+      , x.ORDEM_MENU
+      , x.INCLUIR
+      , x.MODIFICAR
+      , x.EXCLUIR
+      , x.PROCURAR
+      , x.COORDENADA_X
+      , x.COORDENADA_Y
+      , x.MARGEM_ESQ_RELATORIOS
+      FROM HDOC_033 x
+      WHERE x.usu_prg_cdusu = 'DUOMO'
 
   key_list: |
     SELECT
