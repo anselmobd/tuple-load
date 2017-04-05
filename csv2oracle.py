@@ -261,15 +261,26 @@ class Main:
             self.rules = yaml.load(yaml_data)
         self.vOut.pprnt(self.rules, 3)
 
-    def readCsvGenerator(self, columns_tuple=None):
+    def readCsvGenerator(self):
         self.vOut.prnt('->readCsvGenerator', 2)
-        if columns_tuple is None:
-            columns_tuple = ('csv', 'columns')
         with open(self.args.csvFile) as csvfile:
             readCsv = csv.reader(csvfile, delimiter=';')
+
+            countRows = 0
+            firstRows = -1
+            if self.hasRule('csv', 'first'):
+                firstRows = self.getRule('csv', 'first')
+            skipRows = 0
+            if self.hasRule('csv', 'skip'):
+                skipRows = self.getRule('csv', 'skip')
+
             columns = None
             for row in readCsv:
                 if columns:
+                    if skipRows > 0:
+                        skipRows -= 1
+                        continue
+
                     rowByColumns = [row[originalColumns.index(col)]
                                     for col in columns]
                     dictRow = dict(zip(columns, rowByColumns))
@@ -280,8 +291,13 @@ class Main:
                             (dictRow[f] for f in self.getRule('csv', 'keys'))
                             ), 3)
                     yield dictRow
+
+                    countRows += 1
+                    if countRows == firstRows:
+                        break
                 else:
                     originalColumns = row
+                    columns_tuple = ('csv', 'columns')
                     if self.hasRule(*columns_tuple):
                         columns = self.getRule(*columns_tuple)
                     else:
