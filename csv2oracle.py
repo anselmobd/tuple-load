@@ -314,7 +314,7 @@ class Main:
         if cursor.rowcount != 0 and self.hasRule(*path):
             hasSubSql = False
             for sqlOrderInt in range(10):
-                sqlOrder = 'sql{}'.format(sqlOrderInt).strip('0')
+                sqlOrder = 'command{}'.format(sqlOrderInt).strip('0')
                 if self.hasRule(*path, sqlOrder):
                     hasSubSql = True
                     sql = self.getStrRule(*path, sqlOrder)
