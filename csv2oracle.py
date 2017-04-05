@@ -26,11 +26,24 @@ class Main:
             print(_('file does not exist'))
             sys.exit(exitError)
 
-    def getRule(self, group, rulename):
-        return self.rules[group][rulename]
+    def hasRule(self, *path):
+        branch = self.rules
+        for level in path:
+            if level not in branch:
+                return False
+            branch = branch[level]
+        return True
 
-    def getStrRule(self, group, rulename):
-        ruleData = self.getRule(group, rulename)
+    def getRule(self, *path):
+        branch = self.rules
+        for level in path:
+            if level not in branch:
+                return None
+            branch = branch[level]
+        return branch
+
+    def getStrRule(self, *path):
+        ruleData = self.getRule(*path)
         if isinstance(ruleData, list):
             rule = '\n'.join(ruleData)
         else:
@@ -248,8 +261,10 @@ class Main:
             self.rules = yaml.load(yaml_data)
         self.vOut.pprnt(self.rules, 3)
 
-    def readCsvGenerator(self):
+    def readCsvGenerator(self, columns_tuple=None):
         self.vOut.prnt('->readCsvGenerator', 2)
+        if columns_tuple is None:
+            columns_tuple = ('csv', 'columns')
         with open(self.args.csvFile) as csvfile:
             readCsv = csv.reader(csvfile, delimiter=';')
             columns = None
@@ -265,11 +280,10 @@ class Main:
                             (dictRow[f] for f in self.getRule('csv', 'keys'))
                             ), 3)
                     yield dictRow
-                    # break
                 else:
                     originalColumns = row
-                    if 'columns' in self.rules['csv']:
-                        columns = self.getRule('csv', 'columns')
+                    if self.hasRule(*columns_tuple):
+                        columns = self.getRule(*columns_tuple)
                     else:
                         columns = originalColumns
 
@@ -295,6 +309,27 @@ class Main:
             sql = self.getStrRule('sql', 'insert')
             cursor = self.db.cursorExecute(sql, dictRow)
             self.vOut.prnt(_('inserted: %s') % (cursor.rowcount), 2)
+
+        path = ('sql', 'after_insert_update')
+        if cursor.rowcount != 0 and self.hasRule(*path):
+            for sqlOrderInt in range(10):
+                sqlOrder = 'sql{}'.format(sqlOrderInt).strip('0')
+                if self.hasRule(*path, sqlOrder):
+                    sql = self.getStrRule(*path, sqlOrder)
+
+                    columnsPath = None
+                    colOrder = 'columns{}'.format(sqlOrderInt).strip('0')
+                    if self.hasRule(*path, colOrder):
+                        columnsPath = (*path, colOrder)
+                    elif sqlOrderInt != 0 and self.hasRule(*path, 'columns'):
+                        columnsPath = (*path, 'columns')
+                    if columnsPath is not None:
+                        columnsDef = self.getRule(*columnsPath)
+                        dictRow = {key: dictRow[key] for key in columnsDef}
+
+                    cursor = self.db.cursorExecute(sql, dictRow)
+                    self.vOut.prnt(_('after_insert_update: %s sql: %s') % (
+                        cursor.rowcount, sqlOrderInt), 2)
 
     def readCsvKeys(self):
         self.vOut.prnt('->readCsvKeys', 2)
