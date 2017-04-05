@@ -37,3 +37,10 @@ sql:
   delete: |
     DELETE FROM basi_140 c
     where c.COLECAO = :SEQUENCE
+
+  fault_delete: |
+    UPDATE basi_140 c
+    set
+      c.DESCR_COLECAO = substr('##' || c.DESCR_COLECAO, 1, 20)
+    where c.COLECAO = :SEQUENCE
+      and c.DESCR_COLECAO not like '##%'
