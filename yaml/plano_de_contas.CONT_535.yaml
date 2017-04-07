@@ -1,0 +1,101 @@
+csv:
+
+  keys:
+    - CONTA_CONTABIL
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(c.DESCRICAO)
+    from cont_535 c
+    where c.CONTA_CONTABIL = :CONTA_CONTABIL
+
+  update: |
+    UPDATE cont_535 t
+    set
+      c.DESCRICAO = :DESCRICAO
+    , c.TIPO_CONTA = :TIPO_CONTA
+    , c.PATR_RESULT = :PATR_RESULT
+    , c.GERA_CUSTOS = :GERA_CUSTOS
+    , c.EXIGE_SUBCONTA = 2
+    , c.NIVEL = :NIVEL
+    , c.COD_REDUZIDO = :COD_REDUZIDO
+    , c.CONTA_MAE =
+        SELECT
+          c2.COD_REDUZIDO
+        from cont_535 c2
+        where c2.CONTA_CONTABIL = :CC_MAE
+    , c.DEBITO_CREDITO = :DEBITO_CREDITO
+    , c.FAMILIA_ORCAMENTO = 1
+    , c.INDICADOR_NATU = :INDICADOR_NATU
+    , c.INDIC_NATU_SPED = :INDIC_NATU_SPED
+    , c.TP_LIVRO_AUX_SPED = 'N'
+    , c.DATA_CADASTRO = TIMESTAMP '2017-04-01 00:00:00.000000'
+    , c.DATA_ALTERACAO = TIMESTAMP '2017-04-01 12:00:00.000000'
+    from cont_535 c
+    where c.CONTA_CONTABIL = :CONTA_CONTABIL
+
+  insert: |
+    INSERT INTO cont_535 c (
+      c.CONTA_CONTABIL
+    , c.DESCRICAO
+    , c.TIPO_CONTA
+    , c.PATR_RESULT
+    , c.GERA_CUSTOS
+    , c.EXIGE_SUBCONTA
+    , c.NIVEL
+    , c.COD_REDUZIDO
+    , c.CONTA_MAE
+    , c.DEBITO_CREDITO
+    , c.FAMILIA_ORCAMENTO
+    , c.INDICADOR_NATU
+    , c.INDIC_NATU_SPED
+    , c.TP_LIVRO_AUX_SPED
+    , c.DATA_CADASTRO
+    , c.DATA_ALTERACAO
+    )
+    VALUES (
+      :CONTA_CONTABIL
+    , :DESCRICAO
+    , :TIPO_CONTA
+    , :PATR_RESULT
+    , :GERA_CUSTOS
+    , 2
+    , :NIVEL
+    , :COD_REDUZIDO
+    , ( case when :CC_MAE = '9'
+        then 0
+        else begin
+          SELECT
+            c2.COD_REDUZIDO
+          from cont_535 c2
+          where c2.CONTA_CONTABIL = :CC_MAE
+        end
+      )
+    , :DEBITO_CREDITO
+    , 1
+    , :INDICADOR_NATU
+    , :INDIC_NATU_SPED
+    , 'N'
+    , TIMESTAMP '2017-04-01 00:00:00.000000'
+    , TIMESTAMP '2017-04-01 12:00:00.000000'
+    )
+
+  key_list: |
+    SELECT
+      c.CONTA_CONTABIL
+    from cont_535 c
+
+  delete: |
+    DELETE FROM cont_535 c
+    where c.CONTA_CONTABIL = :CONTA_CONTABIL
+
+  fault_delete: |
+    UPDATE cont_535 t
+    set
+      c.DESCRICAO = substr('##' || c.DESCRICAO, 1, 40)
+    where c.CONTA_CONTABIL = :CONTA_CONTABIL
+      and c.DESCRICAO not like '##%'
