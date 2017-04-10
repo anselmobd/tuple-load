@@ -1,0 +1,57 @@
+csv:
+
+  keys:
+    - COD_PLANO_CTA
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(c.DESCRICAO)
+    from cont_530 c
+    where c.COD_PLANO_CTA = :COD_PLANO_CTA
+
+  update: |
+    UPDATE cont_530 c
+    set
+      c.COD_PLANO_CTA = :COD_PLANO_CTA
+    , c.DESCRICAO = :DESCRICAO
+    , c.MASCARA = :MASCARA
+    , c.CONTROLA_CONTA_REDUZIDA = :CONTROLA_CONTA_REDUZIDA
+    , c.IDENT_ESCR_CONTAB_SPED = :IDENT_ESCR_CONTAB_SPED
+    from cont_530 c
+    where c.COD_PLANO_CTA = :COD_PLANO_CTA
+
+  insert: |
+    INSERT INTO cont_530 c (
+      c.COD_PLANO_CTA
+    , c.DESCRICAO
+    , c.MASCARA
+    , c.CONTROLA_CONTA_REDUZIDA
+    , c.IDENT_ESCR_CONTAB_SPED
+    )
+    VALUES (
+      :COD_PLANO_CTA
+    , :DESCRICAO
+    , :MASCARA
+    , :CONTROLA_CONTA_REDUZIDA
+    , :IDENT_ESCR_CONTAB_SPED
+    )
+
+  key_list: |
+    SELECT
+      c.COD_PLANO_CTA
+    from cont_530 c
+
+  delete: |
+    DELETE FROM cont_530 c
+    where c.COD_PLANO_CTA = :COD_PLANO_CTA
+
+  fault_delete: |
+    UPDATE cont_530 c
+    set
+      c.DESCRICAO = substr('##' || c.DESCRICAO, 1, 30)
+    where c.COD_PLANO_CTA = :COD_PLANO_CTA
+      and c.DESCRICAO not like '##%'
