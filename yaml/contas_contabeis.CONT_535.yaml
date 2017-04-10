@@ -1,5 +1,18 @@
 csv:
 
+  columns:
+    - CONTA_CONTABIL
+    - COD_REDUZIDO
+    - DESCRICAO
+    - TIPO_CONTA
+    - PATR_RESULT
+    - NIVEL
+    - CONTA_MAE
+    - GERA_CUSTOS
+    - DEBITO_CREDITO
+    - INDICADOR_NATU
+    - INDIC_NATU_SPED
+
   keys:
     - CONTA_CONTABIL
 
@@ -17,74 +30,87 @@ sql:
     UPDATE cont_535 c
     set
       c.COD_PLANO_CTA = 1
+    , c.SUBCONTA = 0
+    , c.COD_REDUZIDO = :COD_REDUZIDO
     , c.DESCRICAO = :DESCRICAO
+    , c.DESCR_SUBCONTA = ' '
     , c.TIPO_CONTA = :TIPO_CONTA
     , c.PATR_RESULT = :PATR_RESULT
-    , c.GERA_CUSTOS = :GERA_CUSTOS
-    , c.EXIGE_SUBCONTA = 2
     , c.NIVEL = :NIVEL
-    , c.COD_REDUZIDO = :COD_REDUZIDO
-    , c.CONTA_MAE =
-        SELECT
-          c2.COD_REDUZIDO
-        from cont_535 c2
-        where c2.CONTA_CONTABIL = :CC_MAE
-    , c.DEBITO_CREDITO = :DEBITO_CREDITO
+    , c.CONTA_MAE = :CONTA_MAE
+    , c.EXIGE_SUBCONTA = 2
+    , c.GERA_CUSTOS = :GERA_CUSTOS
+    , c.TIPO_ORCAMENTO = 0
     , c.FAMILIA_ORCAMENTO = 1
+    , c.DEBITO_CREDITO = :DEBITO_CREDITO
     , c.INDICADOR_NATU = :INDICADOR_NATU
+    , c.PERMITE_LANCTO_MANUAL = 0
+    , c.DATA_CADASTRO = TIMESTAMP '2017-04-10 00:00:00.000000'
+    , c.QUEBRA_FILIAL = 0
+    , c.CONTA_CONTABIL_REF = '1'
     , c.INDIC_NATU_SPED = :INDIC_NATU_SPED
     , c.TP_LIVRO_AUX_SPED = 'N'
-    , c.DATA_CADASTRO = TIMESTAMP '2017-04-01 00:00:00.000000'
-    , c.DATA_ALTERACAO = TIMESTAMP '2017-04-01 12:00:00.000000'
-    from cont_535 c
+    , c.DATA_ALTERACAO = TIMESTAMP '2017-04-10 10:10:10.000000'
+    , c.TIPO_NATUREZA = 0
+    , c.IND_NAT_SUBCONTA_SPED = 0
+    , c.GRUPO_SUBCONTA_SPED = 0
     where c.CONTA_CONTABIL = :CONTA_CONTABIL
 
   insert: |
-    INSERT INTO cont_535 c (
-      c.CONTA_CONTABIL
-    , c.COD_PLANO_CTA
-    , c.DESCRICAO
-    , c.TIPO_CONTA
-    , c.PATR_RESULT
-    , c.GERA_CUSTOS
-    , c.EXIGE_SUBCONTA
-    , c.NIVEL
-    , c.COD_REDUZIDO
-    , c.CONTA_MAE
-    , c.DEBITO_CREDITO
-    , c.FAMILIA_ORCAMENTO
-    , c.INDICADOR_NATU
-    , c.INDIC_NATU_SPED
-    , c.TP_LIVRO_AUX_SPED
-    , c.DATA_CADASTRO
-    , c.DATA_ALTERACAO
-    )
-    VALUES (
+    INSERT INTO CONT_535 (
+      CONTA_CONTABIL
+    , COD_PLANO_CTA
+    , SUBCONTA
+    , COD_REDUZIDO
+    , DESCRICAO
+    , DESCR_SUBCONTA
+    , TIPO_CONTA
+    , PATR_RESULT
+    , NIVEL
+    , CONTA_MAE
+    , EXIGE_SUBCONTA
+    , GERA_CUSTOS
+    , TIPO_ORCAMENTO
+    , FAMILIA_ORCAMENTO
+    , DEBITO_CREDITO
+    , INDICADOR_NATU
+    , PERMITE_LANCTO_MANUAL
+    , DATA_CADASTRO
+    , QUEBRA_FILIAL
+    , CONTA_CONTABIL_REF
+    , INDIC_NATU_SPED
+    , TP_LIVRO_AUX_SPED
+    , DATA_ALTERACAO
+    , TIPO_NATUREZA
+    , IND_NAT_SUBCONTA_SPED
+    , GRUPO_SUBCONTA_SPED
+    ) VALUES (
       :CONTA_CONTABIL
     , 1
+    , 0
+    , :COD_REDUZIDO
     , :DESCRICAO
+    , ' '
     , :TIPO_CONTA
     , :PATR_RESULT
-    , :GERA_CUSTOS
-    , 2
     , :NIVEL
-    , :COD_REDUZIDO
-    , ( case when :CC_MAE = '9'
-        then 0
-        else begin
-          SELECT
-            c2.COD_REDUZIDO
-          from cont_535 c2
-          where c2.CONTA_CONTABIL = :CC_MAE
-        end
-      )
-    , :DEBITO_CREDITO
+    , :CONTA_MAE
+    , 2
+    , :GERA_CUSTOS
+    , 0
     , 1
+    , :DEBITO_CREDITO
     , :INDICADOR_NATU
+    , 0
+    , TIMESTAMP '2017-04-10 00:00:00.000000'
+    , 0
+    , '1'
     , :INDIC_NATU_SPED
     , 'N'
-    , TIMESTAMP '2017-04-01 00:00:00.000000'
-    , TIMESTAMP '2017-04-01 12:00:00.000000'
+    , TIMESTAMP '2017-04-10 10:10:10.000000'
+    , 0
+    , 0
+    , 0
     )
 
   key_list: |

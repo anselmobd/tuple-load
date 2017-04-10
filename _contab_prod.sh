@@ -18,5 +18,7 @@ dataGroupFiles=(
   "plano_referencial"
   "_centrodecusto"
   "deposito"
+  "plano_de_contas"
+  "contas_contabeis"
   "--fim"
 )
