@@ -14,7 +14,7 @@ sql:
     where c.CONTA_CONTABIL = :CONTA_CONTABIL
 
   update: |
-    UPDATE cont_535 t
+    UPDATE cont_535 c
     set
       c.COD_PLANO_CTA = 1
     , c.DESCRICAO = :DESCRICAO
@@ -97,7 +97,7 @@ sql:
     where c.CONTA_CONTABIL = :CONTA_CONTABIL
 
   fault_delete: |
-    UPDATE cont_535 t
+    UPDATE cont_535 c
     set
       c.DESCRICAO = substr('##' || c.DESCRICAO, 1, 40)
     where c.CONTA_CONTABIL = :CONTA_CONTABIL
