@@ -1,5 +1,4 @@
 #!/bin/bash
-# tuzle.sh subject_destination{.sh} [-verbose]
 
 getopt --test > /dev/null
 if [[ $? -ne 4 ]]; then
@@ -75,6 +74,9 @@ if [ $exec = 'c' -o $exec = 'g' ] ; then
 
   echo "./tuzle.sh _contab_prod.sh $VERBOSE $EXECARG"
   ./tuzle.sh _contab_prod.sh $VERBOSE $EXECARG
+
+  echo "./tuzle.sh _insumo_prod.sh $VERBOSE $EXECARG"
+  ./tuzle.sh _insumo_prod.sh $VERBOSE $EXECARG
 
   echo "./tuzle.sh _produto_prod.sh $VERBOSE $EXECARG"
   ./tuzle.sh _produto_prod.sh $VERBOSE $EXECARG
