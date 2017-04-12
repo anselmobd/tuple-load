@@ -1,5 +1,9 @@
 csv:
 
+  fields:
+    SEQUENCE:
+      type: integer
+
   keys:
     - SEQUENCE
 
