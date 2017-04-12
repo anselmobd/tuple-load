@@ -2,7 +2,7 @@ csv:
 
   fields:
 
-    CODIGO:
+    SERIE_TAMANHO:
       type: integer
 
   keys:
