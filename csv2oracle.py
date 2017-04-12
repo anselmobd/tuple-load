@@ -235,6 +235,11 @@ class Main:
         else:
             self.readJson()
 
+        self.countInsert = 0
+        self.countUpdate = 0
+        self.countAfterIU = 0
+        self.countDelete = 0
+        self.countFaultDelete = 0
         try:
             self.connectDataBase()
 
@@ -248,6 +253,15 @@ class Main:
         finally:
             if self.db.connected:
                 self.closeDataBase()
+
+        self.vOut.prnt('- Counters')
+        if self.args.insert:
+            self.vOut.prnt('Inserted: {}'.format(self.countInsert))
+            self.vOut.prnt('Updated: {}'.format(self.countUpdate))
+            self.vOut.prnt('After Insert Update: {}'.format(self.countAfterIU))
+        if self.args.delete:
+            self.vOut.prnt('Deleted: {}'.format(self.countDelete))
+            self.vOut.prnt('Fault Deleted: {}'.format(self.countFaultDelete))
 
     def readJson(self):
         self.vOut.prnt('->readJson', 2)
@@ -321,10 +335,12 @@ class Main:
             sql = self.getStrRule('sql', 'update')
             cursor = self.db.cursorExecute(sql, dictRow)
             self.vOut.prnt(_('updated: %s') % (cursor.rowcount), 2)
+            self.countUpdate += cursor.rowcount
         else:
             sql = self.getStrRule('sql', 'insert')
             cursor = self.db.cursorExecute(sql, dictRow)
             self.vOut.prnt(_('inserted: %s') % (cursor.rowcount), 2)
+            self.countInsert += cursor.rowcount
 
         path = ('sql', 'after_insert_update')
         if cursor.rowcount != 0 and self.hasRule(*path):
@@ -348,6 +364,7 @@ class Main:
                     cursor = self.db.cursorExecute(sql, dictRow)
                     self.vOut.prnt(_('after_insert_update: %s sql: %s') % (
                         cursor.rowcount, sqlOrderInt), 2)
+                    self.countAfterIU += cursor.rowcount
             if not hasSubSql:
                 sql = self.getStrRule(*path)
                 cursor = self.db.cursorExecute(sql, dictRow)
@@ -390,19 +407,23 @@ class Main:
                     {self.getRule('csv', 'keys')[i]: row[i]
                         for i in range(0, len(row))})
 
-        if len(toDelete) > 0:
+        if len(toDelete) == 0:
+            self.vOut.prnt('there is nothing to remove', 4)
+        else:
             sql = self.getStrRule('sql', 'delete')
             for deleteKey in toDelete:
                 self.vOut.pprnt(deleteKey, 3)
                 cursor = self.db.cursorExecute(
                     sql, deleteKey, self.db.CONTINUE_ON_ERROR)
                 self.vOut.prnt(_('deleted: %s') % (cursor.rowcount), 2)
+                self.countDelete += cursor.rowcount
                 if cursor.rowcount == 0:
                     if 'fault_delete' in self.rules['sql']:
                         sql = self.getRule('sql', 'fault_delete')
                         cursor = self.db.cursorExecute(sql, deleteKey)
                         self.vOut.prnt(
                             _('fault deleted: %s') % (cursor.rowcount), 2)
+                        self.countFaultDelete += cursor.rowcount
 
     def main(self):
         self.parseArgs()
