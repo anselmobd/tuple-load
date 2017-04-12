@@ -36,6 +36,8 @@ sql:
     , f.TELEFONE_FORNE = :TELEFONE_FORNE
     , f.CEP_FORNECEDOR = :CEP_FORNECEDOR
     , f.ENDERECO_FORNE = :ENDERECO_FORNE
+    , f.NUMERO_IMOVEL = :NUMERO_IMOVEL
+    , f.COMPLEMENTO = :COMPLEMENTO
     , f.BAIRRO = :BAIRRO
     , f.COD_CIDADE = 7459
     , f.FAX_FORNECEDOR = :FAX_FORNECEDOR
@@ -188,8 +190,8 @@ sql:
     , 0                                      -- CELULAR_FORNECEDOR
     , NULL                                   -- CALL_FREE_FORNECEDOR
     , NULL                                   -- INCIDE_IMPOSTO
-    , ' '                                    -- NUMERO_IMOVEL
-    , NULL                                   -- COMPLEMENTO
+    , :NUMERO_IMOVEL
+    , :COMPLEMENTO
     , 0                                      -- COD_CIDADE_ZONA_FRANCA
     , NULL                                   -- INSCR_INSS
     , 0                                      -- COD_RELACION_SPED_CTB
