@@ -402,7 +402,7 @@ class Main:
                 self.vOut.prnt('remove from key list to delete', 4)
                 self.keys.remove(row)
             else:
-                self.vOut.prnt('append', 4)
+                self.vOut.prnt('key appended to remove', 4)
                 toDelete.append(
                     {self.getRule('csv', 'keys')[i]: row[i]
                         for i in range(0, len(row))})
