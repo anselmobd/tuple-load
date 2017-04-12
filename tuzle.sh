@@ -1,4 +1,5 @@
 #!/bin/bash
+# tuzle.sh subject_destination{.sh} [-verbose]
 
 # rascunho
 #./csv2oracle.py -b csv/regiao.csv yaml/regiao.PEDI_040.yaml -vvvvv --dbvar prod
