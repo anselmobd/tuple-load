@@ -6,6 +6,7 @@ import unicodedata
 
 import csv
 
+import oxy.usual as oxyu
 
 def count_field(valIni, valStep, fieldBreak):
     ''' Closure to "count" function variable '''
