@@ -1,5 +1,10 @@
 csv:
 
+  fields:
+
+    COD_PLANO_CTA:
+      type: integer
+
   keys:
     - COD_PLANO_CTA
 
@@ -16,12 +21,10 @@ sql:
   update: |
     UPDATE cont_530 c
     set
-      c.COD_PLANO_CTA = :COD_PLANO_CTA
-    , c.DESCRICAO = :DESCRICAO
+      c.DESCRICAO = :DESCRICAO
     , c.MASCARA = :MASCARA
     , c.CONTROLA_CONTA_REDUZIDA = :CONTROLA_CONTA_REDUZIDA
     , c.IDENT_ESCR_CONTAB_SPED = :IDENT_ESCR_CONTAB_SPED
-    from cont_530 c
     where c.COD_PLANO_CTA = :COD_PLANO_CTA
 
   insert: |
@@ -42,8 +45,8 @@ sql:
 
   key_list: |
     SELECT
-      c.COD_PLANO_CTA
-    from cont_530 c
+      COD_PLANO_CTA
+    from cont_530
 
   delete: |
     DELETE FROM cont_530 c
