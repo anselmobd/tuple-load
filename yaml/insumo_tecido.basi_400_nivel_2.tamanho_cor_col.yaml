@@ -21,7 +21,7 @@ sql:
 
   update: |
     UPDATE BASI_400 SET
-      CODIGO_INFORMACAO = 1
+      CODIGO_INFORMACAO = 45
     , DATA_01 = TIMESTAMP '2017-01-24 00:00:00.000000'
     , DATA_02 = TIMESTAMP '2017-01-24 00:00:00.000000'
     , SITUACAO = 0
@@ -53,7 +53,7 @@ sql:
     , :TAM
     , :COR
     , 12
-    , 1
+    , 45
     , TIMESTAMP '2017-01-24 00:00:00.000000'
     , TIMESTAMP '2017-01-24 00:00:00.000000'
     , 0
