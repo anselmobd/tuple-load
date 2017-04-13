@@ -1,10 +1,5 @@
 csv:
 
-  fields:
-
-    CONTA_ESTOQUE:
-      type: integer
-
   keys:
     - NIVEL_ESTRUTURA
     - REFERENCIA
@@ -31,12 +26,7 @@ sql:
     , LINHA_PRODUTO=:LINHA_PRODUTO
     , SERIE_TAMANHO=:SERIE_TAMANHO
     , ARTIGO=:ARTIGO
-    , COLECAO=(
-        SELECT
-          c.COLECAO
-        from basi_140 c
-        where c.DESCR_COLECAO = :CODCOLECAO
-      )
+    , COLECAO=:CODCOLECAO
     WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
       AND REFERENCIA=:REFERENCIA
 
@@ -66,12 +56,7 @@ sql:
     , :LINHA_PRODUTO
     , :SERIE_TAMANHO
     , :ARTIGO
-    , (
-        SELECT
-          c.COLECAO
-        from basi_140 c
-        where c.DESCR_COLECAO = :CODCOLECAO
-      )
+    , :CODCOLECAO
     )
 
   key_list: |
@@ -82,8 +67,16 @@ sql:
     WHERE NIVEL_ESTRUTURA = '1'
       AND substr(REFERENCIA, 1, 1) in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '0')
       AND REFERENCIA not like '%00%'
+      AND substr(REFERENCIA, 2, 2) = '00'
 
   delete: |
     DELETE FROM BASI_030
     WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
       AND REFERENCIA=:REFERENCIA
+
+  fault_delete: |
+    UPDATE BASI_030 SET
+      DESCR_REFERENCIA= substr('##' || DESCR_REFERENCIA, 1, 30)
+    WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
+      AND REFERENCIA=:REFERENCIA
+      AND DESCR_REFERENCIA NOT LIKE '##%'
