@@ -1,5 +1,19 @@
 csv:
 
+  first: 19999
+
+  columns:
+    - NIVEL_ESTRUTURA
+    - REFERENCIA
+    - COD_ANT_MD
+    - DESCRICAO
+    - UNIDMEDIDA
+    - CONTA_ESTOQUE
+    - CODIGO_CONTABIL
+    - ARTIGO
+    - CODCOLECAO
+    - CLASSIFIC_FISCAL
+
   fields:
 
     CONTA_ESTOQUE:
@@ -28,14 +42,9 @@ sql:
     , CODIGO_CONTABIL=:CODIGO_CONTABIL
     , COMPRADO_FABRIC=2
     , CLASSIFIC_FISCAL=:CLASSIFIC_FISCAL
-    , LINHA_PRODUTO=:LINHA_PRODUTO
+    , LINHA_PRODUTO=12
     , ARTIGO=:ARTIGO
-    , COLECAO=(
-        SELECT
-          c.COLECAO
-        from basi_140 c
-        where c.DESCR_COLECAO = :CODCOLECAO
-      )
+    , COLECAO=:CODCOLECAO
     WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
       AND REFERENCIA=:REFERENCIA
 
@@ -61,15 +70,23 @@ sql:
     , :CODIGO_CONTABIL
     , 2
     , :CLASSIFIC_FISCAL
-    , :LINHA_PRODUTO
+    , 12
     , :ARTIGO
-    , (
-        SELECT
-          c.COLECAO
-        from basi_140 c
-        where c.DESCR_COLECAO = :CODCOLECAO
-      )
+    , :CODCOLECAO
     )
+
+  after_insert_update:
+
+    columns:
+      - NIVEL_ESTRUTURA
+      - REFERENCIA
+
+    command: |
+      UPDATE BASI_030 SET
+        LINHA_PRODUTO=11
+      WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
+        AND REFERENCIA=:REFERENCIA
+        AND DESCR_REFERENCIA like '%COSTU%'
 
   key_list: |
     SELECT
@@ -79,6 +96,7 @@ sql:
     WHERE NIVEL_ESTRUTURA = '1'
       AND substr(REFERENCIA, 1, 1) in ('M', 'N', 'P', 'Q', 'W', 'Y')
       AND REFERENCIA not like '%00%'
+      AND substr(REFERENCIA, 2, 2) = '00'
 
   delete: |
     DELETE FROM BASI_030
