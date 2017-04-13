@@ -23,6 +23,7 @@ sql:
   update: |
     UPDATE BASI_030 SET
       DESCR_REFERENCIA=:DESCRITEMDEPRODUCAO
+    , COLECAO=45
     , UNIDADE_MEDIDA=:UNIDMEDIDA
     , CONTA_ESTOQUE=:CONTA_ESTOQUE
     , CODIGO_CONTABIL=:CODIGO_CONTABIL
@@ -46,6 +47,7 @@ sql:
     ( NIVEL_ESTRUTURA
     , REFERENCIA
     , DESCR_REFERENCIA
+    , COLECAO
     , UNIDADE_MEDIDA
     , CONTA_ESTOQUE
     , CODIGO_CONTABIL
@@ -58,9 +60,10 @@ sql:
       :NIVEL_ESTRUTURA
     , :REFERENCIA
     , :DESCRITEMDEPRODUCAO
+    , 45
     , :UNIDMEDIDA
     , :CONTA_ESTOQUE
-    , :CODIGO_CONTABIL -- identificador de carga = 99
+    , :CODIGO_CONTABIL
     , 1
     , '0'
     , :LINHA_PRODUTO
@@ -73,6 +76,19 @@ sql:
       )
     , case when INSTR( :DESCRITEMDEPRODUCAO, 'LISTRA' ) <> 0 then 2 else 1 end
     )
+
+  after_insert_update:
+
+    columns:
+      - NIVEL_ESTRUTURA
+      - REFERENCIA
+
+    command1: |
+      UPDATE BASI_030 SET
+        ARTIGO = 2004
+      WHERE NIVEL_ESTRUTURA=:NIVEL_ESTRUTURA
+        AND REFERENCIA=:REFERENCIA
+        AND ARTIGO is null
 
   key_list: |
     SELECT
