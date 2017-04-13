@@ -1,7 +1,5 @@
 csv:
 
-  first: 19999
-
   columns:
     - NIVEL_ESTRUTURA
     - REFERENCIA
