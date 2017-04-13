@@ -370,6 +370,7 @@ class Main:
                 cursor = self.db.cursorExecute(sql, dictRow)
                 self.vOut.prnt(
                     _('after_insert_update: %s') % (cursor.rowcount), 2)
+                self.countAfterIU += cursor.rowcount
 
     def readCsvKeys(self):
         self.vOut.prnt('->readCsvKeys', 2)
