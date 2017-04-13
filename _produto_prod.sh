@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DBVAR='' # --dbvar prod'
+DBVAR='--dbvar prod'
 
 # To dbms2csv.py
 # Order matters - Criation order
@@ -32,17 +32,17 @@ iniFiles=(
 # To csv2oracle.py
 # Order matters - Criation order
 dataGroupFiles=(
+  "--inicio"
+  "_produto_md_capa"
+  "_produto_md_tamanho"
+  "_produto_md_tamanho_cor"
+  "_produto_pa_capa"
+  "_produto_pa_tamanho"
+  "_produto_pa_tamanho_cor"
+  "--fim"
 )
-  # "--inicio"
-  # "--fim"
 
   # "--inicio"
-  # "_produto_md_capa"
-  # "_produto_md_tamanho"
-  # "_produto_md_tamanho_cor"
-  # "_produto_pa_capa"
-  # "_produto_pa_tamanho"
-  # "_produto_pa_tamanho_cor"
   # "_produto_md_estrutura.pamd"
   # "_produto_md_estrutura_combinacao_tamanho_m.1.2.3.4.5.6"
   # "--fim"
