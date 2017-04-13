@@ -39,7 +39,11 @@ sql:
             AND TAMANHO_REF=:TAM
         ) || ' ' || :DESCRCOR
       )
-    , CLASSIFIC_FISCAL = '0'
+    , CLASSIFIC_FISCAL = ( select capa.CLASSIFIC_FISCAL
+        from SYSTEXTIL.BASI_030 capa
+        WHERE capa.NIVEL_ESTRUTURA = :NIVEL_ESTRUTURA
+        AND capa.REFERENCIA = :REFERENCIA
+      ) -- CLASSIFIC_FISCAL
     , DATA_CADASTRO = TIMESTAMP '2017-01-24 00:00:00.000000'
     , NARRATIVA2 = :COMPLEMENTOCOR || '-' || :CORINTEGRACAO
     , PRECO_CUSTO_INFO = :ULTIMOPRECO
@@ -87,7 +91,11 @@ sql:
             AND TAMANHO_REF=:TAM
         ) || ' ' || :DESCRCOR
       )
-    , '0'
+    , ( select capa.CLASSIFIC_FISCAL
+        from SYSTEXTIL.BASI_030 capa
+        WHERE capa.NIVEL_ESTRUTURA = :NIVEL_ESTRUTURA
+        AND capa.REFERENCIA = :REFERENCIA
+      ) -- CLASSIFIC_FISCAL
     , TIMESTAMP '2017-01-24 00:00:00.000000'
     , :DESCRCOR || '-' || :COMPLEMENTOCOR || '-' || :CORINTEGRACAO
     , :ULTIMOPRECO
