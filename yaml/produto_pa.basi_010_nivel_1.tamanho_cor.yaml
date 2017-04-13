@@ -45,7 +45,12 @@ sql:
             AND TIPO_COR = 1
         )
       )
-    , CLASSIFIC_FISCAL = '0'
+    , CLASSIFIC_FISCAL =
+      ( select capa.CLASSIFIC_FISCAL
+        from SYSTEXTIL.BASI_030 capa
+        WHERE capa.NIVEL_ESTRUTURA = 1
+        AND capa.REFERENCIA = :REFERENCIA
+      )
     , DATA_CADASTRO = TIMESTAMP '2017-01-24 00:00:00.000000'
     , NUMERO_ROTEIRO = 1
     , NUMERO_ALTERNATI = 1
@@ -103,7 +108,11 @@ sql:
             AND TIPO_COR = 1
         )
       )
-    , '0' -- CLASSIFIC_FISCAL
+    , ( select capa.CLASSIFIC_FISCAL
+        from SYSTEXTIL.BASI_030 capa
+        WHERE capa.NIVEL_ESTRUTURA = 1
+        AND capa.REFERENCIA = :REFERENCIA
+      ) -- CLASSIFIC_FISCAL
     , TIMESTAMP '2017-01-24 00:00:00.000000' -- DATA_CADASTRO
     , 1 -- NUMERO_ROTEIRO
     , 1 -- NUMERO_ALTERNATI
