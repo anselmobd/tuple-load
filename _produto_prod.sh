@@ -33,6 +33,7 @@ iniFiles=(
 # Order matters - Criation order
 dataGroupFiles=(
   "--inicio"
+  #"area_producao" # deve ser fixo do sistema
   "_produto_md_capa"
   "_produto_md_tamanho"
   "_produto_md_tamanho_cor"
