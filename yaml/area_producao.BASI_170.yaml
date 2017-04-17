@@ -1,0 +1,50 @@
+csv:
+
+  fields:
+
+    AREA_PRODUCAO:
+      type: integer
+
+  keys:
+    - AREA_PRODUCAO
+
+sql:
+  
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(ap.DESCRICAO)
+    from BASI_170 ap
+    where ap.AREA_PRODUCAO = :AREA_PRODUCAO
+
+  update: |
+    UPDATE BASI_170 ap
+    set
+      ap.DESCRICAO = :DESCRICAO
+    where ap.AREA_PRODUCAO = :AREA_PRODUCAO
+
+  insert: |
+    INSERT INTO BASI_170 (
+      AREA_PRODUCAO
+    , DESCRICAO
+    ) VALUES (
+      :AREA_PRODUCAO
+    , :DESCRICAO
+    )
+
+  key_list: |
+    SELECT
+      ap.AREA_PRODUCAO
+    from BASI_170 ap
+
+  delete: |
+    DELETE FROM BASI_170 ap
+    where ap.AREA_PRODUCAO = :AREA_PRODUCAO
+
+  fault_delete: |
+    UPDATE BASI_170 ap
+    set
+      ap.DESCRICAO = substr('##' || ap.DESCRICAO, 1, 20)
+    where ap.AREA_PRODUCAO = :AREA_PRODUCAO
+      and ap.DESCRICAO not like '##%'
