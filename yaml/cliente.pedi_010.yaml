@@ -6,7 +6,18 @@ csv:
     - CGC_2
     - NOME_CLIENTE
     - ENDERECO_CLIENTE
+    - NUMERO_IMOVEL
+    - COMPLEMENTO
+    - CEP_CLIENTE
     - BAIRRO
+    - COD_CIDADE_IBGE
+    - TELEFONE_CLIENTE
+    - FAX_CLIENTE
+    - E_MAIL
+    - NFE_E_MAIL
+    - NR_SUFRAMA_CLI
+    - PORTADOR_CLIENTE
+    - INSC_EST_CLIENTE
 
   fields:
 
@@ -41,248 +52,31 @@ sql:
     set
       NOME_CLIENTE                 = :NOME_CLIENTE
     , FANTASIA_CLIENTE             = :NOME_CLIENTE
-    , SITUACAO_CLIENTE             = 1
-    , TELEFONE_CLIENTE             = 30282299
-    , TELEX_CLIENTE                = 0
-    , FAX_CLIENTE                  = 1
     , ENDERECO_CLIENTE             = :ENDERECO_CLIENTE
-    , CEP_CLIENTE                  = 646010
-    , CXPOSTAL_CLIENTE             = NULL
-    , INSC_EST_CLIENTE             = '206257690116'
-    , PORTADOR_CLIENTE             = 237
-    , DATA_CAD_CLIENTE             = TIMESTAMP '2017-02-07 00:00:00.000000'
-    , DATA_EXC_CLIENTE             = NULL
-    , MOT_EXC_CLIENTE              = 0
-    , CDREPRES_CLIENTE             = 4
+    , NUMERO_IMOVEL                = :NUMERO_IMOVEL
+    , COMPLEMENTO                  = :COMPLEMENTO
+    , CEP_CLIENTE                  = :CEP_CLIENTE
     , BAIRRO                       = :BAIRRO
-    , COD_CIDADE                   = 1025
-    , COD_CLIENTE                  = 0
-    , DIG_CLIENTE                  = 0
-    , SUB_REGIAO                   = 1002
-    , COD_SIT_CREDITO              = 1
-    , MAIOR_TITULO                 = 0
-    , MAIOR_ACUMULO                = 0
-    , MAIOR_ATRASO                 = 0
-    , ATRASO_MEDIO                 = 0
-    , DATA_FUNDACAO                = NULL
-    , NUMERO_FILIAIS               = 0
-    , FATURAMENTO_ANO              = 0
-    , ANO_FATURAMENTO              = 0
-    , PERC_VENDA_VISTA             = 0
-    , CREDIARIO_PROPRI             = 1
-    , CAPITAL_ATUAL                = 0
-    , ANO_CAPITAL_ATUA             = 0
-    , DATA_MAIOR_TIT               = NULL
-    , DATA_MAIOR_ATR               = NULL
-    , ACUMULO_ATRASO               = 0
-    , VALOR_ULT_TITULO             = 0
-    , DATA_ULT_TITULO              = NULL
-    , TITULOS_CARTORIO             = 0
-    , OBSERVACAO                   = NULL
-    , DT_MAIOR_ACUMULO             = NULL
-    , COD_RAMO_ATIV                = 0
-    , CONCEITO_CLIENTE             = 0
-    , TIPO_CLIENTE                 = 0
-    , PORTE_CLIENTE                = 0
-    , SEGMENTO_MERCADO             = 0
-    , PARTICIP_EMPRESA             = 0
-    , DATA_ULT_COMPRA              = NULL
-    , FISICA_JURIDICA              = 2 -- juridica
-    , ENVIA_MALA                   = 1
-    , FAIXA_ETARIA                 = 0
-    , TIPO_PRODUTO                 = NULL
-    , CLIENTE_PECA                 = 0
-    , LOCAL_COMPRA                 = 0
-    , VALOR_ULT_COMPRA             = 0
-    , NR_SUFRAMA_CLI               = NULL
-    , TRAN_CLI_FORNE9              = 0
-    , TRAN_CLI_FORNE4              = 0
-    , TRAN_CLI_FORNE2              = 0
-    , VL_MAIOR_PEDIDO              = 0
-    , DT_MAIOR_PEDIDO              = NULL
-    , TIPO_PRODUTO1                = NULL
-    , TIPO_PRODUTO2                = NULL
-    , TIPO_PRODUTO3                = NULL
-    , LIMITE_MAX_PED1              = 0
-    , LIMITE_MAX_PED2              = 0
-    , LIMITE_MAX_PED4              = 0
-    , LIMITE_MAX_PED7              = 0
-    , UNIDADE_LIM_PED              = 2
-    , CONTA_CONTABIL               = NULL
-    , PRAZO_MEDIO                  = 0
-    , DATA_ULT_FATUR               = NULL
-    , VALOR_ULT_FATUR              = 0
-    , DATA_MAIOR_FATUR             = NULL
-    , VAL_MAIOR_FATUR              = 0
-    , FORMA_PAGAMENTO              = 9
-    , ACUMULADO_VENDAS             = 0
-    , E_MAIL                       = 'agendabarueri@netshoes.com'
-    , CODIGO_CONTABIL              = 0
-    , INSTRUCAO_INT                = 0
-    , DIAS_INSTR_1                 = 0
-    , PERC_INSTR_1                 = 0
-    , INSTRUCAO_INT_2              = 0
-    , DIAS_INSTR_2                 = 0
-    , PERC_DESC_DUPLIC             = 0
-    , MENSAGEM_COBR                = NULL
-    , CODIGO_CLIENTE               = NULL
-    , TIPO_CLI_EXTERIOR            = 0
-    , PERC_ENCARGOS                = 0
-    , CLIENTE_ISENTO               = 0
-    , PERC_VERBA_PROP              = 0
-    , CAPITAL_INTERIOR             = 0
-    , VAL_LIM_CREDITO              = TIMESTAMP '2017-02-07 00:00:00.000000'
-    , DATA_VENCTO                  = NULL
-    , SITUACAO_CADASTRO            = 4
-    , DATA_COMPL_CADASTRO          = TIMESTAMP '2017-02-13 00:00:00.000000'
-    , CRITERIO_ATENDIMENTO         = 0
-    , ATIV_CONFECCAO               = 0
-    , ATIV_ATAC_CONF               = 0
-    , ATIV_VAR_CONF                = 0
-    , ATIV_ATAC_TECI               = 0
-    , ATIV_VAR_TECI                = 0
-    , ATIV_OUTROS                  = 0
-    , ATIV_DESCR_OUTROS            = NULL
-    , ALVO_FEMININO                = 0
-    , ALVO_MASCULINO               = 0
-    , ALVO_JUVENIL                 = 0
-    , ALVO_INFANTIL                = 0
-    , ALVO_BEBE                    = 0
-    , ALVO_SENHORA                 = 0
-    , ALVO_OUTROS                  = 0
-    , ALVO_DESCR_OUTROS            = NULL
-    , SEG_SPORTWEAR                = 0
-    , SEG_CASUALWEAR               = 0
-    , SEG_STREETWEAR               = 0
-    , SEG_SURFWEAR                 = 0
-    , SEG_ACTIVEWEAR               = 0
-    , SEG_INTIMA                   = 0
-    , SEG_PRAIA                    = 0
-    , SEG_OUTROS                   = 0
-    , SEG_DESCR_OUTROS             = NULL
-    , ESP_CAMISARIA                = 0
-    , ESP_CALCA                    = 0
-    , ESP_TUNICA                   = 0
-    , ESP_SAIA                     = 0
-    , ESP_MOSTRUARIO               = 0
-    , ESP_OUTROS                   = 0
-    , ESP_DESCR_OUTROS             = NULL
-    , DIST_MULTIMARCAS             = 0
-    , DIST_LOJAS_PROPRIAS          = 0
-    , DIST_FRANQUIAS               = 0
-    , DIST_ATAC_PROPRIO            = 0
-    , DIST_ATAC_MULTI              = 0
-    , DIST_TERCEIRIZADO            = 0
-    , DIST_OUTROS                  = 0
-    , DIST_DESCR_OUTROS            = NULL
-    , TIPO_TECI_ESTAMPA            = 0
-    , TIPO_TECI_LISO               = 0
-    , TIPO_DESENV_ESTAMPA          = 0
-    , TIPO_DESENV_TECIDO           = 0
-    , TIPO_OUTROS                  = 0
-    , TIPO_DESCR_OUTROS            = NULL
-    , PESQ_VIAGENS                 = 0
-    , PESQ_REVISTAS                = 0
-    , PESQ_VIDEOS                  = 0
-    , PESQ_BUREAUS                 = 0
-    , PESQ_OUTROS                  = 0
-    , PESQ_DESCR_OUTROS            = NULL
-    , MES_INIC_VERAO               = 0
-    , MES_LANC_VERAO               = 0
-    , MES_INIC_INVERNO             = 0
-    , MES_LANC_INVERNO             = 0
-    , DATA_ULT_ATU_MERC            = NULL
-    , OBS_MALA_DIRETA              = ' '
-    , OBS_COMERCIAL                = NULL
-    , SIT_CARTELA                  = 1
-    , DT_CARTELA                   = TIMESTAMP '2017-02-07 00:00:00.000000'
-    , OBS_CARTELA                  = ' '
-    , VIP                          = 0
-    , COD_SIT_COBRANCA             = 0
-    , DATA_SIT_COBRANCA            = NULL
-    , DATA_PROX_COBRANCA           = NULL
-    , SIT_ZONEAMENTO               = 2
-    , OBS_ZONEAMENTO               = NULL
-    , COD_SIT_COMERCIAL            = 0
-    , DATA_SIT_COMERCIAL           = NULL
-    , DATA_REATIVACAO              = NULL
-    , EMPENHO_AUTOMATICO           = 1
-    , DATA_ATUALIZACAO             = NULL
-    , ISENTO_SCI                   = 0
-    , ISENTO_SERASA                = 0
-    , DATA_VALID_SUFRAMA           = NULL
-    , DIGITACAO_PEDIDO             = 0
-    , DT_ALT_LIM_CREDITO           = NULL
-    , LANCA_COLECAO                = NULL
-    , MARCAS_PROPRIAS              = 0
-    , FORNE_PROD                   = 0
-    , GRUPO_ECONOMICO              = 0
-    , POSSUI_ROMANEIO              = 0
-    , NUMERO_REG_JUNTA             = NULL
-    , VALOR_FATURAMENTO_ANUAL      = 0
-    , VALOR_COMPRAS_MENSAL         = 0
-    , PREDIO_PROPRIO               = 'S'
-    , SUG_LIMITE_MAX_PED1          = 0
-    , SUG_LIMITE_MAX_PED2          = 0
-    , SUG_LIMITE_MAX_PED4          = 0
-    , SUG_LIMITE_MAX_PED7          = 0
-    , DATA_IMPORTACAO              = NULL
-    , FASHION                      = 0
-    , QTDE_PECAS_MES               = 0
-    , DT_ULT_CONSULTA_SINTEGRA     = NULL
-    , ALTERNATIVA_CLIENTE          = 0
-    , DATA_MAIOR_ATR_ANT           = NULL
-    , MAIOR_ATRASO_ANT             = 0
-    , DATA_MAIOR_FATUR_ANT         = NULL
-    , VAL_MAIOR_FATUR_ANT          = 0
-    , DATA_MAIOR_TIT_ANT           = NULL
-    , MAIOR_TITULO_ANT             = 0
-    , DATA_ULT_COMPRA_ANT          = NULL
-    , VALOR_ULT_COMPRA_ANT         = 0
-    , DATA_ULT_FATUR_ANT           = NULL
-    , VALOR_ULT_FATUR_ANT          = 0
-    , DATA_ULT_TITULO_ANT          = NULL
-    , VALOR_ULT_TITULO_ANT         = 0
-    , DT_MAIOR_ACUMULO_ANT         = NULL
-    , MAIOR_ACUMULO_ANT            = 0
-    , DT_MAIOR_PEDIDO_ANT          = NULL
-    , VL_MAIOR_PEDIDO_ANT          = 0
-    , CODIGO_EMPRESA               = 0
-    , TIPO_FRETE                   = 0
-    , CLI_QUEBRA_PECA              = 0
-    , CLI_QUEBRA_TECI              = 0
-    , CLI_QUEBRA_PANO              = 0
-    , CLI_QUEBRA_FIOS              = 0
-    , ACEITA_DESP_COBR             = 2
-    , CELULAR_CLIENTE              = 0
-    , CALL_FREE_CLIENTE            = NULL
-    , CLIENTE_INTEGRACAO           = NULL
-    , NUMERO_IMOVEL                = '854'
-    , COMPLEMENTO                  = 'AREA 3'
-    , COD_CIDADE_ZONA_FRANCA       = 0
-    , DES_ABREVIATURA              = '0'
-    , IND_ENVIA_INFOTINT           = 'S'
-    , COD_RELACION_SPED_CTB        = 0
-    , NFE_E_MAIL                   = 'fiscal@netshoes.com'
-    , PRIORIDADE_SUGESTAO          = 9
-    , IND_DESC_PIS_COFINS          = 'N'
-    , SENHA_WEB                    = NULL
-    , CADASTRO_DDA                 = 'N'
-    , FLAG_EXPORTACAO_LOJA         = 0
-    , IND_DESC_ICMS_IPI            = 'N'
-    , IND_DESC_PIS_COFINS_SUFRAMA  = 'N'
-    , BAIRRO_E_COMMERCE            = ' '
-    , COMPLEMENTO_E_COMMERCE       = ' '
-    , DDD_CELULAR_E_COMMERCE       = 0
-    , DDD_FIXO_E_COMMERCE          = 0
-    , TIPO_EMPRESA                 = NULL
-    , AUDITAR_VOLUME               = 0
-    , COD_ATIVIDADE_ECONOMICA      = 0
-    , CONTROLE_CLIENTE             = 0
-    , MICRO_EMPREENDEDOR_INDIV     = 0
-    , DATA_LIMITE_VENDA_TIT_ATRASO = NULL
-    , CREDITO_TROCA                = 0
-    , SOLICITACAO_EMERGENCIAL      = 0
+    , COD_CIDADE                   =
+      ( SELECT cod_cidade
+        FROM
+        ( SELECT cod_cidade
+          FROM SYSTEXTIL.BASI_160 x
+          WHERE cod_cidade_ibge = :COD_CIDADE_IBGE
+             OR cod_cidade = 99999
+          order by cod_cidade
+        )
+        WHERE ROWNUM = 1
+      )
+    , TELEFONE_CLIENTE             = :TELEFONE_CLIENTE
+    , FAX_CLIENTE                  = :FAX_CLIENTE
+    , E_MAIL                       = :E_MAIL
+    , NFE_E_MAIL                   = :NFE_E_MAIL
+    , NR_SUFRAMA_CLI               = :NR_SUFRAMA_CLI
+    , PORTADOR_CLIENTE             = :PORTADOR_CLIENTE
+    , INSC_EST_CLIENTE             = :INSC_EST_CLIENTE
+    , TIPO_EMPRESA                 = 1
+    , FISICA_JURIDICA              = 2
     WHERE c.CGC_9 = :CGC_9
       AND c.CGC_4 = :CGC_4
       AND c.CGC_2 = :CGC_2
@@ -294,495 +88,51 @@ sql:
     , CGC_2
     , NOME_CLIENTE
     , FANTASIA_CLIENTE
-    , SITUACAO_CLIENTE
-    , TELEFONE_CLIENTE
-    , TELEX_CLIENTE
-    , FAX_CLIENTE
     , ENDERECO_CLIENTE
-    , CEP_CLIENTE
-    , CXPOSTAL_CLIENTE
-    , INSC_EST_CLIENTE
-    , PORTADOR_CLIENTE
-    , DATA_CAD_CLIENTE
-    , DATA_EXC_CLIENTE
-    , MOT_EXC_CLIENTE
-    , CDREPRES_CLIENTE
-    , BAIRRO
-    , COD_CIDADE
-    , COD_CLIENTE
-    , DIG_CLIENTE
-    , SUB_REGIAO
-    , COD_SIT_CREDITO
-    , MAIOR_TITULO
-    , MAIOR_ACUMULO
-    , MAIOR_ATRASO
-    , ATRASO_MEDIO
-    , DATA_FUNDACAO
-    , NUMERO_FILIAIS
-    , FATURAMENTO_ANO
-    , ANO_FATURAMENTO
-    , PERC_VENDA_VISTA
-    , CREDIARIO_PROPRI
-    , CAPITAL_ATUAL
-    , ANO_CAPITAL_ATUA
-    , DATA_MAIOR_TIT
-    , DATA_MAIOR_ATR
-    , ACUMULO_ATRASO
-    , VALOR_ULT_TITULO
-    , DATA_ULT_TITULO
-    , TITULOS_CARTORIO
-    , OBSERVACAO
-    , DT_MAIOR_ACUMULO
-    , COD_RAMO_ATIV
-    , CONCEITO_CLIENTE
-    , TIPO_CLIENTE
-    , PORTE_CLIENTE
-    , SEGMENTO_MERCADO
-    , PARTICIP_EMPRESA
-    , DATA_ULT_COMPRA
-    , FISICA_JURIDICA
-    , ENVIA_MALA
-    , FAIXA_ETARIA
-    , TIPO_PRODUTO
-    , CLIENTE_PECA
-    , LOCAL_COMPRA
-    , VALOR_ULT_COMPRA
-    , NR_SUFRAMA_CLI
-    , TRAN_CLI_FORNE9
-    , TRAN_CLI_FORNE4
-    , TRAN_CLI_FORNE2
-    , VL_MAIOR_PEDIDO
-    , DT_MAIOR_PEDIDO
-    , TIPO_PRODUTO1
-    , TIPO_PRODUTO2
-    , TIPO_PRODUTO3
-    , LIMITE_MAX_PED1
-    , LIMITE_MAX_PED2
-    , LIMITE_MAX_PED4
-    , LIMITE_MAX_PED7
-    , UNIDADE_LIM_PED
-    , CONTA_CONTABIL
-    , PRAZO_MEDIO
-    , DATA_ULT_FATUR
-    , VALOR_ULT_FATUR
-    , DATA_MAIOR_FATUR
-    , VAL_MAIOR_FATUR
-    , FORMA_PAGAMENTO
-    , ACUMULADO_VENDAS
-    , E_MAIL
-    , CODIGO_CONTABIL
-    , INSTRUCAO_INT
-    , DIAS_INSTR_1
-    , PERC_INSTR_1
-    , INSTRUCAO_INT_2
-    , DIAS_INSTR_2
-    , PERC_DESC_DUPLIC
-    , MENSAGEM_COBR
-    , CODIGO_CLIENTE
-    , TIPO_CLI_EXTERIOR
-    , PERC_ENCARGOS
-    , CLIENTE_ISENTO
-    , PERC_VERBA_PROP
-    , CAPITAL_INTERIOR
-    , VAL_LIM_CREDITO
-    , DATA_VENCTO
-    , SITUACAO_CADASTRO
-    , DATA_COMPL_CADASTRO
-    , CRITERIO_ATENDIMENTO
-    , ATIV_CONFECCAO
-    , ATIV_ATAC_CONF
-    , ATIV_VAR_CONF
-    , ATIV_ATAC_TECI
-    , ATIV_VAR_TECI
-    , ATIV_OUTROS
-    , ATIV_DESCR_OUTROS
-    , ALVO_FEMININO
-    , ALVO_MASCULINO
-    , ALVO_JUVENIL
-    , ALVO_INFANTIL
-    , ALVO_BEBE
-    , ALVO_SENHORA
-    , ALVO_OUTROS
-    , ALVO_DESCR_OUTROS
-    , SEG_SPORTWEAR
-    , SEG_CASUALWEAR
-    , SEG_STREETWEAR
-    , SEG_SURFWEAR
-    , SEG_ACTIVEWEAR
-    , SEG_INTIMA
-    , SEG_PRAIA
-    , SEG_OUTROS
-    , SEG_DESCR_OUTROS
-    , ESP_CAMISARIA
-    , ESP_CALCA
-    , ESP_TUNICA
-    , ESP_SAIA
-    , ESP_MOSTRUARIO
-    , ESP_OUTROS
-    , ESP_DESCR_OUTROS
-    , DIST_MULTIMARCAS
-    , DIST_LOJAS_PROPRIAS
-    , DIST_FRANQUIAS
-    , DIST_ATAC_PROPRIO
-    , DIST_ATAC_MULTI
-    , DIST_TERCEIRIZADO
-    , DIST_OUTROS
-    , DIST_DESCR_OUTROS
-    , TIPO_TECI_ESTAMPA
-    , TIPO_TECI_LISO
-    , TIPO_DESENV_ESTAMPA
-    , TIPO_DESENV_TECIDO
-    , TIPO_OUTROS
-    , TIPO_DESCR_OUTROS
-    , PESQ_VIAGENS
-    , PESQ_REVISTAS
-    , PESQ_VIDEOS
-    , PESQ_BUREAUS
-    , PESQ_OUTROS
-    , PESQ_DESCR_OUTROS
-    , MES_INIC_VERAO
-    , MES_LANC_VERAO
-    , MES_INIC_INVERNO
-    , MES_LANC_INVERNO
-    , DATA_ULT_ATU_MERC
-    , OBS_MALA_DIRETA
-    , OBS_COMERCIAL
-    , SIT_CARTELA
-    , DT_CARTELA
-    , OBS_CARTELA
-    , VIP
-    , COD_SIT_COBRANCA
-    , DATA_SIT_COBRANCA
-    , DATA_PROX_COBRANCA
-    , SIT_ZONEAMENTO
-    , OBS_ZONEAMENTO
-    , COD_SIT_COMERCIAL
-    , DATA_SIT_COMERCIAL
-    , DATA_REATIVACAO
-    , EMPENHO_AUTOMATICO
-    , DATA_ATUALIZACAO
-    , ISENTO_SCI
-    , ISENTO_SERASA
-    , DATA_VALID_SUFRAMA
-    , DIGITACAO_PEDIDO
-    , DT_ALT_LIM_CREDITO
-    , LANCA_COLECAO
-    , MARCAS_PROPRIAS
-    , FORNE_PROD
-    , GRUPO_ECONOMICO
-    , POSSUI_ROMANEIO
-    , NUMERO_REG_JUNTA
-    , VALOR_FATURAMENTO_ANUAL
-    , VALOR_COMPRAS_MENSAL
-    , PREDIO_PROPRIO
-    , SUG_LIMITE_MAX_PED1
-    , SUG_LIMITE_MAX_PED2
-    , SUG_LIMITE_MAX_PED4
-    , SUG_LIMITE_MAX_PED7
-    , DATA_IMPORTACAO
-    , FASHION
-    , QTDE_PECAS_MES
-    , DT_ULT_CONSULTA_SINTEGRA
-    , ALTERNATIVA_CLIENTE
-    , DATA_MAIOR_ATR_ANT
-    , MAIOR_ATRASO_ANT
-    , DATA_MAIOR_FATUR_ANT
-    , VAL_MAIOR_FATUR_ANT
-    , DATA_MAIOR_TIT_ANT
-    , MAIOR_TITULO_ANT
-    , DATA_ULT_COMPRA_ANT
-    , VALOR_ULT_COMPRA_ANT
-    , DATA_ULT_FATUR_ANT
-    , VALOR_ULT_FATUR_ANT
-    , DATA_ULT_TITULO_ANT
-    , VALOR_ULT_TITULO_ANT
-    , DT_MAIOR_ACUMULO_ANT
-    , MAIOR_ACUMULO_ANT
-    , DT_MAIOR_PEDIDO_ANT
-    , VL_MAIOR_PEDIDO_ANT
-    , CODIGO_EMPRESA
-    , TIPO_FRETE
-    , CLI_QUEBRA_PECA
-    , CLI_QUEBRA_TECI
-    , CLI_QUEBRA_PANO
-    , CLI_QUEBRA_FIOS
-    , ACEITA_DESP_COBR
-    , CELULAR_CLIENTE
-    , CALL_FREE_CLIENTE
-    , CLIENTE_INTEGRACAO
     , NUMERO_IMOVEL
     , COMPLEMENTO
-    , COD_CIDADE_ZONA_FRANCA
-    , DES_ABREVIATURA
-    , IND_ENVIA_INFOTINT
-    , COD_RELACION_SPED_CTB
+    , CEP_CLIENTE
+    , BAIRRO
+    , COD_CIDADE
+    , TELEFONE_CLIENTE
+    , FAX_CLIENTE
+    , E_MAIL
     , NFE_E_MAIL
-    , PRIORIDADE_SUGESTAO
-    , IND_DESC_PIS_COFINS
-    , SENHA_WEB
-    , CADASTRO_DDA
-    , FLAG_EXPORTACAO_LOJA
-    , IND_DESC_ICMS_IPI
-    , IND_DESC_PIS_COFINS_SUFRAMA
-    , BAIRRO_E_COMMERCE
-    , COMPLEMENTO_E_COMMERCE
-    , DDD_CELULAR_E_COMMERCE
-    , DDD_FIXO_E_COMMERCE
+    , NR_SUFRAMA_CLI
+    , PORTADOR_CLIENTE
+    , INSC_EST_CLIENTE
     , TIPO_EMPRESA
-    , AUDITAR_VOLUME
-    , COD_ATIVIDADE_ECONOMICA
-    , CONTROLE_CLIENTE
-    , MICRO_EMPREENDEDOR_INDIV
-    , DATA_LIMITE_VENDA_TIT_ATRASO
-    , CREDITO_TROCA
+    , FISICA_JURIDICA
     ) VALUES (
-      :CGC_9                                 -- CGC_9
-    , :CGC_4                                 -- CGC_4
-    , :CGC_2                                 -- CGC_2
+      :CGC_9
+    , :CGC_4
+    , :CGC_2
     , :NOME_CLIENTE
-    , :NOME_CLIENTE                          -- FANTASIA_CLIENTE
-    , 1                                      -- SITUACAO_CLIENTE
-    , 30282299                               -- TELEFONE_CLIENTE
-    , 0                                      -- TELEX_CLIENTE
-    , 1                                      -- FAX_CLIENTE
+    , :NOME_CLIENTE -- FANTASIA_CLIENTE
     , :ENDERECO_CLIENTE
-    , 646010                                 -- CEP_CLIENTE
-    , NULL                                   -- CXPOSTAL_CLIENTE
-    , '206257690116'                         -- INSC_EST_CLIENTE
-    , 237                                    -- PORTADOR_CLIENTE
-    , TIMESTAMP '2017-02-07 00:00:00.000000' -- DATA_CAD_CLIENTE
-    , NULL                                   -- DATA_EXC_CLIENTE
-    , 0                                      -- MOT_EXC_CLIENTE
-    , 4                                      -- CDREPRES_CLIENTE
+    , :NUMERO_IMOVEL
+    , :COMPLEMENTO
+    , :CEP_CLIENTE
     , :BAIRRO
-    , 1025                                   -- COD_CIDADE
-    , 0                                      -- COD_CLIENTE
-    , 0                                      -- DIG_CLIENTE
-    , 1002                                   -- SUB_REGIAO
-    , 1                                      -- COD_SIT_CREDITO
-    , 0                                      -- MAIOR_TITULO
-    , 0                                      -- MAIOR_ACUMULO
-    , 0                                      -- MAIOR_ATRASO
-    , 0                                      -- ATRASO_MEDIO
-    , NULL                                   -- DATA_FUNDACAO
-    , 0                                      -- NUMERO_FILIAIS
-    , 0                                      -- FATURAMENTO_ANO
-    , 0                                      -- ANO_FATURAMENTO
-    , 0                                      -- PERC_VENDA_VISTA
-    , 1                                      -- CREDIARIO_PROPRI
-    , 0                                      -- CAPITAL_ATUAL
-    , 0                                      -- ANO_CAPITAL_ATUA
-    , NULL                                   -- DATA_MAIOR_TIT
-    , NULL                                   -- DATA_MAIOR_ATR
-    , 0                                      -- ACUMULO_ATRASO
-    , 0                                      -- VALOR_ULT_TITULO
-    , NULL                                   -- DATA_ULT_TITULO
-    , 0                                      -- TITULOS_CARTORIO
-    , NULL                                   -- OBSERVACAO
-    , NULL                                   -- DT_MAIOR_ACUMULO
-    , 0                                      -- COD_RAMO_ATIV
-    , 0                                      -- CONCEITO_CLIENTE
-    , 0                                      -- TIPO_CLIENTE
-    , 0                                      -- PORTE_CLIENTE
-    , 0                                      -- SEGMENTO_MERCADO
-    , 0                                      -- PARTICIP_EMPRESA
-    , NULL                                   -- DATA_ULT_COMPRA
-    , 2 -- juridica                          -- FISICA_JURIDICA
-    , 1                                      -- ENVIA_MALA
-    , 0                                      -- FAIXA_ETARIA
-    , NULL                                   -- TIPO_PRODUTO
-    , 0                                      -- CLIENTE_PECA
-    , 0                                      -- LOCAL_COMPRA
-    , 0                                      -- VALOR_ULT_COMPRA
-    , NULL                                   -- NR_SUFRAMA_CLI
-    , 0                                      -- TRAN_CLI_FORNE9
-    , 0                                      -- TRAN_CLI_FORNE4
-    , 0                                      -- TRAN_CLI_FORNE2
-    , 0                                      -- VL_MAIOR_PEDIDO
-    , NULL                                   -- DT_MAIOR_PEDIDO
-    , NULL                                   -- TIPO_PRODUTO1
-    , NULL                                   -- TIPO_PRODUTO2
-    , NULL                                   -- TIPO_PRODUTO3
-    , 0                                      -- LIMITE_MAX_PED1
-    , 0                                      -- LIMITE_MAX_PED2
-    , 0                                      -- LIMITE_MAX_PED4
-    , 0                                      -- LIMITE_MAX_PED7
-    , 2                                      -- UNIDADE_LIM_PED
-    , NULL                                   -- CONTA_CONTABIL
-    , 0                                      -- PRAZO_MEDIO
-    , NULL                                   -- DATA_ULT_FATUR
-    , 0                                      -- VALOR_ULT_FATUR
-    , NULL                                   -- DATA_MAIOR_FATUR
-    , 0                                      -- VAL_MAIOR_FATUR
-    , 9                                      -- FORMA_PAGAMENTO
-    , 0                                      -- ACUMULADO_VENDAS
-    , 'agendabarueri@netshoes.com'           -- E_MAIL
-    , 0                                      -- CODIGO_CONTABIL
-    , 0                                      -- INSTRUCAO_INT
-    , 0                                      -- DIAS_INSTR_1
-    , 0                                      -- PERC_INSTR_1
-    , 0                                      -- INSTRUCAO_INT_2
-    , 0                                      -- DIAS_INSTR_2
-    , 0                                      -- PERC_DESC_DUPLIC
-    , NULL                                   -- MENSAGEM_COBR
-    , NULL                                   -- CODIGO_CLIENTE
-    , 0                                      -- TIPO_CLI_EXTERIOR
-    , 0                                      -- PERC_ENCARGOS
-    , 0                                      -- CLIENTE_ISENTO
-    , 0                                      -- PERC_VERBA_PROP
-    , 0                                      -- CAPITAL_INTERIOR
-    , TIMESTAMP '2017-02-07 00:00:00.000000' -- VAL_LIM_CREDITO
-    , NULL                                   -- DATA_VENCTO
-    , 4                                      -- SITUACAO_CADASTRO
-    , TIMESTAMP '2017-02-13 00:00:00.000000' -- DATA_COMPL_CADASTRO
-    , 0                                      -- CRITERIO_ATENDIMENTO
-    , 0                                      -- ATIV_CONFECCAO
-    , 0                                      -- ATIV_ATAC_CONF
-    , 0                                      -- ATIV_VAR_CONF
-    , 0                                      -- ATIV_ATAC_TECI
-    , 0                                      -- ATIV_VAR_TECI
-    , 0                                      -- ATIV_OUTROS
-    , NULL                                   -- ATIV_DESCR_OUTROS
-    , 0                                      -- ALVO_FEMININO
-    , 0                                      -- ALVO_MASCULINO
-    , 0                                      -- ALVO_JUVENIL
-    , 0                                      -- ALVO_INFANTIL
-    , 0                                      -- ALVO_BEBE
-    , 0                                      -- ALVO_SENHORA
-    , 0                                      -- ALVO_OUTROS
-    , NULL                                   -- ALVO_DESCR_OUTROS
-    , 0                                      -- SEG_SPORTWEAR
-    , 0                                      -- SEG_CASUALWEAR
-    , 0                                      -- SEG_STREETWEAR
-    , 0                                      -- SEG_SURFWEAR
-    , 0                                      -- SEG_ACTIVEWEAR
-    , 0                                      -- SEG_INTIMA
-    , 0                                      -- SEG_PRAIA
-    , 0                                      -- SEG_OUTROS
-    , NULL                                   -- SEG_DESCR_OUTROS
-    , 0                                      -- ESP_CAMISARIA
-    , 0                                      -- ESP_CALCA
-    , 0                                      -- ESP_TUNICA
-    , 0                                      -- ESP_SAIA
-    , 0                                      -- ESP_MOSTRUARIO
-    , 0                                      -- ESP_OUTROS
-    , NULL                                   -- ESP_DESCR_OUTROS
-    , 0                                      -- DIST_MULTIMARCAS
-    , 0                                      -- DIST_LOJAS_PROPRIAS
-    , 0                                      -- DIST_FRANQUIAS
-    , 0                                      -- DIST_ATAC_PROPRIO
-    , 0                                      -- DIST_ATAC_MULTI
-    , 0                                      -- DIST_TERCEIRIZADO
-    , 0                                      -- DIST_OUTROS
-    , NULL                                   -- DIST_DESCR_OUTROS
-    , 0                                      -- TIPO_TECI_ESTAMPA
-    , 0                                      -- TIPO_TECI_LISO
-    , 0                                      -- TIPO_DESENV_ESTAMPA
-    , 0                                      -- TIPO_DESENV_TECIDO
-    , 0                                      -- TIPO_OUTROS
-    , NULL                                   -- TIPO_DESCR_OUTROS
-    , 0                                      -- PESQ_VIAGENS
-    , 0                                      -- PESQ_REVISTAS
-    , 0                                      -- PESQ_VIDEOS
-    , 0                                      -- PESQ_BUREAUS
-    , 0                                      -- PESQ_OUTROS
-    , NULL                                   -- PESQ_DESCR_OUTROS
-    , 0                                      -- MES_INIC_VERAO
-    , 0                                      -- MES_LANC_VERAO
-    , 0                                      -- MES_INIC_INVERNO
-    , 0                                      -- MES_LANC_INVERNO
-    , NULL                                   -- DATA_ULT_ATU_MERC
-    , ' '                                    -- OBS_MALA_DIRETA
-    , NULL                                   -- OBS_COMERCIAL
-    , 1                                      -- SIT_CARTELA
-    , TIMESTAMP '2017-02-07 00:00:00.000000' -- DT_CARTELA
-    , ' '                                    -- OBS_CARTELA
-    , 0                                      -- VIP
-    , 0                                      -- COD_SIT_COBRANCA
-    , NULL                                   -- DATA_SIT_COBRANCA
-    , NULL                                   -- DATA_PROX_COBRANCA
-    , 2                                      -- SIT_ZONEAMENTO
-    , NULL                                   -- OBS_ZONEAMENTO
-    , 0                                      -- COD_SIT_COMERCIAL
-    , NULL                                   -- DATA_SIT_COMERCIAL
-    , NULL                                   -- DATA_REATIVACAO
-    , 1                                      -- EMPENHO_AUTOMATICO
-    , NULL                                   -- DATA_ATUALIZACAO
-    , 0                                      -- ISENTO_SCI
-    , 0                                      -- ISENTO_SERASA
-    , NULL                                   -- DATA_VALID_SUFRAMA
-    , 0                                      -- DIGITACAO_PEDIDO
-    , NULL                                   -- DT_ALT_LIM_CREDITO
-    , NULL                                   -- LANCA_COLECAO
-    , 0                                      -- MARCAS_PROPRIAS
-    , 0                                      -- FORNE_PROD
-    , 0                                      -- GRUPO_ECONOMICO
-    , 0                                      -- POSSUI_ROMANEIO
-    , NULL                                   -- NUMERO_REG_JUNTA
-    , 0                                      -- VALOR_FATURAMENTO_ANUAL
-    , 0                                      -- VALOR_COMPRAS_MENSAL
-    , 'S'                                    -- PREDIO_PROPRIO
-    , 0                                      -- SUG_LIMITE_MAX_PED1
-    , 0                                      -- SUG_LIMITE_MAX_PED2
-    , 0                                      -- SUG_LIMITE_MAX_PED4
-    , 0                                      -- SUG_LIMITE_MAX_PED7
-    , NULL                                   -- DATA_IMPORTACAO
-    , 0                                      -- FASHION
-    , 0                                      -- QTDE_PECAS_MES
-    , NULL                                   -- DT_ULT_CONSULTA_SINTEGRA
-    , 0                                      -- ALTERNATIVA_CLIENTE
-    , NULL                                   -- DATA_MAIOR_ATR_ANT
-    , 0                                      -- MAIOR_ATRASO_ANT
-    , NULL                                   -- DATA_MAIOR_FATUR_ANT
-    , 0                                      -- VAL_MAIOR_FATUR_ANT
-    , NULL                                   -- DATA_MAIOR_TIT_ANT
-    , 0                                      -- MAIOR_TITULO_ANT
-    , NULL                                   -- DATA_ULT_COMPRA_ANT
-    , 0                                      -- VALOR_ULT_COMPRA_ANT
-    , NULL                                   -- DATA_ULT_FATUR_ANT
-    , 0                                      -- VALOR_ULT_FATUR_ANT
-    , NULL                                   -- DATA_ULT_TITULO_ANT
-    , 0                                      -- VALOR_ULT_TITULO_ANT
-    , NULL                                   -- DT_MAIOR_ACUMULO_ANT
-    , 0                                      -- MAIOR_ACUMULO_ANT
-    , NULL                                   -- DT_MAIOR_PEDIDO_ANT
-    , 0                                      -- VL_MAIOR_PEDIDO_ANT
-    , 0                                      -- CODIGO_EMPRESA
-    , 0                                      -- TIPO_FRETE
-    , 0                                      -- CLI_QUEBRA_PECA
-    , 0                                      -- CLI_QUEBRA_TECI
-    , 0                                      -- CLI_QUEBRA_PANO
-    , 0                                      -- CLI_QUEBRA_FIOS
-    , 2                                      -- ACEITA_DESP_COBR
-    , 0                                      -- CELULAR_CLIENTE
-    , NULL                                   -- CALL_FREE_CLIENTE
-    , NULL                                   -- CLIENTE_INTEGRACAO
-    , '854'                                  -- NUMERO_IMOVEL
-    , 'AREA 3'                               -- COMPLEMENTO
-    , 0                                      -- COD_CIDADE_ZONA_FRANCA
-    , '0'                                    -- DES_ABREVIATURA
-    , 'S'                                    -- IND_ENVIA_INFOTINT
-    , 0                                      -- COD_RELACION_SPED_CTB
-    , 'fiscal@netshoes.com'                  -- NFE_E_MAIL
-    , 9                                      -- PRIORIDADE_SUGESTAO
-    , 'N'                                    -- IND_DESC_PIS_COFINS
-    , NULL                                   -- SENHA_WEB
-    , 'N'                                    -- CADASTRO_DDA
-    , 0                                      -- FLAG_EXPORTACAO_LOJA
-    , 'N'                                    -- IND_DESC_ICMS_IPI
-    , 'N'                                    -- IND_DESC_PIS_COFINS_SUFRAMA
-    , ' '                                    -- BAIRRO_E_COMMERCE
-    , ' '                                    -- COMPLEMENTO_E_COMMERCE
-    , 0                                      -- DDD_CELULAR_E_COMMERCE
-    , 0                                      -- DDD_FIXO_E_COMMERCE
-    , NULL                                   -- TIPO_EMPRESA
-    , 0                                      -- AUDITAR_VOLUME
-    , 0                                      -- COD_ATIVIDADE_ECONOMICA
-    , 0                                      -- CONTROLE_CLIENTE
-    , 0                                      -- MICRO_EMPREENDEDOR_INDIV
-    , NULL                                   -- DATA_LIMITE_VENDA_TIT_ATRASO
-    , 0                                      -- CREDITO_TROCA
-    , 0                                      -- SOLICITACAO_EMERGENCIAL
+    , ( SELECT cod_cidade
+        FROM
+        ( SELECT cod_cidade
+          FROM SYSTEXTIL.BASI_160 x
+          WHERE cod_cidade_ibge = :COD_CIDADE_IBGE
+             OR cod_cidade = 99999
+          order by cod_cidade
+        )
+        WHERE ROWNUM = 1
+      )
+    , :TELEFONE_CLIENTE
+    , :FAX_CLIENTE
+    , :E_MAIL
+    , :NFE_E_MAIL
+    , :NR_SUFRAMA_CLI
+    , :PORTADOR_CLIENTE
+    , :INSC_EST_CLIENTE
+    , 1 -- TIPO_EMPRESA
+    , 2 -- FISICA_JURIDICA
     )
 
   key_list: |
@@ -791,7 +141,6 @@ sql:
     , c.CGC_4
     , c.CGC_2
     from PEDI_010 c
-    where c.CGC_9 = '62774319'
 
   delete: |
     DELETE FROM PEDI_010 x
