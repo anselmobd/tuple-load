@@ -33,17 +33,15 @@ iniFiles=(
 # Order matters - Criation order
 dataGroupFiles=(
   "--inicio"
-  #"area_producao" # deve ser fixo do sistema
+  "area_producao"
+  "estagios"
   "_produto_md_capa"
   "_produto_md_tamanho"
   "_produto_md_tamanho_cor"
   "_produto_pa_capa"
   "_produto_pa_tamanho"
   "_produto_pa_tamanho_cor"
+  "_produto_md_estrutura.pamd"
+  "_produto_md_estrutura_combinacao_tamanho_m.1.2.3.4.5.6"
   "--fim"
 )
-
-  # "--inicio"
-  # "_produto_md_estrutura.pamd"
-  # "_produto_md_estrutura_combinacao_tamanho_m.1.2.3.4.5.6"
-  # "--fim"
