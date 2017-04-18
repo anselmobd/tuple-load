@@ -20,5 +20,6 @@ dataGroupFiles=(
   "deposito"
   "plano_de_contas"
   "contas_contabeis"
+  "codigo_contabil"
   "--fim"
 )

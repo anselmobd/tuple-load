@@ -1,0 +1,61 @@
+csv:
+
+  fields:
+
+    TIPO_CONTABIL:
+      type: integer
+
+    CODIGO_CONTABIL:
+      type: integer
+
+  keys:
+    - TIPO_CONTABIL
+    - CODIGO_CONTABIL
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count(c.DESCRICAO)
+    from CONT_540 c
+    where c.TIPO_CONTABIL = :TIPO_CONTABIL
+      and c.CODIGO_CONTABIL = :CODIGO_CONTABIL
+
+  update: |
+    UPDATE CONT_540 c
+    set
+      c.DESCRICAO = :DESCRICAO
+    where c.TIPO_CONTABIL = :TIPO_CONTABIL
+      and c.CODIGO_CONTABIL = :CODIGO_CONTABIL
+
+  insert: |
+    INSERT INTO CONT_540 (
+      TIPO_CONTABIL
+    , CODIGO_CONTABIL
+    , DESCRICAO
+    ) VALUES (
+      :TIPO_CONTABIL
+    , :CODIGO_CONTABIL
+    , :DESCRICAO
+    )
+
+  key_list: |
+    SELECT
+      c.TIPO_CONTABIL
+    , c.CODIGO_CONTABIL
+    from CONT_540 c
+
+  delete: |
+    DELETE FROM CONT_540 c
+    where c.TIPO_CONTABIL = :TIPO_CONTABIL
+      and c.CODIGO_CONTABIL = :CODIGO_CONTABIL
+
+  fault_delete: |
+    UPDATE CONT_540 c
+    set
+      c.DESCRICAO = substr('##' || c.DESCRICAO, 1, 45)
+    where c.TIPO_CONTABIL = :TIPO_CONTABIL
+      and c.CODIGO_CONTABIL = :CODIGO_CONTABIL
+      and c.DESCRICAO not like '##%'
