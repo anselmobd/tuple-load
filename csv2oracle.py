@@ -386,7 +386,7 @@ class Main:
 
     def scriptRow(self, dictRow, *path):
         hasSubSql = False
-        for sqlOrderInt in range(10):
+        for sqlOrderInt in range(100):
             sqlOrder = 'command{}'.format(sqlOrderInt).strip('0')
             if self.hasRule(*path, sqlOrder):
                 hasSubSql = True
