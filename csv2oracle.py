@@ -38,6 +38,7 @@ class Main:
         result = self.getRule(*path)
         if result is None:
             result = default
+        return result
 
     def getRule(self, *path):
         branch = self.rules
@@ -51,6 +52,7 @@ class Main:
         result = self.getStrRule(*path)
         if result is None:
             result = default
+        return result
 
     def getStrRule(self, *path):
         ruleData = self.getRule(*path)
@@ -191,6 +193,8 @@ class Main:
     def configProcess(self):
         self.vOut.prnt('->configProcess', 2)
 
+        self.tadTypeScript = False
+
         if self.args.insert:
             self.vOut.prnt('--insert', 2)
         if self.args.delete:
@@ -240,19 +244,24 @@ class Main:
     def countersInit(self):
         self.countInsert = 0
         self.countUpdate = 0
-        self.countAfterIU = 0
+        self.countCommands = 0
         self.countDelete = 0
         self.countFaultDelete = 0
 
     def countersPrint(self):
         self.vOut.prnt('- Counters')
-        if self.args.insert:
-            self.vOut.prnt('Inserted: {}'.format(self.countInsert))
-            self.vOut.prnt('Updated: {}'.format(self.countUpdate))
-            self.vOut.prnt('After Insert Update: {}'.format(self.countAfterIU))
-        if self.args.delete:
-            self.vOut.prnt('Deleted: {}'.format(self.countDelete))
-            self.vOut.prnt('Fault Deleted: {}'.format(self.countFaultDelete))
+        if self.tadTypeScript:
+            self.vOut.prnt('Script commands: {}'.format(self.countCommands))
+        else:
+            if self.args.insert:
+                self.vOut.prnt('Inserted: {}'.format(self.countInsert))
+                self.vOut.prnt('Updated: {}'.format(self.countUpdate))
+                self.vOut.prnt(
+                    'After Insert Update: {}'.format(self.countCommands))
+            if self.args.delete:
+                self.vOut.prnt('Deleted: {}'.format(self.countDelete))
+                self.vOut.prnt(
+                    'Fault Deleted: {}'.format(self.countFaultDelete))
 
     def run(self):
         self.vOut.prnt('->run', 2)
@@ -266,12 +275,14 @@ class Main:
         try:
             self.connectDataBase()
 
-            tadTypeScript =\
-                self.getStrDefRule('iud', 'sql', 'type') == 'script'
+            self.tadTypeScript =\
+                self.getDefRule('iud', 'sql', 'type') == 'script'
 
-            if tadTypeScript:
+            if self.tadTypeScript:
+
+                path = ('sql', 'script')
                 for dataRow in self.readCsvGenerator():
-                    self.insertUpdateRow(dataRow)
+                    self.scriptRow(dataRow, *path)
 
             else:
                 if self.args.insert:
@@ -324,10 +335,13 @@ class Main:
                     dictRow = dict(zip(columns, rowByColumns))
 
                     self.vOut.pprnt(dictRow, 3)
-                    self.vOut.pprnt(
-                        list(
-                            (dictRow[f] for f in self.getRule('csv', 'keys'))
-                            ), 3)
+                    keys = self.getRule('csv', 'keys')
+                    if keys is not None:
+                        self.vOut.pprnt(
+                            list(
+                                (dictRow[f]
+                                 for f in self.getRule('csv', 'keys'))
+                                ), 3)
                     yield dictRow
 
                     countRows += 1
@@ -389,15 +403,15 @@ class Main:
                     dictRow = {key: dictRow[key] for key in columnsDef}
 
                 cursor = self.db.cursorExecute(sql, dictRow)
-                self.vOut.prnt(_('after_insert_update: %s sql: %s') % (
-                    cursor.rowcount, sqlOrderInt), 2)
-                self.countAfterIU += cursor.rowcount
+                self.vOut.prnt(_('%s (command: %s): %s') % (
+                    path[1], sqlOrderInt, cursor.rowcount), 2)
+                self.countCommands += cursor.rowcount
         if not hasSubSql:
             sql = self.getStrRule(*path)
             cursor = self.db.cursorExecute(sql, dictRow)
             self.vOut.prnt(
-                _('after_insert_update: %s') % (cursor.rowcount), 2)
-            self.countAfterIU += cursor.rowcount
+                _('%s: %s') % (path[1], cursor.rowcount), 2)
+            self.countCommands += cursor.rowcount
 
     def readCsvKeys(self):
         self.vOut.prnt('->readCsvKeys', 2)
