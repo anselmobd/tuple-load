@@ -227,6 +227,23 @@ class Main:
         self.vOut.prnt(_('Table access definitions '
                          'file name: %s') % (self.tableADFileName))
 
+    def countersInit(self):
+        self.countInsert = 0
+        self.countUpdate = 0
+        self.countAfterIU = 0
+        self.countDelete = 0
+        self.countFaultDelete = 0
+
+    def countersPrint(self):
+        self.vOut.prnt('- Counters')
+        if self.args.insert:
+            self.vOut.prnt('Inserted: {}'.format(self.countInsert))
+            self.vOut.prnt('Updated: {}'.format(self.countUpdate))
+            self.vOut.prnt('After Insert Update: {}'.format(self.countAfterIU))
+        if self.args.delete:
+            self.vOut.prnt('Deleted: {}'.format(self.countDelete))
+            self.vOut.prnt('Fault Deleted: {}'.format(self.countFaultDelete))
+
     def run(self):
         self.vOut.prnt('->run', 2)
 
@@ -235,13 +252,11 @@ class Main:
         else:
             self.readJson()
 
-        self.countInsert = 0
-        self.countUpdate = 0
-        self.countAfterIU = 0
-        self.countDelete = 0
-        self.countFaultDelete = 0
+        self.countersInit()
         try:
             self.connectDataBase()
+
+
 
             if self.args.insert:
                 for dataRow in self.readCsvGenerator():
@@ -254,14 +269,7 @@ class Main:
             if self.db.connected:
                 self.closeDataBase()
 
-        self.vOut.prnt('- Counters')
-        if self.args.insert:
-            self.vOut.prnt('Inserted: {}'.format(self.countInsert))
-            self.vOut.prnt('Updated: {}'.format(self.countUpdate))
-            self.vOut.prnt('After Insert Update: {}'.format(self.countAfterIU))
-        if self.args.delete:
-            self.vOut.prnt('Deleted: {}'.format(self.countDelete))
-            self.vOut.prnt('Fault Deleted: {}'.format(self.countFaultDelete))
+        self.countersPrint()
 
     def readJson(self):
         self.vOut.prnt('->readJson', 2)
