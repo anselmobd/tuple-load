@@ -34,6 +34,11 @@ class Main:
             branch = branch[level]
         return True
 
+    def getDefRule(self, default, *path):
+        result = self.getRule(*path)
+        if result is None:
+            result = default
+
     def getRule(self, *path):
         branch = self.rules
         for level in path:
@@ -41,6 +46,11 @@ class Main:
                 return None
             branch = branch[level]
         return branch
+
+    def getStrDefRule(self, default, *path):
+        result = self.getStrRule(*path)
+        if result is None:
+            result = default
 
     def getStrRule(self, *path):
         ruleData = self.getRule(*path)
