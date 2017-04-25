@@ -385,15 +385,17 @@ class Main:
             self.scriptRow(dictRow, *path)
 
     def scriptRow(self, dictRow, *path):
+        self.vOut.prnt('->scriptRow', 2)
         hasSubSql = False
         for sqlOrderInt in range(100):
-            sqlOrder = 'command{}'.format(sqlOrderInt).strip('0')
+            strOrderInt = '' if sqlOrderInt == 0 else str(sqlOrderInt)
+            sqlOrder = 'command{}'.format(strOrderInt)
             if self.hasRule(*path, sqlOrder):
                 hasSubSql = True
                 sql = self.getStrRule(*path, sqlOrder)
 
                 columnsPath = None
-                colOrder = 'columns{}'.format(sqlOrderInt).strip('0')
+                colOrder = 'columns{}'.format(strOrderInt)
                 if self.hasRule(*path, colOrder):
                     columnsPath = (*path, colOrder)
                 elif sqlOrderInt != 0 and self.hasRule(*path, 'columns'):
