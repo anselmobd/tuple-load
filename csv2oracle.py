@@ -270,7 +270,8 @@ class Main:
                 self.getStrDefRule('iud', 'sql', 'type') == 'script'
 
             if tadTypeScript:
-                pass
+                for dataRow in self.readCsvGenerator():
+                    self.insertUpdateRow(dataRow)
 
             else:
                 if self.args.insert:
@@ -367,33 +368,36 @@ class Main:
 
         path = ('sql', 'after_insert_update')
         if cursor.rowcount != 0 and self.hasRule(*path):
-            hasSubSql = False
-            for sqlOrderInt in range(10):
-                sqlOrder = 'command{}'.format(sqlOrderInt).strip('0')
-                if self.hasRule(*path, sqlOrder):
-                    hasSubSql = True
-                    sql = self.getStrRule(*path, sqlOrder)
+            self.scriptRow(dictRow, *path)
 
-                    columnsPath = None
-                    colOrder = 'columns{}'.format(sqlOrderInt).strip('0')
-                    if self.hasRule(*path, colOrder):
-                        columnsPath = (*path, colOrder)
-                    elif sqlOrderInt != 0 and self.hasRule(*path, 'columns'):
-                        columnsPath = (*path, 'columns')
-                    if columnsPath is not None:
-                        columnsDef = self.getRule(*columnsPath)
-                        dictRow = {key: dictRow[key] for key in columnsDef}
+    def scriptRow(self, dictRow, *path):
+        hasSubSql = False
+        for sqlOrderInt in range(10):
+            sqlOrder = 'command{}'.format(sqlOrderInt).strip('0')
+            if self.hasRule(*path, sqlOrder):
+                hasSubSql = True
+                sql = self.getStrRule(*path, sqlOrder)
 
-                    cursor = self.db.cursorExecute(sql, dictRow)
-                    self.vOut.prnt(_('after_insert_update: %s sql: %s') % (
-                        cursor.rowcount, sqlOrderInt), 2)
-                    self.countAfterIU += cursor.rowcount
-            if not hasSubSql:
-                sql = self.getStrRule(*path)
+                columnsPath = None
+                colOrder = 'columns{}'.format(sqlOrderInt).strip('0')
+                if self.hasRule(*path, colOrder):
+                    columnsPath = (*path, colOrder)
+                elif sqlOrderInt != 0 and self.hasRule(*path, 'columns'):
+                    columnsPath = (*path, 'columns')
+                if columnsPath is not None:
+                    columnsDef = self.getRule(*columnsPath)
+                    dictRow = {key: dictRow[key] for key in columnsDef}
+
                 cursor = self.db.cursorExecute(sql, dictRow)
-                self.vOut.prnt(
-                    _('after_insert_update: %s') % (cursor.rowcount), 2)
+                self.vOut.prnt(_('after_insert_update: %s sql: %s') % (
+                    cursor.rowcount, sqlOrderInt), 2)
                 self.countAfterIU += cursor.rowcount
+        if not hasSubSql:
+            sql = self.getStrRule(*path)
+            cursor = self.db.cursorExecute(sql, dictRow)
+            self.vOut.prnt(
+                _('after_insert_update: %s') % (cursor.rowcount), 2)
+            self.countAfterIU += cursor.rowcount
 
     def readCsvKeys(self):
         self.vOut.prnt('->readCsvKeys', 2)
