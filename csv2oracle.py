@@ -266,15 +266,20 @@ class Main:
         try:
             self.connectDataBase()
 
+            tadTypeScript =\
+                self.getStrDefRule('iud', 'sql', 'type') == 'script'
 
+            if tadTypeScript:
+                pass
 
-            if self.args.insert:
-                for dataRow in self.readCsvGenerator():
-                    self.insertUpdateRow(dataRow)
+            else:
+                if self.args.insert:
+                    for dataRow in self.readCsvGenerator():
+                        self.insertUpdateRow(dataRow)
 
-            if self.args.delete:
-                self.readCsvKeys()
-                self.deleteRows()
+                if self.args.delete:
+                    self.readCsvKeys()
+                    self.deleteRows()
         finally:
             if self.db.connected:
                 self.closeDataBase()
