@@ -252,3 +252,58 @@ ORDER BY
 
 --- --- --- --- --- --- --- --- ---
 --- --- --- --- --- --- --- --- ---
+
+SELECT
+  ptc.NIVEL_ESTRUTURA
+, ptc.GRUPO_ESTRUTURA
+, ptc.SUBGRU_ESTRUTURA
+, ptc.ITEM_ESTRUTURA
+, ptc.DESCRICAO_15
+, comb.NIVEL_ITEM
+, comb.GRUPO_ITEM
+, comb.SUB_ITEM
+, comb.ITEM_ITEM
+FROM BASI_010 ptc
+LEFT JOIN BASI_040 comb
+  ON comb.NIVEL_ITEM = ptc.NIVEL_ESTRUTURA
+ AND comb.GRUPO_ITEM = ptc.GRUPO_ESTRUTURA
+ AND (comb.SUB_ITEM = ptc.SUBGRU_ESTRUTURA
+      OR comb.ITEM_ITEM = ptc.ITEM_ESTRUTURA
+     )
+WHERE ptc.NIVEL_ESTRUTURA = 1
+  AND ptc.DESCRICAO_15 like '-%'
+
+---
+
+SELECT
+  comb.NIVEL_ITEM
+, comb.GRUPO_ITEM
+, comb.SUB_ITEM
+, comb.ITEM_ITEM
+, comb.ALTERNATIVA_ITEM
+FROM BASI_040 comb
+WHERE comb.ITEM_ITEM <> '000000'
+  AND EXISTS (
+	  SELECT
+	    ptc.ITEM_ESTRUTURA
+	  FROM BASI_010 ptc
+	  where comb.NIVEL_ITEM = ptc.NIVEL_ESTRUTURA
+	    AND comb.GRUPO_ITEM = ptc.GRUPO_ESTRUTURA
+	    AND comb.ITEM_ITEM = ptc.ITEM_ESTRUTURA
+	    AND ptc.DESCRICAO_15 like '-%'
+  )
+
+-- vvvvvvvvvv executando
+-- exclui das combinações cores marcadas com '-' no início da descrição
+
+DELETE FROM BASI_040 comb
+WHERE comb.ITEM_ITEM <> '000000'
+  AND EXISTS (
+	  SELECT
+	    ptc.ITEM_ESTRUTURA
+	  FROM BASI_010 ptc
+	  where comb.NIVEL_ITEM = ptc.NIVEL_ESTRUTURA
+	    AND comb.GRUPO_ITEM = ptc.GRUPO_ESTRUTURA
+	    AND comb.ITEM_ITEM = ptc.ITEM_ESTRUTURA
+	    AND ptc.DESCRICAO_15 like '-%'
+  )
