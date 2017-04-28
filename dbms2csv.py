@@ -339,9 +339,17 @@ class Main:
 
             self.execFunctionsToRow(dictRowFunctions, dictRow)
 
+            if self.ini.has('columns'):
+                csvColumns = self.ini.iter('columns')
+            else:
+                csvColumns = [
+                    (c[0].lower(),
+                     't' if (c[1] == self.db.STRING) else 'n'
+                     ) for c in curF.description]
+
             dataLine = ''
             separator = ''
-            for column, spec in self.ini.iter('columns'):
+            for column, spec in csvColumns:
                 column = column.lower()
                 if self.args.iniyaml:
                     if isinstance(spec, str):
