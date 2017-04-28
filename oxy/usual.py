@@ -66,7 +66,7 @@ class IniParser:
                     result = levels[-1] in stru
                 else:
                     result = levels[-1] in [pair[0] for pair in stru]
-            except:
+            except Exception:
                 result = False
         return result
 
