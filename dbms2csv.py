@@ -19,6 +19,7 @@ import gettext
 from oxy.arg import parse as argparse
 from oxy.mssql import Mssql
 from oxy.firebird import Firebird
+from oxy.oracle import Oracle
 import oxy.usual as oxyu
 from oxy.usual import VerboseOutput
 import oxy.inner_functions as oxyin
@@ -36,7 +37,11 @@ class Main:
     def connectDataBase(self):
         self.vOut.prnt('->connectDataBase', 4)
         dbfrom = 'db.from.{}'.format(self.ini.get('read', 'db'))
-        dbms = self.config.get(dbfrom, 'dbms')
+        try:
+            dbms = self.config.get(dbfrom, 'dbms')
+        except Exception as e:
+            dbfrom = self.ini.get('read', 'db')
+            dbms = self.config.get(dbfrom, 'dbms')
 
         if dbms == 'mssql':
             self.db = Mssql(
@@ -57,13 +62,13 @@ class Main:
                 self.config.get(dbfrom, 'charset'))
 
         elif dbms == 'oracle':
-            self.oracle = Oracle(
-                self.config.get(dbTo, 'username'),
-                self.config.get(dbTo, 'password'),
-                self.config.get(dbTo, 'hostname'),
-                self.config.get(dbTo, 'port'),
-                self.config.get(dbTo, 'servicename'),
-                self.config.get(dbTo, 'schema'))
+            self.db = Oracle(
+                self.config.get(dbfrom, 'username'),
+                self.config.get(dbfrom, 'password'),
+                self.config.get(dbfrom, 'hostname'),
+                self.config.get(dbfrom, 'port'),
+                self.config.get(dbfrom, 'servicename'),
+                self.config.get(dbfrom, 'schema'))
         else:
             raise NameError(
                 'For now, script is not prepared for "'+dbms+'".')
