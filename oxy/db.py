@@ -22,6 +22,9 @@ class Db:
         self.dbModule = None
         self.nonRaiserErrors = {}
 
+        self.STRING = None
+        self.NUMBER = None
+
     def custonConnect(self):
         pass
 
