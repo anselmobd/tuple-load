@@ -24,6 +24,11 @@ def fileWithDefaultDir(dire, fileName):
     return os.path.join(path, name)
 
 
+def fileNameWithSuffix(fileName, suffix):
+    file_name, file_ext = os.path.splitext(fileName)
+    return '{}.{}{}'.format(file_name, suffix, file_ext)
+
+
 class IniParser:
 
     AUTO = 0
