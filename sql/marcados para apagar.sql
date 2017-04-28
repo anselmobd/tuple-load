@@ -294,7 +294,7 @@ WHERE comb.ITEM_ITEM <> '000000'
   )
 
 -- vvvvvvvvvv executando
--- exclui das combinações cores marcadas com '-' no início da descrição
+-- exclui das combinações, cores marcadas com '-' no início da descrição
 
 DELETE FROM BASI_040 comb
 WHERE comb.ITEM_ITEM <> '000000'
@@ -307,3 +307,257 @@ WHERE comb.ITEM_ITEM <> '000000'
 	    AND comb.ITEM_ITEM = ptc.ITEM_ESTRUTURA
 	    AND ptc.DESCRICAO_15 like '-%'
   )
+;
+
+-- vvvvvvvvvv executando
+-- exclui das combinações, tamanhos marcadas com '-' no início da descrição
+
+DELETE FROM BASI_040 comb
+WHERE comb.SUB_ITEM <> '000'
+  AND EXISTS (
+	  SELECT
+	    pt.TAMANHO_REF
+	  FROM BASI_020 pt
+	  where pt.BASI030_NIVEL030 = comb.NIVEL_ITEM
+	    AND pt.BASI030_REFERENC = comb.GRUPO_ITEM
+	    AND pt.TAMANHO_REF = comb.SUB_ITEM
+	    AND pt.DESCR_TAM_REFER like '-%'
+  )
+;
+
+--- --- --- --- --- --- --- --- ---
+--- --- --- --- --- --- --- --- ---
+
+-- vvvvvvvvvv executando
+-- exclui
+-- . parametros
+-- . cores
+-- de cores marcadas com '-' no início da descrição
+
+DELETE
+--SELECT *
+FROM BASI_015 ptcp
+WHERE EXISTS
+  ( SELECT
+      ptc.ITEM_ESTRUTURA
+    FROM BASI_010 ptc
+    WHERE ptc.NIVEL_ESTRUTURA = ptcp.NIVEL_ESTRUTURA
+      AND ptc.GRUPO_ESTRUTURA = ptcp.GRUPO_ESTRUTURA
+      AND ptc.SUBGRU_ESTRUTURA = ptcp.SUBGRU_ESTRUTURA
+      AND ptc.ITEM_ESTRUTURA = ptcp.ITEM_ESTRUTURA
+      AND ptc.DESCRICAO_15 like '-%'
+  )
+  AND NOT EXISTS
+  ( SELECT
+      estr.ITEM_COMP
+    FROM BASI_050 estr
+    WHERE estr.NIVEL_COMP = ptcp.NIVEL_ESTRUTURA
+      AND estr.GRUPO_COMP = ptcp.GRUPO_ESTRUTURA
+      AND estr.ITEM_COMP = ptcp.ITEM_ESTRUTURA
+  )
+;
+
+--
+
+DELETE
+--SELECT *
+FROM BASI_010 ptc
+WHERE ptc.DESCRICAO_15 like '-%'
+  AND NOT EXISTS (
+	  SELECT
+	    estr.ITEM_COMP
+	  FROM BASI_050 estr
+	  WHERE estr.NIVEL_COMP = ptc.NIVEL_ESTRUTURA
+	    AND estr.GRUPO_COMP = ptc.GRUPO_ESTRUTURA
+	    AND estr.ITEM_COMP = ptc.ITEM_ESTRUTURA
+  )
+;
+
+-- vvvvvvvvvv executando
+-- exclui
+-- . parametros de fornecedor
+-- . requisições (não sei se devo fazer isso)
+-- . parametros
+-- . cores
+-- . tamanhos
+-- de tamanhos marcados com '-' no início da descrição
+
+DELETE
+--SELECT *
+FROM supr_060 s
+WHERE EXISTS
+  ( SELECT
+      pt.TAMANHO_REF
+    FROM BASI_020 pt
+    WHERE pt.BASI030_NIVEL030 = s.ITEM_060_NIVEL99
+      AND pt.BASI030_REFERENC = s.ITEM_060_GRUPO
+      AND pt.TAMANHO_REF = s.ITEM_060_SUBGRUPO
+      AND pt.DESCR_TAM_REFER like '-%'
+  )
+  AND NOT EXISTS
+  ( SELECT
+      estr.ITEM_COMP
+    FROM BASI_050 estr
+    WHERE estr.NIVEL_COMP = s.ITEM_060_NIVEL99
+      AND estr.GRUPO_COMP = s.ITEM_060_GRUPO
+      AND estr.SUB_COMP = s.ITEM_060_SUBGRUPO
+  )
+;
+
+--
+
+DELETE
+--SELECT *
+FROM supr_067 s
+WHERE EXISTS
+  ( SELECT
+      pt.TAMANHO_REF
+    FROM BASI_020 pt
+    WHERE pt.BASI030_NIVEL030 = s.ITEM_REQ_NIVEL99
+      AND pt.BASI030_REFERENC = s.ITEM_REQ_GRUPO
+      AND pt.TAMANHO_REF = s.ITEM_REQ_SUBGRUPO
+      AND pt.DESCR_TAM_REFER like '-%'
+  )
+  AND NOT EXISTS
+  ( SELECT
+      estr.ITEM_COMP
+    FROM BASI_050 estr
+    WHERE estr.NIVEL_COMP = s.ITEM_REQ_NIVEL99
+      AND estr.GRUPO_COMP = s.ITEM_REQ_GRUPO
+      AND estr.SUB_COMP = s.ITEM_REQ_SUBGRUPO
+  )
+;
+
+--
+
+DELETE
+--SELECT *
+FROM BASI_015 ptcp
+WHERE EXISTS
+  ( SELECT
+      pt.TAMANHO_REF
+    FROM BASI_020 pt
+    WHERE pt.BASI030_NIVEL030 = ptcp.NIVEL_ESTRUTURA
+      AND pt.BASI030_REFERENC = ptcp.GRUPO_ESTRUTURA
+      AND pt.TAMANHO_REF = ptcp.SUBGRU_ESTRUTURA
+      AND pt.DESCR_TAM_REFER like '-%'
+  )
+  AND NOT EXISTS
+  ( SELECT
+      estr.ITEM_COMP
+    FROM BASI_050 estr
+    WHERE estr.NIVEL_COMP = ptcp.NIVEL_ESTRUTURA
+      AND estr.GRUPO_COMP = ptcp.GRUPO_ESTRUTURA
+      AND estr.SUB_COMP = ptcp.SUBGRU_ESTRUTURA
+  )
+;
+
+--
+
+DELETE
+--SELECT *
+FROM BASI_010 ptc
+WHERE EXISTS
+  ( SELECT
+      pt.TAMANHO_REF
+    FROM BASI_020 pt
+    WHERE pt.BASI030_NIVEL030 = ptc.NIVEL_ESTRUTURA
+      AND pt.BASI030_REFERENC = ptc.GRUPO_ESTRUTURA
+      AND pt.TAMANHO_REF = ptc.SUBGRU_ESTRUTURA
+      AND pt.DESCR_TAM_REFER like '-%'
+  )
+  AND NOT EXISTS
+  ( SELECT
+      estr.ITEM_COMP
+    FROM BASI_050 estr
+    WHERE estr.NIVEL_COMP = ptc.NIVEL_ESTRUTURA
+      AND estr.GRUPO_COMP = ptc.GRUPO_ESTRUTURA
+      AND estr.SUB_COMP = ptc.SUBGRU_ESTRUTURA
+  )
+;
+
+--
+
+DELETE
+--SELECT *
+FROM BASI_020 pt
+WHERE pt.DESCR_TAM_REFER like '-%'
+  AND NOT EXISTS (
+	  SELECT
+	    estr.ITEM_COMP
+	  FROM BASI_050 estr
+	  WHERE estr.NIVEL_COMP = pt.BASI030_NIVEL030
+	    AND estr.GRUPO_COMP = pt.BASI030_REFERENC
+	    AND estr.SUB_COMP = pt.TAMANHO_REF
+  )
+;
+
+-- vvvvvvvvvv executando
+-- exclui
+-- . produtos
+-- sem tamanhos e marcados com '-' no início da descrição
+
+DELETE
+-- SELECT *
+FROM BASI_030 p
+WHERE p.DESCR_REFERENCIA like '-%'
+  AND NOT EXISTS (
+	  SELECT
+	    pt.BASI030_REFERENC
+	  FROM BASI_020 pt
+	  WHERE pt.BASI030_NIVEL030 = p.NIVEL_ESTRUTURA
+	    AND pt.BASI030_REFERENC = p.REFERENCIA
+  )
+;
+
+-- vvvvvvvvvv executando
+-- exclui uma referencia
+
+DELETE
+--SELECT *
+FROM MQOP_050 p
+WHERE p.NIVEL_ESTRUTURA = 1
+  AND p.GRUPO_ESTRUTURA = '00103'
+;
+
+DELETE
+--SELECT *
+FROM BASI_070 p
+WHERE p.NIVEL = 1
+  AND p.GRUPO = '00103'
+;
+
+DELETE
+--SELECT *
+FROM BASI_040 p
+WHERE p.NIVEL_ITEM = 1
+  AND p.GRUPO_ITEM = '00103'
+;
+
+DELETE
+--SELECT *
+FROM BASI_050 p
+WHERE p.NIVEL_ITEM = 1
+  AND p.GRUPO_ITEM = '00103'
+;
+
+DELETE
+--SELECT *
+FROM BASI_010 p
+WHERE p.NIVEL_ESTRUTURA = 1
+  AND p.GRUPO_ESTRUTURA = '00103'
+;
+
+DELETE
+--SELECT *
+FROM BASI_020 p
+WHERE p.BASI030_NIVEL030 = 1
+  AND p.BASI030_REFERENC = '00103'
+;
+
+DELETE
+--SELECT *
+FROM BASI_030 p
+WHERE p.NIVEL_ESTRUTURA = 1
+  AND p.REFERENCIA = '00103'
+;
