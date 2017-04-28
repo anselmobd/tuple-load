@@ -1,0 +1,4 @@
+UPDATE basi_010 i
+SET
+  i.PRECO_MEDIO	= i.PRECO_CUSTO_INFO
+;
