@@ -344,7 +344,7 @@ class Main:
             else:
                 csvColumns = [
                     (c[0].lower(),
-                     't' if (c[1] == self.db.STRING) else 'n'
+                     'n' if (c[1] == self.db.NUMBER) else 't'
                      ) for c in curF.description]
 
             dataLine = ''
