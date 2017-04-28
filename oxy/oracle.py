@@ -28,6 +28,9 @@ class Oracle(Db):
         self.servicename = servicename
         self.schema = schema
 
+        self.STRING = cx_Oracle.STRING
+        self.NUMBER = cx_Oracle.NUMBER
+
     def custonConnect(self):
         self.con = cx_Oracle.connect(
             self.username, self.password,
