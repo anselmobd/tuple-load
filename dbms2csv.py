@@ -181,8 +181,16 @@ class Main:
         try:
             self.connectDataBase()
 
-            with open(self.args.csvFile, 'w') as self.csvNew:
+            # with open(self.args.csvFile, 'w') as self.csvNew:
+            self.csvNew = None
+            try:
+                self.csvNew = open(self.args.csvFile, 'w')
+
                 self.executeMaster()
+
+            finally:
+                if self.csvNew is None:
+                    close(self.csvNew)
 
         finally:
             self.closeDataBase()
@@ -473,14 +481,14 @@ class Main:
             self.vOut.pprnt(self.ini.get('post_process'), 4)
             for variable, value in self.ini.iter('post_process'):
                 self.vOut.pprnt(variable, 4)
+                self.vOut.pprnt(value, 4)
                 varParams = json.loads(value)
                 if 'id' in varParams:
                     postProcId = varParams['id']
                 else:
                     postProcId = variable
 
-                file_name, file_ext = os.path.splitext(self.args.csvFile)
-                newCsv = '{}.{}{}'.format(file_name, postProcId, file_ext)
+                newCsv = oxyu.fileNameWithSuffix(self.args.csvFile, postProcId)
 
                 if variable == 'sort':
                     self.sortCsv(varParams, self.args.csvFile, newCsv)
