@@ -294,9 +294,11 @@ WHERE comb.ITEM_ITEM <> '000000'
   )
 
 -- vvvvvvvvvv executando
--- exclui das combinações, cores marcadas com '-' no início da descrição
+-- exclui das combinações, cores do produto pai marcadas com '-' no início da descrição
 
-DELETE FROM BASI_040 comb
+DELETE
+--SELECT *
+FROM BASI_040 comb
 WHERE comb.ITEM_ITEM <> '000000'
   AND EXISTS (
 	  SELECT
