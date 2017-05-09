@@ -370,15 +370,17 @@ class Main:
         self.vOut.prnt(_('count = %s') % (countRows), 2)
 
         if countRows == 1:
-            sql = self.getStrRule('sql', 'update')
-            cursor = self.db.cursorExecute(sql, dictRow)
-            self.vOut.prnt(_('updated: %s') % (cursor.rowcount), 2)
-            self.countUpdate += cursor.rowcount
+            if self.hasRule('sql', 'update'):
+                sql = self.getStrRule('sql', 'update')
+                cursor = self.db.cursorExecute(sql, dictRow)
+                self.vOut.prnt(_('updated: %s') % (cursor.rowcount), 2)
+                self.countUpdate += cursor.rowcount
         else:
-            sql = self.getStrRule('sql', 'insert')
-            cursor = self.db.cursorExecute(sql, dictRow)
-            self.vOut.prnt(_('inserted: %s') % (cursor.rowcount), 2)
-            self.countInsert += cursor.rowcount
+            if self.hasRule('sql', 'insert'):
+                sql = self.getStrRule('sql', 'insert')
+                cursor = self.db.cursorExecute(sql, dictRow)
+                self.vOut.prnt(_('inserted: %s') % (cursor.rowcount), 2)
+                self.countInsert += cursor.rowcount
 
         path = ('sql', 'after_insert_update')
         if cursor.rowcount != 0 and self.hasRule(*path):
