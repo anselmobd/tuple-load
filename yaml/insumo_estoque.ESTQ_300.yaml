@@ -1,0 +1,72 @@
+csv:
+
+  keys:
+    - CODITEMPROD
+    - CODCOR
+    - CODTAM
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count( ptc.GRUPO_ESTRUTURA )
+    FROM BASI_010 ptc
+    WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODCOR || '.' || :CODTAM
+
+  update: |
+    insert into ESTQ_300 (
+      CODIGO_DEPOSITO
+    , CODIGO_TRANSACAO
+    , NIVEL_ESTRUTURA
+    , GRUPO_ESTRUTURA
+    , SUBGRUPO_ESTRUTURA
+    , ITEM_ESTRUTURA
+    , DATA_MOVIMENTO
+    , SEQUENCIA_FICHA
+    , SEQUENCIA_INSERCAO
+    , NUMERO_LOTE
+    , NUMERO_DOCUMENTO
+    , SERIE_DOCUMENTO
+    , SEQUENCIA_DOCUMENTO
+    , ENTRADA_SAIDA
+    , QUANTIDADE
+    , VALOR_MOVIMENTO_UNITARIO
+    )
+    VALUES
+    (
+      231 -- deposito MP
+    , 105 -- entrada via balanco
+    , 9 -- nivel
+    , ( SELECT
+          ptc.GRUPO_ESTRUTURA
+        FROM BASI_010 ptc
+        WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODCOR || '.' || :CODTAM
+      )
+    , ( SELECT
+          ptc.SUBGRU_ESTRUTURA
+        FROM BASI_010 ptc
+        WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODCOR || '.' || :CODTAM
+      )
+    , ( SELECT
+          ptc.ITEM_ESTRUTURA
+        FROM BASI_010 ptc
+        WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODCOR || '.' || :CODTAM
+      )
+    , CURRENT_TIMESTAMP -- DATA_MOVIMENTO
+    , 0 -- SEQUENCIA_FICHA
+    , 1 -- SEQUENCIA_INSERCAO
+    , 0 -- NUMERO_LOTE
+    , 10 -- NUMERO_DOCUMENTO
+    , NULL -- SERIE_DOCUMENTO
+    , 0 -- SEQUENCIA_DOCUMENTO
+    , 'E' -- ENTRADA_SAIDA
+    , :SALDO -- QUANTIDADE
+    , (
+      SELECT
+        ptc.PRECO_MEDIO
+      FROM BASI_010 ptc
+      WHERE ptc.CODIGO_VELHO = 'AL03004' || '.' || 'UN' || '.' || 'UN'
+      ) -- VALOR_MOVIMENTO_UNITARIO
+    )
