@@ -13,7 +13,11 @@ sql:
     SELECT
       count( ptc.GRUPO_ESTRUTURA )
     FROM BASI_010 ptc
-    WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODCOR || '.' || :CODTAM
+    WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODTAM || '.' || :CODCOR
+      AND :CODITEMPROD NOT LIKE 'MA0%'
+      AND :CODITEMPROD NOT LIKE 'TC0%'
+      AND :CODITEMPROD NOT LIKE 'MD%'
+      AND :CODITEMPROD NOT LIKE 'PA%'
 
   update: |
     insert into ESTQ_300 (
@@ -42,17 +46,20 @@ sql:
     , ( SELECT
           ptc.GRUPO_ESTRUTURA
         FROM BASI_010 ptc
-        WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODCOR || '.' || :CODTAM
+        WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODTAM || '.' || :CODCOR
+          AND rownum = 1
       )
     , ( SELECT
           ptc.SUBGRU_ESTRUTURA
         FROM BASI_010 ptc
-        WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODCOR || '.' || :CODTAM
+        WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODTAM || '.' || :CODCOR
+          AND rownum = 1
       )
     , ( SELECT
           ptc.ITEM_ESTRUTURA
         FROM BASI_010 ptc
-        WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODCOR || '.' || :CODTAM
+        WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODTAM || '.' || :CODCOR
+          AND rownum = 1
       )
     , CURRENT_TIMESTAMP -- DATA_MOVIMENTO
     , 0 -- SEQUENCIA_FICHA
@@ -67,6 +74,7 @@ sql:
       SELECT
         ptc.PRECO_MEDIO
       FROM BASI_010 ptc
-      WHERE ptc.CODIGO_VELHO = 'AL03004' || '.' || 'UN' || '.' || 'UN'
+      WHERE ptc.CODIGO_VELHO = :CODITEMPROD || '.' || :CODTAM || '.' || :CODCOR
+          AND rownum = 1
       ) -- VALOR_MOVIMENTO_UNITARIO
     )
