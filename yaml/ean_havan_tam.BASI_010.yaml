@@ -1,0 +1,25 @@
+csv:
+
+  keys:
+    - REF
+    - TAM
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count( c.GRUPO_ESTRUTURA )
+    FROM BASI_010 c
+    WHERE c.NIVEL_ESTRUTURA = 1
+      AND c.GRUPO_ESTRUTURA <= '99999'
+      AND c.CODIGO_VELHO like 'PA' || :REF || '.' || :TAM || '.%'
+
+  update: |
+    UPDATE BASI_010 c
+    SET
+      c.CODIGO_BARRAS = :EAN
+    WHERE c.NIVEL_ESTRUTURA = 1
+      AND c.GRUPO_ESTRUTURA <= '99999'
+      AND c.CODIGO_VELHO like 'PA' || :REF || '.' || :TAM || '.%'
