@@ -369,7 +369,7 @@ class Main:
         countRows = cursor.fetchall()[0][0]
         self.vOut.prnt(_('count = %s') % (countRows), 2)
 
-        if countRows == 1:
+        if countRows >= 1:
             if self.hasRule('sql', 'update'):
                 sql = self.getStrRule('sql', 'update')
                 cursor = self.db.cursorExecute(sql, dictRow)
