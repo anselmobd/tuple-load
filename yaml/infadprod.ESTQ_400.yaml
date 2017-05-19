@@ -1,0 +1,87 @@
+csv:
+
+  keys:
+    - REF
+    - COR
+    - TAM
+
+sql:
+
+  db: systextil
+
+  key_count: |
+    SELECT
+      count( c.GRUPO_ESTRUTURA )
+    FROM BASI_010 c
+    WHERE c.NIVEL_ESTRUTURA = 1
+      AND c.GRUPO_ESTRUTURA <= '99999'
+      AND c.CODIGO_VELHO = 'PA' || :REF || '.' || :TAM || '.' || :COR
+      AND NOT EXISTS (
+      SELECT
+        p.NIVEL
+      FROM basi_400 p
+      WHERE p.NIVEL = 1
+        AND p.GRUPO =
+        ( SELECT
+            ptc.GRUPO_ESTRUTURA
+          FROM BASI_010 ptc
+          WHERE ptc.CODIGO_VELHO = 'PA' || :REF || '.' || :TAM || '.' || :COR
+            AND rownum = 1
+        ) -- GRUPO_ESTRUTURA
+        AND p.SUBGRUPO =
+        ( SELECT
+            ptc.SUBGRU_ESTRUTURA
+          FROM BASI_010 ptc
+          WHERE ptc.CODIGO_VELHO = 'PA' || :REF || '.' || :TAM || '.' || :COR
+            AND rownum = 1
+        ) -- SUBGRUPO_ESTRUTURA
+        AND p.ITEM =
+        ( SELECT
+            ptc.ITEM_ESTRUTURA
+          FROM BASI_010 ptc
+          WHERE ptc.CODIGO_VELHO = 'PA' || :REF || '.' || :TAM || '.' || :COR
+            AND rownum = 1
+        ) -- ITEM_ESTRUTURA
+      )
+
+  update: |
+    INSERT INTO ESTQ_400 (
+      CLIENTE9
+    , CLIENTE4
+    , CLIENTE2
+    , TERCEIRO
+    , NIVEL_ESTRUTURA
+    , GRUPO_ESTRUTURA
+    , SUBGRUPO_ESTRUTURA
+    , ITEM_ESTRUTURA
+    , REF_CLIENTE
+    , PRECO_CLIENTE
+    , IMPRIME_DESC_CLI_DANFE
+    ) VALUES (
+      45242914 -- CLIENTE9
+    , 42 -- CLIENTE4
+    , 75 -- CLIENTE2
+    , 0 -- TERCEIRO
+    , '1' -- NIVEL_ESTRUTURA
+    , ( SELECT
+          ptc.GRUPO_ESTRUTURA
+        FROM BASI_010 ptc
+        WHERE ptc.CODIGO_VELHO = 'PA' || :REF || '.' || :TAM || '.' || :COR
+          AND rownum = 1
+      ) -- GRUPO_ESTRUTURA
+    , ( SELECT
+          ptc.SUBGRU_ESTRUTURA
+        FROM BASI_010 ptc
+        WHERE ptc.CODIGO_VELHO = 'PA' || :REF || '.' || :TAM || '.' || :COR
+          AND rownum = 1
+      ) -- SUBGRUPO_ESTRUTURA
+    , ( SELECT
+          ptc.ITEM_ESTRUTURA
+        FROM BASI_010 ptc
+        WHERE ptc.CODIGO_VELHO = 'PA' || :REF || '.' || :TAM || '.' || :COR
+          AND rownum = 1
+      ) -- ITEM_ESTRUTURA
+    , :REF_CLIENTE
+    , 0 -- PRECO_CLIENTE
+    , 2 -- IMPRIME_DESC_CLI_DANFE
+    )
