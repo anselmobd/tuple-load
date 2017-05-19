@@ -1,0 +1,24 @@
+read:
+
+  db: db.to.systextil.prod
+
+  # id: BASI_030
+  sql: |
+    SELECT *
+    FROM BASI_030 p
+    WHERE p.NIVEL_ESTRUTURA = 1
+      AND p.REFERENCIA = '00417'
+
+  # id1: BASI_020
+  # sql1:
+  #   SELECT *
+  #   FROM BASI_020 p
+  #   WHERE p.BASI030_NIVEL030 = 1
+  #     AND p.BASI030_REFERENC = '00417'
+
+# columns:
+#   - REFERENCIA: t
+
+post_process:
+
+  - sort: '{ "field": "REFERENCIA" }'
