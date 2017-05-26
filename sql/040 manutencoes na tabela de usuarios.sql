@@ -1,0 +1,45 @@
+SELECT
+  u.libera_pv_n1
+, u.libera_pv_n2
+, u.libera_pv_n4
+, u.libera_pv_n7
+, u.carrega_pv_n_marc
+, u.INF_PESO_MANU
+, u.*
+FROM HDOC_030 u
+WHERE 1=1
+  --AND INSTR(u.USUARIO, '_') <> 0
+  --AND u.REQUISITA_ESTOQUE <> 0
+  --AND u.USUARIO LIKE 'MAR%'
+;
+
+UPDATE HDOC_030 u
+SET
+  u.INF_PESO_MANU = 0
+WHERE u.INF_PESO_MANU <> 0
+;
+
+UPDATE HDOC_030 u
+SET
+  u.NOME_EDITOR = 'TEXPAD'
+;
+
+UPDATE HDOC_030 u
+SET
+  u.MENU_USUARIO = 0
+;
+
+UPDATE HDOC_030 u
+SET
+  u.IMPRESSORA_TERMICA = 0
+;
+
+UPDATE HDOC_030 u
+SET
+  u.IMPRESSORA_PADRAO_ETIQUETA = 'ETIQUETA'
+;
+
+UPDATE HDOC_030 u
+SET
+  u.ALTERA_DESC_LOJA = 2
+;
