@@ -38,16 +38,17 @@ class GTIN(object):
 
 range = {'1': '78968962', '2': '78996188'}
 
-f = open('DIS_BAT.DBF', 'r')
+# f = open('DIS_BAT.DBF', 'r')
 
-table = DBF('DIS_BAT.DBF')
-pprint(table)
-writer = csv.writer(sys.stdout)
+table = DBF('./scripts/DIS_BAT.DBF')
+# pprint(table)
 
-writer.writerow(table.field_names)
+# writer = csv.writer(sys.stdout)
+# writer.writerow(table.field_names)
 for record in table:
     # pass
-    if record['B_PROD'] == '640':
+    # if record['B_PROD'] == '640':
+    if record['B_ATIV'] == 'S':
         # pprint(record)
         # print(range[record['B_RANGE']])
         ean13_ = range[record['B_RANGE']] + record['B_CODBAR']
@@ -55,5 +56,11 @@ for record in table:
         prod = record['B_PROD']
         cor = record['B_COR']
         tam = record['B_TAM']
-        print('{}.{}.{}: {}'.format(prod, cor, tam, ean13))
+        print('--{}.{}.{}: {}'.format(prod, tam, cor, ean13))
+        print("UPDATE basi_010 c SET c.CODIGO_BARRAS = '{}' "
+              "WHERE c.CODIGO_VELHO = 'PA{}.{}.{}' "
+              "AND c.NIVEL_ESTRUTURA = 1 AND c.GRUPO_ESTRUTURA < '99999' "
+              "AND c.CODIGO_BARRAS IS NULL;".format(ean13, prod, tam, cor))
         # sys.exit(9)
+    # pprint(record)
+    # sys.exit(9)
