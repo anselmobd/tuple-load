@@ -109,3 +109,6 @@ lixo*
 
 # lock
 .~lock.*#
+
+# spreadsheet
+*.ods
