@@ -1,5 +1,7 @@
+-- !!! Verificar na view se já tem data de faturamento da OS. Se tem, não deve excluir.
 SELECT DISTINCT
-  l.NUMERO_ORDEM
+  l.ORDEM_PRODUCAO
+, l.NUMERO_ORDEM
 , l.SEQ_ORDEM_SERV
 , l.PERIODO_PRODUCAO
 , l.ORDEM_CONFECCAO
@@ -9,29 +11,11 @@ FROM pcpc_040 l
 --SET
 --  l.NUMERO_ORDEM = 0
 --, l.SEQ_ORDEM_SERV = 0
-WHERE l.NUMERO_ORDEM = 116
-  AND l.PERIODO_PRODUCAO = 1720
+WHERE l.ORDEM_PRODUCAO = 297
+  AND l.NUMERO_ORDEM = 170
+  AND l.PERIODO_PRODUCAO = 1719
   AND l.ORDEM_CONFECCAO IN (
-    14063
-  , 14064
-  , 14065
-  , 14066
-  , 14067
-  , 14068
-  , 14069
-  , 14070
-  , 14196
-  , 14197
-  , 14198
-  , 14199
-  , 14200
-  , 14201
-  , 14202
-  , 14203
-  , 14204
-  , 14205
-  , 14206
-  , 14207
-  , 14208
+    9811
+  , 9812
+  , 9813
   )
-  
