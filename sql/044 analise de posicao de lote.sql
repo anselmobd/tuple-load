@@ -65,6 +65,8 @@ ORDER BY
 , l.SITUACAO_ORDEM
 ;
 
+-- lista informações mais importantes de estágios de lote
+
 SELECT
   l.ORDEM_PRODUCAO op
 , l.PERIODO_PRODUCAO per
