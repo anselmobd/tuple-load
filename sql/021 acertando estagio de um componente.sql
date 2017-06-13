@@ -5,3 +5,174 @@ SET
 --  e.*
 --FROM BASI_050 e
 WHERE e.GRUPO_COMP = 'ET009'
+
+-- baseado em e-mail da Giselle de 09/06/2017 - baseado em reunião com Bersange e etc.
+-- Modificar o estagio do elástico 15 da alternativa 1 no MD para o estagio 33 . ( el ou ep ).
+
+UPDATE BASI_050 upe
+SET
+  upe.ESTAGIO = 33
+WHERE EXISTS (
+	SELECT
+	  e.*
+	FROM BASI_050 e
+	WHERE
+	  (  e.GRUPO_COMP like 'EL%'
+	  OR e.GRUPO_COMP like 'EL%'
+	  )
+	  AND e.ALTERNATIVA_ITEM = 1
+	  AND e.ESTAGIO = 15
+	  --
+	  AND e.NIVEL_ITEM=upe.NIVEL_ITEM
+	  AND e.GRUPO_ITEM=upe.GRUPO_ITEM
+	  AND e.SUB_ITEM=upe.SUB_ITEM
+	  AND e.ITEM_ITEM=upe.ITEM_ITEM
+	  AND e.ALTERNATIVA_ITEM=upe.ALTERNATIVA_ITEM
+	  AND e.SEQUENCIA=upe.SEQUENCIA
+)
+;
+
+-- obs: Não utilizei o filtro abaixo, mas deveria
+AND e.GRUPO_ITEM > '99999'
+
+
+-- baseado em e-mail da Giselle de 09/06/2017 - baseado em reunião com Bersange e etc.
+-- Modificar o estagio do MA001 24 da alternativa 3 (malha) para 54 no PA
+
+UPDATE BASI_050 upe
+SET
+  upe.ESTAGIO = 54
+WHERE EXISTS (
+	SELECT
+	  e.*
+	FROM BASI_050 e
+	WHERE e.GRUPO_COMP = 'MA001'
+	  AND e.ALTERNATIVA_ITEM = 3
+	  AND e.ESTAGIO = 24
+	  AND e.GRUPO_ITEM < '99999'
+	  --
+	  AND e.NIVEL_ITEM=upe.NIVEL_ITEM
+	  AND e.GRUPO_ITEM=upe.GRUPO_ITEM
+	  AND e.SUB_ITEM=upe.SUB_ITEM
+	  AND e.ITEM_ITEM=upe.ITEM_ITEM
+	  AND e.ALTERNATIVA_ITEM=upe.ALTERNATIVA_ITEM
+	  AND e.SEQUENCIA=upe.SEQUENCIA
+)
+;
+
+-- acertando gargalos - baseado em reunião com Bersange e etc.
+
+SELECT
+  r.*
+FROM MQOP_050 r
+WHERE r.NUMERO_ALTERNATI <> r.NUMERO_ROTEIRO
+;
+
+SELECT
+  r.IND_ESTAGIO_GARGALO
+, r.*
+FROM MQOP_050 r
+WHERE 1=1
+  AND r.GRUPO_ESTRUTURA = 'M0417'
+  AND r.NUMERO_ALTERNATI = 1
+  AND r.NUMERO_ROTEIRO = 1
+;
+
+SELECT distinct
+  r.NUMERO_ROTEIRO
+FROM MQOP_050 r
+WHERE r.GRUPO_ESTRUTURA < '99999'
+;
+
+SELECT
+  r.GRUPO_ESTRUTURA
+, r.NUMERO_ROTEIRO
+, r.SEQ_OPERACAO
+, r.CODIGO_OPERACAO
+, r.IND_ESTAGIO_GARGALO
+, r.*
+FROM MQOP_050 r
+WHERE 1=1
+  AND r.GRUPO_ESTRUTURA < '99999'
+  AND r.NUMERO_ROTEIRO IN (1,4,5,6,7)
+  --AND r.CODIGO_OPERACAO = 33
+  --AND r.IND_ESTAGIO_GARGALO = 1
+ORDER BY
+  r.GRUPO_ESTRUTURA
+, r.SEQ_OPERACAO
+;
+
+UPDATE MQOP_050 r
+SET
+  r.IND_ESTAGIO_GARGALO =
+	CASE WHEN r.CODIGO_OPERACAO = 60 THEN 1
+	ELSE 0
+	END
+WHERE r.GRUPO_ESTRUTURA < '99999'
+  AND r.NUMERO_ROTEIRO IN (1,4,5,6,7)
+;
+
+UPDATE MQOP_050 r
+SET
+  r.IND_ESTAGIO_GARGALO =
+	CASE WHEN r.CODIGO_OPERACAO = 24 THEN 1
+	ELSE 0
+	END
+WHERE r.GRUPO_ESTRUTURA < '99999'
+  AND r.NUMERO_ROTEIRO IN (2,3)
+;
+
+UPDATE MQOP_050 r
+SET
+  r.IND_ESTAGIO_GARGALO =
+	CASE
+	WHEN r.NUMERO_ROTEIRO = 1 AND r.CODIGO_OPERACAO = 33 THEN 1
+	WHEN r.NUMERO_ROTEIRO = 2 AND r.CODIGO_OPERACAO = 12 THEN 1
+	WHEN r.NUMERO_ROTEIRO = 3 AND r.CODIGO_OPERACAO = 12 THEN 1
+	WHEN r.NUMERO_ROTEIRO = 4 AND r.CODIGO_OPERACAO = 27 THEN 1
+	WHEN r.NUMERO_ROTEIRO = 5 AND r.CODIGO_OPERACAO = 24 THEN 1
+	WHEN r.NUMERO_ROTEIRO = 6 AND r.CODIGO_OPERACAO = 25 THEN 1
+	WHEN r.NUMERO_ROTEIRO = 7 AND r.CODIGO_OPERACAO = 33 THEN 1
+	ELSE 0
+	END
+WHERE r.GRUPO_ESTRUTURA > '99999'
+;
+
+-- Eliminação do CD1 - baseado em reunião com Bersange e etc.
+-- Modificar o estagio de todos os materiais de PA das alternativas 1,4,5,6,7 de 57 para 60
+-- renomear estágio para "CD1(<=13/06/2017)" indicando que só pode aparecer em OPs criadas até essa data
+-- apagar estágio 57 dos roteiros em questão
+
+UPDATE BASI_050 upe
+SET
+  upe.ESTAGIO = 60
+WHERE EXISTS (
+	SELECT
+	  e.*
+	FROM BASI_050 e
+	WHERE e.ALTERNATIVA_ITEM in (1, 4, 5, 6, 7)
+	  AND e.ESTAGIO = 57
+	  AND e.GRUPO_ITEM < '99999' -- PA
+	  --
+	  AND e.NIVEL_ITEM=upe.NIVEL_ITEM
+	  AND e.GRUPO_ITEM=upe.GRUPO_ITEM
+	  AND e.SUB_ITEM=upe.SUB_ITEM
+	  AND e.ITEM_ITEM=upe.ITEM_ITEM
+	  AND e.ALTERNATIVA_ITEM=upe.ALTERNATIVA_ITEM
+	  AND e.SEQUENCIA=upe.SEQUENCIA
+)
+;
+
+SELECT
+  *
+FROM MQOP_050 r
+WHERE r.GRUPO_ESTRUTURA < '99999'
+  AND r.CODIGO_OPERACAO = 57
+  AND r.NUMERO_ROTEIRO IN (1,4,5,6,7)
+;
+
+DELETE FROM MQOP_050 r
+WHERE r.GRUPO_ESTRUTURA < '99999'
+  AND r.CODIGO_OPERACAO = 57
+  AND r.NUMERO_ROTEIRO IN (1,4,5,6,7)
+;
