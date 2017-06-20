@@ -231,6 +231,28 @@ WHERE r.GRUPO_ESTRUTURA > '99999' -- MD
   AND r.NUMERO_ROTEIRO IN (5,6)
 ;
 
+-- lista roteiros MD 5 e 6 com o operacão 55 e estágio 54
+
+SELECT
+  r.*
+FROM MQOP_050 r
+WHERE r.GRUPO_ESTRUTURA > '99999' -- MD
+  AND r.CODIGO_OPERACAO = 55 -- terceiro RJ
+  AND r.CODIGO_ESTAGIO = 54 -- terceiro MG
+  AND r.NUMERO_ROTEIRO IN (5,6)
+;
+
+-- Monta update
+
+UPDATE MQOP_050 r
+SET
+  r.CODIGO_ESTAGIO = 55 -- terceiro RJ
+WHERE r.GRUPO_ESTRUTURA > '99999' -- MD
+  AND r.CODIGO_OPERACAO = 55 -- terceiro RJ
+  AND r.CODIGO_ESTAGIO = 54 -- terceiro MG
+  AND r.NUMERO_ROTEIRO IN (5,6)
+;
+
 -- baseado em reuniões com Bersange e etc.
 -- estágios 18 e 21 dos roteiros 2 e 3 de MD são excluidos
 -- estágios 18 e 21 entram nos roteiros 2 e 3 de PA
