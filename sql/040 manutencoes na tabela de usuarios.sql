@@ -24,6 +24,15 @@ SET
   u.NOME_EDITOR = 'TEXPAD'
 ;
 
+-- alterei
+
+UPDATE HDOC_030 u
+SET
+  u.NOME_EDITOR = 'T'
+;
+
+--
+
 UPDATE HDOC_030 u
 SET
   u.MENU_USUARIO = 0
