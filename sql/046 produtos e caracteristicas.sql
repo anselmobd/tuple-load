@@ -347,6 +347,22 @@ SET
   r.OBSERVACAO3 = NULL
 ;
 
+-- marcando produtos com OP, no campo certo e só se o campo for vazio
+
+UPDATE BASI_030 r
+SET
+  r.RESPONSAVEL = 'OP'
+WHERE r.NIVEL_ESTRUTURA = 1
+  AND r.RESPONSAVEL IS NULL
+  AND EXISTS
+( SELECT
+    o.PERIODO_PRODUCAO
+  FROM PCPC_040 o
+  WHERE o.PROCONF_NIVEL99 = r.NIVEL_ESTRUTURA
+    AND o.PROCONF_GRUPO = r.REFERENCIA
+)
+;
+
 --
 
 SELECT
