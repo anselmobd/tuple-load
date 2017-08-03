@@ -45,7 +45,7 @@ WHERE 1=1
 
 -- estudando tabelas da OS
 
--- lotes mancados com a OS
+-- lotes marcados com a OS
 
 SELECT DISTINCT
   l.ORDEM_PRODUCAO
