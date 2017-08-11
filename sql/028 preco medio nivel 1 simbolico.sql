@@ -2,5 +2,5 @@ UPDATE basi_010 ptc
 SET
   ptc.PRECO_MEDIO = 2
 WHERE ptc.NIVEL_ESTRUTURA = 1
-  AND ptc.PRECO_MEDIO <> 2
+  AND ptc.PRECO_MEDIO = 0
 ;
