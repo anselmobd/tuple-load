@@ -89,3 +89,65 @@ WHERE r.COD_REP_CLIENTE <> 0
   AND NOT (p.PERIODO_PRODUCAO = 1702 AND r.COD_REP_CLIENTE = 4)
   AND NOT (p.PERIODO_PRODUCAO = 1703 AND r.COD_REP_CLIENTE = 4)
 ;
+
+-- ====================================
+
+-- criados dados
+csv/periodo_de_cota.csv yaml/periodo_de_cotas.PCPC_010.yaml
+-- criadas regras
+yaml/periodo_de_cotas.PCPC_010.yaml
+
+-- executado
+./csv2oracle.py -vvvv -i --yamltad --cfg tuple-load.cfg --dbvar prod csv/periodo_de_cota.csv yaml/periodo_de_cotas.PCPC_010.yaml
+
+-- ====================================
+
+SELECT
+  p.PERIODO_PRODUCAO
+, 0
+, r.COD_REP_CLIENTE
+, 1
+, 40000
+, 1
+, 0
+, 0
+, 0
+, 0
+FROM PCPC_010 p, PEDI_020 R
+WHERE r.COD_REP_CLIENTE <> 0
+  AND p.PERIODO_PRODUCAO > 1800
+  AND p.PERIODO_PRODUCAO < 2100
+  AND p.AREA_PERIODO = 8
+;
+
+-- vvvvvvvvvvvvvvvvvvv          executado
+
+INSERT INTO PEDI_170 (
+  PERIODO_COTAS
+, CODIGO_REGIAO
+, CODIGO_REPR
+, ARTIGO_COTAS
+, QTDE_COTAS
+, VALOR_COTAS
+, QTDE_VENDIDA
+, VALOR_VENDIDO
+, QTDE_CANCELADA
+, VALOR_CANCELADO
+)
+SELECT
+  p.PERIODO_PRODUCAO
+, 0
+, r.COD_REP_CLIENTE
+, 1
+, 40000
+, 1
+, 0
+, 0
+, 0
+, 0
+FROM PCPC_010 p, PEDI_020 R
+WHERE r.COD_REP_CLIENTE <> 0
+  AND p.PERIODO_PRODUCAO > 1800
+  AND p.PERIODO_PRODUCAO < 2100
+  AND p.AREA_PERIODO = 8
+;
