@@ -1,0 +1,358 @@
+SELECT
+  l.ORDEM_PRODUCAO OP
+, count(DISTINCT NUMERO_ORDEM) OS
+FROM pcpc_040 l
+--WHERE l.NUMERO_ORDEM = 134
+GROUP BY
+  l.ORDEM_PRODUCAO
+;
+
+SELECT
+  l.NUMERO_ORDEM OS
+, count(l.ORDEM_CONFECCAO) LOTES
+, sum(l.QTDE_PECAS_PROG) QTD
+FROM pcpc_040 l
+WHERE l.ORDEM_PRODUCAO = 309
+  AND l.NUMERO_ORDEM <> 0
+GROUP BY
+  l.NUMERO_ORDEM
+ORDER BY
+  l.NUMERO_ORDEM
+;
+
+SELECT
+  l.NUMERO_ORDEM OS
+, count(DISTINCT l.ORDEM_PRODUCAO) OP
+FROM pcpc_040 l
+--WHERE l.NUMERO_ORDEM = 134
+GROUP BY
+  l.NUMERO_ORDEM
+ORDER BY
+  2 DESC
+;
+
+        SELECT
+ 		  l.ORDEM_PRODUCAO
+        , CASE WHEN dos.NUMERO_ORDEM IS NULL
+          THEN '0'
+          ELSE l.NUMERO_ORDEM || ' (' || eos.DESCRICAO || ')'
+          END OS
+        , l.PROCONF_GRUPO REF
+        , l.PROCONF_SUBGRUPO TAM
+        , l.PROCONF_ITEM COR
+        , COALESCE(
+          ( SELECT
+              LISTAGG(le.CODIGO_ESTAGIO || ' - ' || ed.DESCRICAO, ' & ')
+              WITHIN GROUP (ORDER BY le.CODIGO_ESTAGIO)
+            FROM PCPC_040 le
+            JOIN MQOP_005 ed
+              ON ed.CODIGO_ESTAGIO = le.CODIGO_ESTAGIO
+            WHERE le.PERIODO_PRODUCAO = l.PERIODO_PRODUCAO
+              AND le.ORDEM_CONFECCAO = l.ORDEM_CONFECCAO
+              AND le.QTDE_EM_PRODUCAO_PACOTE <> 0
+          )
+          , 'FINALIZADO'
+          ) EST
+        , l.PERIODO_PRODUCAO PERIODO
+        , l.ORDEM_CONFECCAO OC
+        , l.QTDE_PROGRAMADA QTD
+        FROM (
+          SELECT
+            os.PERIODO_PRODUCAO
+          , os.ORDEM_CONFECCAO
+          , os.PROCONF_GRUPO
+          , os.PROCONF_SUBGRUPO
+          , os.PROCONF_ITEM
+          , os.ORDEM_PRODUCAO
+          , max( os.NUMERO_ORDEM ) NUMERO_ORDEM
+          , max( os.QTDE_PROGRAMADA ) QTDE_PROGRAMADA
+          FROM PCPC_040 os
+          WHERE 1=1
+            --AND os.ORDEM_PRODUCAO = 288
+            AND os.NUMERO_ORDEM = 238
+          GROUP BY
+            os.PERIODO_PRODUCAO
+          , os.ORDEM_CONFECCAO
+          , os.PROCONF_GRUPO
+          , os.PROCONF_SUBGRUPO
+          , os.PROCONF_ITEM
+          , os.ORDEM_PRODUCAO
+        ) l
+        LEFT JOIN PCPC_040 dos
+          ON l.NUMERO_ORDEM <> 0
+         AND dos.PERIODO_PRODUCAO = l.PERIODO_PRODUCAO
+         AND dos.ORDEM_CONFECCAO = l.ORDEM_CONFECCAO
+         AND dos.NUMERO_ORDEM = l.NUMERO_ORDEM
+        LEFT JOIN MQOP_005 eos
+          ON eos.CODIGO_ESTAGIO = dos.CODIGO_ESTAGIO
+        LEFT JOIN BASI_220 t
+          ON t.TAMANHO_REF = l.PROCONF_SUBGRUPO
+        ORDER BY
+          l.ORDEM_PRODUCAO
+        , l.NUMERO_ORDEM
+        , l.PROCONF_GRUPO
+        , l.PROCONF_ITEM
+        , t.ORDEM_TAMANHO
+        , l.PERIODO_PRODUCAO
+        , l.ORDEM_CONFECCAO
+;
+
+
+        SELECT
+          os.NUMERO_ORDEM OS
+        , os.CODIGO_SERVICO || '-' || s.DESC_TERCEIRO SERV
+        , os.CGCTERC_FORNE9 CNPJ9
+        , os.CGCTERC_FORNE4 CNPJ4
+        , os.CGCTERC_FORNE2 CNPJ2
+        , f.NOME_FANTASIA NOME
+        , CASE os.SITUACAO_ORDEM
+          WHEN 1 THEN '1-Aberta'
+          WHEN 2 THEN '2-Em Processo'
+          WHEN 3 THEN '3-Baixa Parcial'
+          WHEN 4 THEN '4-Baixa Total'
+          ELSE '-'
+          END SITUACAO
+        , os.COD_CANC_ORDEM || '-' || c.DESCR_CANC_ORDEM CANC
+        , count(l.ORDEM_CONFECCAO) LOTES
+        , sum(l.QTDE_PECAS_PROG) QTD
+        FROM OBRF_080 os
+        JOIN OBRF_070 s
+          ON s.CODIGO_TERCEIRO = os.CODIGO_SERVICO
+        JOIN SUPR_010 f
+          ON f.FORNECEDOR9 = os.CGCTERC_FORNE9
+         AND f.FORNECEDOR4 = os.CGCTERC_FORNE4
+        JOIN OBRF_087 c
+          ON c.COD_CANC_ORDEM = os.COD_CANC_ORDEM
+        JOIN pcpc_040 l
+          ON l.NUMERO_ORDEM = os.NUMERO_ORDEM
+        WHERE 1=1
+          AND (os.NUMERO_ORDEM = 239 OR 0=0)
+          AND (l.PERIODO_PRODUCAO = 1719 OR 0=0)
+          AND (l.ORDEM_CONFECCAO = 03600 OR 0=0)
+          AND (l.ORDEM_PRODUCAO = 120 OR 0=10)
+          AND l.NUMERO_ORDEM <> 0
+        GROUP BY
+          os.NUMERO_ORDEM
+        , os.CODIGO_SERVICO
+        , s.DESC_TERCEIRO
+        , os.CGCTERC_FORNE9
+        , os.CGCTERC_FORNE4
+        , os.CGCTERC_FORNE2
+        , f.NOME_FANTASIA
+        , os.SITUACAO_ORDEM
+        , os.COD_CANC_ORDEM
+        , c.DESCR_CANC_ORDEM
+        ORDER BY
+          os.NUMERO_ORDEM
+;
+
+
+        SELECT
+          ll.EST
+        , (SELECT
+              cast( SUM( lp.QTDE_PECAS_PROD ) / SUM( lp.QTDE_PECAS_PROG ) * 100
+                    AS NUMERIC(10,2) )
+            FROM pcpc_040 lp
+            WHERE lp.ORDEM_PRODUCAO = ll.ORDEM_PRODUCAO
+              AND lp.SEQ_OPERACAO = ll.SEQ_OPERACAO
+          ) PERC
+        , (SELECT
+              SUM( lp.QTDE_PECAS_PROD )
+            FROM pcpc_040 lp
+            WHERE lp.ORDEM_PRODUCAO = ll.ORDEM_PRODUCAO
+              AND lp.SEQ_OPERACAO = ll.SEQ_OPERACAO
+          ) PROD
+        , (SELECT
+              count(*)
+            FROM pcpc_040 lp
+            WHERE lp.ORDEM_PRODUCAO = ll.ORDEM_PRODUCAO
+              AND lp.SEQ_OPERACAO = ll.SEQ_OPERACAO
+              AND lp.QTDE_EM_PRODUCAO_PACOTE <> 0
+          ) LOTES
+        FROM
+        (
+        SELECT DISTINCT
+          l.ORDEM_PRODUCAO
+        , l.SEQ_OPERACAO
+        , l.CODIGO_ESTAGIO || ' - ' || e.DESCRICAO EST
+        FROM pcpc_040 l
+        JOIN MQOP_005 e
+          ON e.CODIGO_ESTAGIO = l.CODIGO_ESTAGIO
+        WHERE l.ORDEM_PRODUCAO = 1046
+        ORDER BY
+          l.SEQ_OPERACAO
+        ) ll
+;
+
+
+SELECT
+  i.TAMANHO
+, i.SORTIMENTO
+, i.QUANTIDADE
+, i.*
+FROM PCPC_021 i
+WHERE i.ORDEM_PRODUCAO = 1536
+ORDER BY
+  i.SEQUENCIA_TAMANHO
+, i.SORTIMENTO
+;
+
+SELECT DISTINCT
+  i.TAMANHO
+, i.SEQUENCIA_TAMANHO
+FROM PCPC_021 i
+WHERE i.ORDEM_PRODUCAO = 1536
+ORDER BY
+  i.SEQUENCIA_TAMANHO
+;
+
+SELECT
+  i.SORTIMENTO
+, max( p.DESCRICAO_15 ) DESCR
+FROM PCPC_021 i
+JOIN pcpc_020 op
+  ON op.ORDEM_PRODUCAO = i.ORDEM_PRODUCAO
+LEFT JOIN basi_010 p
+  ON p.NIVEL_ESTRUTURA = 1
+ AND p.GRUPO_ESTRUTURA = op.REFERENCIA_PECA
+ AND p.ITEM_ESTRUTURA = i.SORTIMENTO
+WHERE i.ORDEM_PRODUCAO = 1536
+GROUP BY
+  i.SORTIMENTO
+ORDER BY
+  2
+;
+
+SELECT
+  *
+FROM BASI_010
+;
+
+UPDATE pcpc_040 l
+SET
+  l.NUMERO_ORDEM = 0
+, l.SEQ_ORDEM_SERV = 0
+
+SELECT DISTINCT
+  l.ORDEM_PRODUCAO
+, l.NUMERO_ORDEM
+, l.SEQ_ORDEM_SERV
+, l.PERIODO_PRODUCAO
+, l.ORDEM_CONFECCAO
+, l.*
+FROM pcpc_040 l
+WHERE 1=1
+  --AND l.ORDEM_PRODUCAO = 297
+  AND l.NUMERO_ORDEM = 595
+  --AND l.CODIGO_ESTAGIO = 39
+  AND l.PERIODO_PRODUCAO = 1727
+  AND l.ORDEM_CONFECCAO IN (
+    7900
+  , 7814
+  --, 4096
+  )
+  AND l.NUMERO_ORDEM <> 0
+  AND l.SEQ_ORDEM_SERV <> 0
+;
+
+SELECT
+  DISTINCT
+  s.PRODSAI_NIVEL99
+, s.PRODSAI_GRUPO
+, s.PRODSAI_SUBGRUPO
+, s.PRODSAI_ITEM
+, s.*
+FROM OBRF_082 s
+WHERE s.NUMERO_ORDEM = 589
+ORDER BY
+  s.SEQUENCIA
+, s.PRODSAI_NIVEL99
+, s.PRODSAI_GRUPO
+, s.PRODSAI_SUBGRUPO
+, s.PRODSAI_ITEM
+;
+
+SELECT
+  s.PRODORD_NIVEL99
+, s.PRODORD_GRUPO
+, s.PRODORD_SUBGRUPO
+, s.PRODORD_ITEM
+, s.*
+FROM OBRF_081 s
+WHERE s.NUMERO_ORDEM = 589
+ORDER BY
+  s.PRODORD_NIVEL99
+, s.PRODORD_GRUPO
+, s.PRODORD_SUBGRUPO
+, s.PRODORD_ITEM
+;
+
+SELECT DISTINCT
+  s.PRODORD_SUBGRUPO
+, tam.ORDEM_TAMANHO
+FROM OBRF_081 s
+LEFT JOIN BASI_220 tam
+  ON tam.TAMANHO_REF = s.PRODORD_SUBGRUPO
+WHERE s.NUMERO_ORDEM = 589
+ORDER BY
+  tam.ORDEM_TAMANHO
+;
+
+SELECT
+  s.PRODORD_GRUPO || ' - ' || s.PRODORD_ITEM SORTIMENTO
+, s.PRODORD_GRUPO || ' - ' || s.PRODORD_ITEM || ' - ' || max( p.DESCRICAO_15 ) DESCR
+FROM OBRF_081 s
+LEFT JOIN basi_010 p
+  ON p.NIVEL_ESTRUTURA = 1
+ AND p.GRUPO_ESTRUTURA = s.PRODORD_GRUPO
+ AND p.ITEM_ESTRUTURA = s.PRODORD_ITEM
+WHERE s.NUMERO_ORDEM = 589
+GROUP BY
+  s.PRODORD_GRUPO
+, s.PRODORD_ITEM
+ORDER BY
+  2
+;
+
+SELECT
+  s.PRODORD_GRUPO || ' - ' || s.PRODORD_ITEM SORTIMENTO
+, s.PRODORD_SUBGRUPO TAMANHO
+, s.QTDE_ARECEBER QUANTIDADE
+FROM OBRF_081 s
+WHERE s.NUMERO_ORDEM = 463
+ORDER BY
+  s.PRODORD_NIVEL99
+, s.PRODORD_GRUPO
+, s.PRODORD_SUBGRUPO
+, s.PRODORD_ITEM
+;
+
+SELECT
+  os.NUMERO_ORDEM OS
+, count(DISTINCT os.ORDEM_PRODUCAO) OP
+FROM PCPC_040 os
+GROUP BY
+  os.NUMERO_ORDEM
+ORDER BY
+  2 DESC
+;
+
+        SELECT DISTINCT
+          os.NUMERO_ORDEM OS
+        , os.CODIGO_SERVICO
+        , os.CGCTERC_FORNE9 CNPJ9
+        , os.CGCTERC_FORNE4 CNPJ4
+        , os.CGCTERC_FORNE2 CNPJ2
+        , CASE os.SITUACAO_ORDEM
+          WHEN 1 THEN '1-Aberta'
+          WHEN 2 THEN '2-Em Processo'
+          WHEN 3 THEN '3-Baixa Parcial'
+          WHEN 4 THEN '4-Baixa Total'
+          ELSE '-'
+          END SITUACAO
+        , os.COD_CANC_ORDEM
+        , os.data_emissao
+        , os.
+        FROM OBRF_080 os
+        WHERE os.NUMERO_ORDEM = 589
+;
