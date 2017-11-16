@@ -1,0 +1,58 @@
+SELECT
+  x.CODIGO_ROLO
+, x.ORDEM_PRODUCAO
+, x.ROLO_ESTOQUE
+, x.*
+FROM PCPT_020 x -- cadastro de rolos
+WHERE 1=1
+  AND x.PANOACAB_GRUPO = 'MA004'
+--  AND x.ORDEM_PRODUCAO <> 0
+--  AND x.CODIGO_ROLO = 370
+--WHERE x.NUMERO_ROLO = 8080
+--   OR x.NUMERO_LOTE = 8080
+--   OR x.NR_VOLUME = 8080
+--   OR x.NR_SOLIC_VOLUME = 8080
+--   OR x.NUMERO_PROGRAMA = 8080
+--   OR x.NR_ROLO_ORIGEM = 8080
+--   OR x.NUMERO_TUBETE = 8080
+ORDER BY
+  x.CODIGO_ROLO
+;
+
+
+SELECT
+  x.*
+FROM PCPT_021 x -- rolos - informações não utilizadas
+WHERE 1=1
+;
+
+SELECT
+  x.*
+FROM PCPT_060 x -- faturamento de rolo - porém, quase nenhum dado
+WHERE 1=1
+;
+
+SELECT
+  x.CODIGO_ROLO
+, x.ROLO_CONFIRMADO
+, x.*
+FROM PCPT_025 x -- confirmação de rolo
+WHERE x.PANO_INI_GRUPO = 'MA004'
+  AND x.ORDEM_PRODUCAO <> 0
+  AND x.CODIGO_ROLO = 3648
+--   OR x.NUMROLO_PER_TECE = 8080
+--   OR x.NUMROLO_PER_TECE = 8080
+--   OR x.NUMROLO_PER_TECE = 8080
+--   OR x.NUMROLO_PER_TECE = 8080
+;
+
+SELECT
+  x.GRUPO_PRODUTO
+, x.ORDEM_PRODUCAO
+, x.*
+FROM TMRP_141 x -- reserva de rolo para OP
+WHERE 1=1
+  AND x.GRUPO_PRODUTO = 'MA005'
+  AND x.CODIGO_ROLO = 3648
+--  AND x.ORDEM_PRODUCAO <> 0
+;
