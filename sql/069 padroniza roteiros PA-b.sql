@@ -11,7 +11,7 @@ WHERE rc.NIVEL='1'
 	  AND r.REFERENCIA < 'A'
 	  AND r.COLECAO IN (13, 14, 15)
 )
-  AND rc.ROTEIRO IN (1, 21, 3, 23)
+  AND rc.ROTEIRO IN (1, 21, 2, 22, 3, 23)
 ;
 
 INSERT INTO SYSTEXTIL.BASI_070
@@ -40,7 +40,7 @@ FROM BASI_070 rc -- roteiro capa
 ) ref
 WHERE rc.NIVEL='1'
   AND rc.GRUPO='Z01PA'
-  AND rc.ROTEIRO IN (1, 21, 3, 23)
+  AND rc.ROTEIRO IN (1, 21, 2, 22, 3, 23)
 ;
 
 DELETE FROM MQOP_050 rop -- lista de operações de um roteiro
@@ -55,7 +55,7 @@ WHERE rop.NIVEL_ESTRUTURA = '1'
 	  AND r.REFERENCIA < 'A'
 		AND r.COLECAO IN (13, 14, 15)
 )
-  AND rop.NUMERO_ROTEIRO IN (1, 21, 3, 23)
+  AND rop.NUMERO_ROTEIRO IN (1, 21, 2, 22, 3, 23)
 ;
 
 INSERT INTO MQOP_050
@@ -116,5 +116,5 @@ FROM MQOP_050 rop
 ) ref
 WHERE rop.NIVEL_ESTRUTURA = '1'
   AND rop.GRUPO_ESTRUTURA = 'Z01PA'
-	AND rop.NUMERO_ROTEIRO IN (1, 21, 3, 23)
+	AND rop.NUMERO_ROTEIRO IN (1, 21, 2, 22, 3, 23)
 ;

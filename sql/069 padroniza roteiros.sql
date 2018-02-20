@@ -4,7 +4,7 @@
 ------------------
 ------------------
 
---- atribuindo fluxos 1 e 3 de PA para costurado individual (não kit) (não sunga)
+--- atribuindo fluxos 1, 2 e 3 de PA para costurado individual (não kit) (não sunga)
 --- script PA-a.sql
 
 - seleção de referências
@@ -17,9 +17,9 @@ WHERE r.NIVEL_ESTRUTURA = 1
   AND r.COLECAO IN (1, 2, 3, 4)
 
 - alt/roteiros a atribuir
-(1, 11, 21, 3, 13, 23)
+(1, 11, 21, 2, 12, 22, 3, 13, 23)
 
---- atribuindo fluxos 1 e 3 de PA para costurado kit (não sunga)
+--- atribuindo fluxos 1, 2 e 3 de PA para costurado kit (não sunga)
 --- script PA-b.sql
 
 - seleção de referências
@@ -32,7 +32,7 @@ WHERE r.NIVEL_ESTRUTURA = 1
   AND r.COLECAO IN (13, 14, 15)
 
 - alt/roteiros a atribuir
-(1, 21, 3, 23)
+(1, 21, 2, 22, 3, 23)
 
 --- atribuindo fluxo 4 de PA para sem costura individual (não kit)
 --- script PA-c.sql
@@ -100,7 +100,7 @@ WHERE r.NIVEL_ESTRUTURA = 1
 ------------------
 ------------------
 
---- atribuindo fluxos 1 e 3 de PG para costurado (não sunga)
+--- atribuindo fluxos 1, 2 e 3 de PG para costurado (não sunga)
 --- script PG-a.sql
 
 - seleção de referências
@@ -113,7 +113,7 @@ WHERE r.NIVEL_ESTRUTURA = 1
   AND r.COLECAO IN (1, 2, 3, 4, 13, 14, 15)
 
 - alt/roteiros a atribuir
-(21, 23)
+(21, 22, 23)
 
 --- atribuindo fluxo 4 de PG para sem costura
 --- script PG-b.sql
@@ -166,7 +166,7 @@ WHERE r.NIVEL_ESTRUTURA = 1
 ------------------
 ------------------
 
---- atribuindo fluxos 1 e 3 de PB para costurado (não sunga)
+--- atribuindo fluxos 1, 2 e 3 de PB para costurado (não sunga)
 --- script PB-a.sql
 
 - seleção de referências
@@ -179,7 +179,7 @@ WHERE r.NIVEL_ESTRUTURA = 1
   AND r.COLECAO IN (1, 2, 3, 4)
 
 - alt/roteiros a atribuir
-(11, 13)
+(11, 12, 13)
 
 --- atribuindo fluxo 4 de PB para sem costura
 --- script PB-b.sql
@@ -313,6 +313,28 @@ WHERE r.NIVEL_ESTRUTURA = 1
 
 - alt/roteiros a atribuir
 (3)
+
+---------
+--------- MD só cortado
+---------
+
+--- atribuindo fluxos 2 de MD só cortado
+--- script MD-f.sql
+
+- seleção de referências
+SELECT
+  r.REFERENCIA
+FROM basi_030 r -- referência
+WHERE r.NIVEL_ESTRUTURA = 1
+  AND r.RESPONSAVEL IS NOT NULL
+  AND (
+     r.REFERENCIA like 'E%'
+  OR r.REFERENCIA like 'C%'
+  )
+  AND r.COLECAO IN (1, 2, 3, 4)
+
+- alt/roteiros a atribuir
+(2)
 
 ------------------
 ------------------

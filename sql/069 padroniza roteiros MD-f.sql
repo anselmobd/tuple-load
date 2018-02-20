@@ -8,10 +8,13 @@ WHERE rc.NIVEL='1'
 	FROM basi_030 r -- referência
 	WHERE r.NIVEL_ESTRUTURA = 1
 	  AND r.RESPONSAVEL IS NOT NULL
-    AND r.REFERENCIA like 'A%'
-    AND r.COLECAO IN (1, 2, 3, 4, 13, 14, 15)
+    AND (
+       r.REFERENCIA like 'E%'
+    OR r.REFERENCIA like 'C%'
+    )
+    AND r.COLECAO IN (1, 2, 3, 4)
 )
-  AND rc.ROTEIRO IN (21, 22, 23)
+  AND rc.ROTEIRO IN (2)
 ;
 
 INSERT INTO SYSTEXTIL.BASI_070
@@ -35,12 +38,15 @@ FROM BASI_070 rc -- roteiro capa
 	FROM basi_030 r -- referência
 	WHERE r.NIVEL_ESTRUTURA = 1
 	  AND r.RESPONSAVEL IS NOT NULL
-    AND r.REFERENCIA like 'A%'
-    AND r.COLECAO IN (1, 2, 3, 4, 13, 14, 15)
+    AND (
+       r.REFERENCIA like 'E%'
+    OR r.REFERENCIA like 'C%'
+    )
+    AND r.COLECAO IN (1, 2, 3, 4)
 ) ref
 WHERE rc.NIVEL='1'
-  AND rc.GRUPO='Z01PG'
-  AND rc.ROTEIRO IN (21, 22, 23)
+  AND rc.GRUPO='Z01MD'
+  AND rc.ROTEIRO IN (2)
 ;
 
 DELETE FROM MQOP_050 rop -- lista de operações de um roteiro
@@ -52,10 +58,13 @@ WHERE rop.NIVEL_ESTRUTURA = '1'
 	FROM basi_030 r -- referência
 	WHERE r.NIVEL_ESTRUTURA = 1
 	  AND r.RESPONSAVEL IS NOT NULL
-    AND r.REFERENCIA like 'A%'
-    AND r.COLECAO IN (1, 2, 3, 4, 13, 14, 15)
+    AND (
+       r.REFERENCIA like 'E%'
+    OR r.REFERENCIA like 'C%'
+    )
+    AND r.COLECAO IN (1, 2, 3, 4)
 )
-  AND rop.NUMERO_ROTEIRO IN (21, 22, 23)
+  AND rop.NUMERO_ROTEIRO IN (2)
 ;
 
 INSERT INTO MQOP_050
@@ -111,10 +120,13 @@ FROM MQOP_050 rop
 	FROM basi_030 r -- referência
 	WHERE r.NIVEL_ESTRUTURA = 1
 	  AND r.RESPONSAVEL IS NOT NULL
-    AND r.REFERENCIA like 'A%'
-    AND r.COLECAO IN (1, 2, 3, 4, 13, 14, 15)
+    AND (
+       r.REFERENCIA like 'E%'
+    OR r.REFERENCIA like 'C%'
+    )
+    AND r.COLECAO IN (1, 2, 3, 4)
 ) ref
 WHERE rop.NIVEL_ESTRUTURA = '1'
-  AND rop.GRUPO_ESTRUTURA = 'Z01PG'
-	AND rop.NUMERO_ROTEIRO IN (21, 22, 23)
+  AND rop.GRUPO_ESTRUTURA = 'Z01MD'
+	AND rop.NUMERO_ROTEIRO IN (2)
 ;
