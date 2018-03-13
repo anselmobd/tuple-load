@@ -12,7 +12,7 @@ WHERE rc.NIVEL='1'
        r.REFERENCIA like 'E%'
     OR r.REFERENCIA like 'C%'
     )
-    AND r.COLECAO IN (1, 2, 3, 4)
+    AND r.COLECAO IN (1, 2, 3, 4, 13, 14, 15)
 )
   AND rc.ROTEIRO IN (2)
 ;
@@ -42,7 +42,7 @@ FROM BASI_070 rc -- roteiro capa
        r.REFERENCIA like 'E%'
     OR r.REFERENCIA like 'C%'
     )
-    AND r.COLECAO IN (1, 2, 3, 4)
+    AND r.COLECAO IN (1, 2, 3, 4, 13, 14, 15)
 ) ref
 WHERE rc.NIVEL='1'
   AND rc.GRUPO='Z01MD'
@@ -62,7 +62,7 @@ WHERE rop.NIVEL_ESTRUTURA = '1'
        r.REFERENCIA like 'E%'
     OR r.REFERENCIA like 'C%'
     )
-    AND r.COLECAO IN (1, 2, 3, 4)
+    AND r.COLECAO IN (1, 2, 3, 4, 13, 14, 15)
 )
   AND rop.NUMERO_ROTEIRO IN (2)
 ;
@@ -124,7 +124,7 @@ FROM MQOP_050 rop
        r.REFERENCIA like 'E%'
     OR r.REFERENCIA like 'C%'
     )
-    AND r.COLECAO IN (1, 2, 3, 4)
+    AND r.COLECAO IN (1, 2, 3, 4, 13, 14, 15)
 ) ref
 WHERE rop.NIVEL_ESTRUTURA = '1'
   AND rop.GRUPO_ESTRUTURA = 'Z01MD'

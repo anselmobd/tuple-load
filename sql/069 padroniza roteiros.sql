@@ -231,7 +231,7 @@ FROM basi_030 r -- referência
 WHERE r.NIVEL_ESTRUTURA = 1
   AND r.RESPONSAVEL IS NOT NULL
   AND r.REFERENCIA like 'M%'
-  AND r.COLECAO IN (1, 2, 3, 4)
+  AND r.COLECAO IN (1, 2, 3, 4, 13, 14, 15)
 
 - alt/roteiros a atribuir
 (1)
@@ -282,12 +282,12 @@ WHERE r.NIVEL_ESTRUTURA = 1
   AND (
      r.REFERENCIA like 'E%'
   OR r.REFERENCIA like 'Q%'
-  OR r.REFERENCIA like 'N%'
-  OR r.REFERENCIA like 'M%'
   OR r.REFERENCIA like 'L%'
+  OR r.REFERENCIA like 'N%'
   OR r.REFERENCIA like 'P%'
+  OR r.REFERENCIA like 'M%'
   )
-  AND r.COLECAO IN (9, 10, 11, 12)
+  AND r.COLECAO IN (9, 10, 11, 12, 16, 17)
 
 - alt/roteiros a atribuir
 (4)
@@ -309,7 +309,7 @@ WHERE r.NIVEL_ESTRUTURA = 1
      r.REFERENCIA like 'T%'
   OR r.REFERENCIA like 'R%'
   )
-  AND r.COLECAO IN (1, 2, 3, 4)
+  AND r.COLECAO IN (1, 2, 3, 4, 13, 14, 15)
 
 - alt/roteiros a atribuir
 (3)
@@ -331,7 +331,7 @@ WHERE r.NIVEL_ESTRUTURA = 1
      r.REFERENCIA like 'E%'
   OR r.REFERENCIA like 'C%'
   )
-  AND r.COLECAO IN (1, 2, 3, 4)
+  AND r.COLECAO IN (1, 2, 3, 4, 13, 14, 15)
 
 - alt/roteiros a atribuir
 (2)
