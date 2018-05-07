@@ -347,7 +347,7 @@ WHERE r.NIVEL_ESTRUTURA = 1
 ---------
 
 --- atribuindo fluxo 8 de MP forro de sunga
---- script MP-e.sql
+--- script MP-a.sql
 
 - seleção de referências
 SELECT
@@ -360,9 +360,3 @@ WHERE r.NIVEL_ESTRUTURA = 1
 
 - alt/roteiros a atribuir
 (8)
-
-
-
-
-
-
