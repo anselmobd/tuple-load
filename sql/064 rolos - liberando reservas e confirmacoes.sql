@@ -48,3 +48,23 @@ WHERE 1=1
 ORDER BY
   x.CODIGO_ROLO DESC
 ;
+
+-- outras tabelas ligadas aos rolos
+
+SELECT
+  x.*
+FROM EFIC_100 x -- rejeição de rolo
+--WHERE x.CODIGO_ROLO = 16088
+;
+
+SELECT
+  x.*
+FROM ESTQ_073 x -- romaneio/inventário rolo
+--WHERE x.CODIGO_ROLO = 16088
+;
+
+SELECT
+  x.*
+FROM PCPT_025 x -- ligação entre rolo e OP
+--WHERE x.CODIGO_ROLO = 16088
+;
