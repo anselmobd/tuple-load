@@ -1,0 +1,38 @@
+
+=== BASI_010
+
+= Item de produto (venda, referência, ou compra, matéria prima)
+(Tussor:ref-tam-cor) (Systêxtil: grupo-subgrupo-item)
+- chaves
+	NIVEL_ESTRUTURA
+	GRUPO_ESTRUTURA
+	SUBGRU_ESTRUTURA
+	ITEM_ESTRUTURA
+- principais campos
+	DESCRICAO_15
+	ITEM_ATIVO
+	CLASSIFIC_FISCAL
+	NARRATIVA
+	CODIGO_BARRAS
+	...
+
+=== BASI_050
+
+= Componentes de estrutura de um produto (nível 1)
+
+=== BASI_040
+
+= Combinaçoes de cores e tamanhos dos componentes de estrutura de um produto (nível 1)
+
+
+
+
+
+
+
+
+
+
+
+
+
